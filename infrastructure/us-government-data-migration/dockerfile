@@ -1,0 +1,26 @@
+FROM debian:jessie
+
+# TODO: Remove python2 when this [issue is resolved](https://github.com/unitedstates/congress/issues/256)
+RUN apt-get update && \
+  apt-get install -y \
+  git python-dev libxml2-dev libxslt1-dev libz-dev python-pip wget \
+  build-essential libpoppler-cpp-dev pkg-config python3-dev && \
+  apt-get clean
+
+# Copy shell scripts to bin
+COPY /bin /bin
+
+RUN mkdir us-government-data-migration
+RUN mkdir data
+
+# Clone the open source "@unitedstates/congress" XML scrapper
+RUN git clone https://github.com/unitedstates/congress.git /us-government-data-migration/congress
+
+# Python setup
+RUN pip install -r us-government-data-migration/congress/requirements.txt
+
+COPY /us-government-data-migration /us-government-data-migration
+RUN pip install -r us-government-data-migration/requirements.txt
+
+WORKDIR /us-government-data-migration
+ENTRYPOINT ["python","-m", "src.run"]
