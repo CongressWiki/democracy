@@ -1,1 +1,6 @@
-{}
+{
+  "cSpell.words": [
+    "dockerfiles"
+  ],
+  "python.pythonPath": ".venv/bin/python"
+}

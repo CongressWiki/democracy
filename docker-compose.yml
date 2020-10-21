@@ -1,0 +1,8 @@
+version: '3'
+services:
+  us-government-xml-adapter:
+    build:
+      context: ./infrastructure/
+      dockerfile: /us-government-xml-adapter/dockerfile
+    volumes:
+     - ./build/us-government-xml-adapter-data/:/congress/data

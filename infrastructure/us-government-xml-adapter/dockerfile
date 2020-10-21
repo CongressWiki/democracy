@@ -1,0 +1,28 @@
+FROM python:2-slim
+
+RUN apt-get update && \
+  apt-get install -y \
+  git \
+  python-dev \
+  libxml2-dev \
+  libxslt1-dev \
+  libz-dev \
+  python-pip \
+  git
+
+# Copy shell scripts to bin
+COPY /bin /bin
+
+RUN mkdir /us-government-xml-adapter
+
+# Clone the open source "@unitedstates/congress" XML scrapper
+RUN git clone https://github.com/unitedstates/congress.git /us-government-xml-adapter/congress
+
+# Python setup
+RUN pip install --upgrade pip && \
+  pip install -r us-government-xml-adapter/congress/requirements.txt
+
+COPY /us-government-xml-adapter /us-government-xml-adapter
+
+WORKDIR /us-government-xml-adapter
+ENTRYPOINT ["python","-m", "src.run"]
