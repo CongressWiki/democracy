@@ -1,17 +1,21 @@
 import logging
 import subprocess
+from os import path
 
 logging.basicConfig()
 log = logging.getLogger('[UsGovernment.py]')
 log.setLevel(logging.DEBUG)
 
-log.info('Starting...')
+
+def run_task(task=''):
+    log.info("Fetching " + task)
+
+    command = [path.join('congress', 'run'), task]
+    log.info(command)
+
+    process = subprocess.Popen(command, stdout=subprocess.PIPE)
+    process.wait()
 
 
 def votes():
-    log.info('Invoking votes()')
-    bash_command = '/congress/run'
-    args = ['bash', '-c', bash_command]
-    log.info(args)
-    output = subprocess.check_output(args)
-    return output
+    run_task('votes')
