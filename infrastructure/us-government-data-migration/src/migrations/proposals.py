@@ -1,24 +1,22 @@
 from ..repositories import graphql_engine
 
 
-def from_vote_data(voteData):
+def from_vote_data(vote_data):
     proposal = {
-        'category': voteData.get('category'),
-        'chamber': voteData.get('chamber'),
-        'congress': voteData.get('congress'),
-        'date': voteData.get('date'),
-        'number': voteData.get('number'),
-        'question': voteData.get('question'),
-        'requires': voteData.get('requires'),
-        'result': voteData.get('result'),
-        'result_text': voteData.get('result_text'),
-        'session': voteData.get('session'),
-        'source_url': voteData.get('source_url'),
-        'subject': voteData.get('subject'),
-        'type': voteData.get('type'),
-        'updated_at': voteData.get('updated_at'),
-        'vote_id': voteData.get('vote_id'),
-        'record_modified': voteData.get('record_modified')
+        'id': vote_data.get('vote_id'),
+        'category': vote_data.get('category'),
+        'chamber': vote_data.get('chamber'),
+        'congress': vote_data.get('congress'),
+        'date': vote_data.get('date'),
+        'number': vote_data.get('number'),
+        'question': vote_data.get('question'),
+        'requires': vote_data.get('requires'),
+        'result': vote_data.get('result'),
+        'result_text': vote_data.get('result_text'),
+        'session': vote_data.get('session'),
+        'source_url': vote_data.get('source_url'),
+        'subject': vote_data.get('subject'),
+        'type': vote_data.get('type'),
     }
 
     return graphql_engine.insert_proposal(proposal)
