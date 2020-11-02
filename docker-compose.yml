@@ -32,13 +32,13 @@ services:
   #     - graphql-engine
   #   volumes:
   #    - ./build/us-government-data/:/us-government-data-migration/data
-  next-js-server:
-    depends_on:
-      - graphql-engine
-    links:
-      - graphql-engine
-    ports:
-    - 3000:3000
-    build: .
+  # next-js-server:
+  #   depends_on:
+  #     - graphql-engine
+  #   links:
+  #     - graphql-engine
+  #   ports:
+  #   - 3000:3000
+  #   build: .
 volumes:
   db_data:
