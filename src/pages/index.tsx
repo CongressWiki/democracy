@@ -1,5 +1,6 @@
 import Layout, {siteTitle} from '../components/Layout';
 
+import Bubble from '../components/atoms/Bubble'
 import BubblesLine from '../components/molecules/BubblesLine'
 import Head from 'next/head';
 
@@ -9,7 +10,12 @@ export default function Home() {
 			<Head>
 				<title>{siteTitle}</title>
       </Head>
-      <BubblesLine />
+      <BubblesLine>
+        <Bubble src="/images/profile.jpg" />
+        <Bubble src="/images/profile.jpg" />
+        <Bubble src="/images/profile.jpg" />
+        <Bubble src="/images/profile.jpg" />
+      </BubblesLine>
 		</Layout>
 	);
 }

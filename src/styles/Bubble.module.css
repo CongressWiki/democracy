@@ -1,4 +1,14 @@
 .image {
-  position: absolute;
-  left: 50%;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+.section {
+  height: 100vh;
+  width: 100vw;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
