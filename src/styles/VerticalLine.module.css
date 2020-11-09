@@ -1,8 +1,0 @@
-.vLineInCenter {
-  z-index: -10;
-  border-left: 1px solid rgb(0, 0, 0);
-  position: fixed;
-  height: 100%;
-  left: 50%;
-  top: 0;
-}
