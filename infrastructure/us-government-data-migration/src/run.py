@@ -1,6 +1,6 @@
 import logging
 from repositories import us_government
-from migrations import legislative_members, proposals, votes
+from migrations import legislative_members, proposals, votes, bills
 import utils
 import os
 
@@ -21,14 +21,21 @@ def collect_data_file_paths():
     return votes
 
 
-def migrate_legislative_data():
+def migrate_legislative_members():
     members = us_government.legislative_members()
 
     for member in members:
         legislative_members.from_legislative_member(member)
 
 
-def migrate_vote_data():
+def migrate_bills():
+    bills_data = us_government.govinfo()
+
+    for bill in bills:
+        bills.from_bills_data(bills_data)
+
+
+def migrate_votes():
     us_government.votes()
     vote_file_paths = collect_data_file_paths()
 
@@ -38,5 +45,6 @@ def migrate_vote_data():
         votes.from_vote_data(vote_data)
 
 
-migrate_legislative_data()
-migrate_vote_data()
+migrate_legislative_members()
+migrate_bills()
+migrate_votes()

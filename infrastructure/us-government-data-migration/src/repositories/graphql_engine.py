@@ -163,6 +163,64 @@ def insert_vote(vote):
         return response.json()
 
 
+def insert_bill(bill):
+    query = """\
+        mutation (
+            $id: String, $introduced_at: timestamptz, $updated_at: timestamptz, $official_title: String,
+            $popular_title: String, $short_title: String, $titles: json, $subjects_top_term: String,
+            $subjects: json, $summary: json, $status: String, $status_at: timestamptz, $history: json,
+            $enacted_as: json, $sponsor: json, $cosponsors: json, $committees: json, $amendments: json,
+            $actions: json
+        ) {
+            insert_bills(objects: {
+                id: $id,
+                introduced_at: $introduced_at,
+                updated_at: $updated_at,
+                official_title: $official_title,
+                popular_title: $popular_title,
+                short_title: $short_title,
+                titles: $titles,
+                subjects_top_term: $subjects_top_term,
+                subjects: $subjects,
+                summary: $summary,
+                status: $status,
+                status_at: $status_at,
+                history: $history,
+                enacted_as: $enacted_as,
+                sponsor: $sponsor,
+                cosponsors: $cosponsors,
+                committees: $committees,
+                amendments: $amendments,
+                actions: $actions,
+            }, on_conflict: {
+                constraint: bills_pkey,
+                update_columns: [
+                    introduced_at, updated_at, official_title, popular_title, short_title, titles, subjects_top_term,
+                    subjects, summary, status, status_at, history, enacted_as, sponsor, cosponsors, committees,
+                    amendments, actions
+                ]
+            })
+            {
+                returning {
+                    id
+                    official_title
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": bill}
+
+    with requests.Session() as session:
+        log.info('GRAPHQL_URL: ' + GRAPHQL_URL)
+        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
+
+        if response.status_code != 200:
+            response.raise_for_status()
+
+        return response.json()
+
+
 def subscribe_to_recent_proposals():
     query = """\
         subscription votes {

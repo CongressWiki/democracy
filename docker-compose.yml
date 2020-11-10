@@ -21,17 +21,17 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: goodpassword
-  # us-government-data-migration:
-  #   depends_on:
-  #     - graphql-engine
-  #   build:
-  #     context: infrastructure/
-  #     dockerfile: us-government-data-migration/dockerfile
-  #   links:
-  #     - graphql-engine
-  #   volumes:
-  #    - ./build/us-government-data/:/us-government-data-migration/data
+      HASURA_GRAPHQL_ADMIN_SECRET: hasurapassword
+  us-government-data-migration:
+    depends_on:
+      - graphql-engine
+    build:
+      context: infrastructure/
+      dockerfile: us-government-data-migration/dockerfile
+    links:
+      - graphql-engine
+    volumes:
+     - ./build/us-government-data/:/us-government-data-migration/data
   # next-js-server:
   #   depends_on:
   #     - graphql-engine
