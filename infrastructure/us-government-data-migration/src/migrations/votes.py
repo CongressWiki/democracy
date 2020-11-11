@@ -1,8 +1,15 @@
 from ..repositories import graphql_engine
+import logging
+
+logging.basicConfig()
+log = logging.getLogger('[votes.py]')
+log.setLevel(logging.DEBUG)
 
 
 def from_vote_data(vote_data):
     vote_groups = vote_data.get('votes')
+
+    log.info("NEW VOTE")
 
     NAY = 'Nay'
     if NAY in vote_groups:

@@ -12,9 +12,9 @@ services:
     links:
       - postgres
     ports:
-    - 8080:8080
+      - 8080:8080
     depends_on:
-    - postgres
+      - postgres
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres

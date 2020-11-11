@@ -7,7 +7,7 @@ log = logging.getLogger('[graphql_engine.py]')
 log.setLevel(logging.ERROR)
 
 GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
-HEADERS = {'x-hasura-admin-secret': 'goodpassword', "Content-Type": "application/json"}
+HEADERS = {'x-hasura-admin-secret': 'hasurapassword', "Content-Type": "application/json"}
 
 
 def insert_proposal(proposal):
@@ -166,7 +166,7 @@ def insert_vote(vote):
 def insert_bill(bill):
     query = """\
         mutation (
-            $id: String, $introduced_at: timestamptz, $updated_at: timestamptz, $official_title: String,
+            $id: String, $introduced_at: timestamp, $updated_at: timestamptz, $official_title: String,
             $popular_title: String, $short_title: String, $titles: json, $subjects_top_term: String,
             $subjects: json, $summary: json, $status: String, $status_at: timestamptz, $history: json,
             $enacted_as: json, $sponsor: json, $cosponsors: json, $committees: json, $amendments: json,

@@ -11,14 +11,15 @@ log.setLevel(logging.DEBUG)
 
 def collect_data_file_paths():
     rootdir = os.path.join('data')
-    votes = []
+    bills = []
 
     for root, dirs, files in os.walk(rootdir):
-        for name in files:
-            if name.endswith((".json")):
-                full_path = os.path.join(root, name)
-                votes.append(full_path)
-    return votes
+        if 'bills' in root:
+            for name in files:
+                if name.endswith((".json")):
+                    full_path = os.path.join(root, name)
+                    bills.append(full_path)
+    return bills
 
 
 def migrate_legislative_members():
@@ -29,14 +30,22 @@ def migrate_legislative_members():
 
 
 def migrate_bills():
-    bills_data = us_government.govinfo()
+    # us_government.govinfo()
+    # us_government.bills()
+    log.info('Started migration of bills')
+    bill_file_paths = collect_data_file_paths()
+    log.info('Collected all file paths')
 
-    for bill in bills:
-        bills.from_bills_data(bills_data)
+    for bill_file_path in bill_file_paths:
+        bill_data = utils.read_json_file(bill_file_path)
+        bills.from_bills_data(bill_data)
+
+    log.info('Finished migration of bills')
 
 
 def migrate_votes():
-    us_government.votes()
+    # us_government.votes()
+    log.info('Started migration of votes')
     vote_file_paths = collect_data_file_paths()
 
     for vote_file_path in vote_file_paths:
@@ -45,6 +54,6 @@ def migrate_votes():
         votes.from_vote_data(vote_data)
 
 
-migrate_legislative_members()
 migrate_bills()
-migrate_votes()
+# migrate_legislative_members()
+# migrate_votes()

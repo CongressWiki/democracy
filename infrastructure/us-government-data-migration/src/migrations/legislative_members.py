@@ -1,4 +1,10 @@
+import logging
+import json
 from ..repositories import graphql_engine
+
+logging.basicConfig()
+log = logging.getLogger('[legislative_members.py]')
+log.setLevel(logging.DEBUG)
 
 
 def from_legislative_member(legislative_member):
@@ -29,5 +35,8 @@ def from_legislative_member(legislative_member):
         'contact_form_url': last_active_term.get('contact_form'),
         'terms': member_terms,
     }
+
+    log.info('NEW MEMBER')
+    log.info(json.dumps(new_member))
 
     return graphql_engine.insert_legislative_member(new_member)

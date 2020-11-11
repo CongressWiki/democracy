@@ -19,27 +19,27 @@ def run_task(task='', args=[]):
 
 
 def votes():
-    run_task('votes')
+    run_task("votes")
 
 
 def bills():
-    run_task('bills')
+    run_task("bills", ["--log=info"])
 
 
 def nominations():
-    run_task('nominations')
+    run_task("nominations")
 
 
 def committee_meetings():
-    run_task('committee_meetings')
+    run_task("committee_meetings")
 
 
 def govinfo():
-    run_task('govinfo', ['--bulkdata=BILLSTATUS'])
+    run_task("govinfo", ["--bulkdata=BILLSTATUS", "--log=info"])
 
 
 def statutes():
-    run_task('statutes')
+    run_task("statutes")
 
 
 def legislative_members():

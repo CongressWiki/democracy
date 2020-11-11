@@ -1,7 +1,16 @@
+import logging
+import json
 from ..repositories import graphql_engine
 
 
+logging.basicConfig()
+log = logging.getLogger("[bills.py]")
+log.setLevel(logging.DEBUG)
+
+
 def from_bills_data(bill_data):
+    log.info("NEW BILL")
+
     bill = {
         'id': bill_data.get('bill_id'),
         'introduced_at': bill_data.get('introduced_at'),
@@ -23,5 +32,7 @@ def from_bills_data(bill_data):
         'amendments': bill_data.get('amendments'),
         'actions': bill_data.get('actions')
     }
+
+    log.info(json.dumps(bill))
 
     return graphql_engine.insert_bill(bill)

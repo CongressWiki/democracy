@@ -1,4 +1,10 @@
+import logging
+import json
 from ..repositories import graphql_engine
+
+logging.basicConfig()
+log = logging.getLogger('[proposals.py]')
+log.setLevel(logging.DEBUG)
 
 
 def from_vote_data(vote_data):
@@ -18,5 +24,8 @@ def from_vote_data(vote_data):
         'subject': vote_data.get('subject'),
         'type': vote_data.get('type'),
     }
+
+    log.info('NEW PROPOSAL')
+    log.info(json.dumps(proposal))
 
     return graphql_engine.insert_proposal(proposal)
