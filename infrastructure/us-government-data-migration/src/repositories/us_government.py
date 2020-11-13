@@ -11,7 +11,7 @@ log.setLevel(logging.DEBUG)
 def run_task(task='', args=[]):
     log.info("Fetching " + task)
 
-    command = [path.join('congress', 'run'), task] + args
+    command = [path.join('congress', 'run'), task] + args + ["--log=info"]
     log.info(command)
 
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
@@ -23,7 +23,7 @@ def votes():
 
 
 def bills():
-    run_task("bills", ["--log=info"])
+    run_task("bills")
 
 
 def nominations():
@@ -35,7 +35,7 @@ def committee_meetings():
 
 
 def govinfo():
-    run_task("govinfo", ["--bulkdata=BILLSTATUS", "--log=info"])
+    run_task("govinfo", ["--bulkdata=BILLSTATUS"])
 
 
 def statutes():

@@ -1,6 +1,6 @@
 import logging
 from repositories import us_government
-from migrations import legislative_members, proposals, votes, bills
+from migrations import legislative_members, proposals, votes, bills, amendments
 import utils
 import os
 
@@ -9,17 +9,39 @@ log = logging.getLogger('[run.py]')
 log.setLevel(logging.DEBUG)
 
 
+def downloadVotes():
+    us_government.votes()
+
+
+def downloadBillsAndAmendments():
+    us_government.govinfo()
+    us_government.bills()
+
+
 def collect_data_file_paths():
     rootdir = os.path.join('data')
-    bills = []
+    bill_file_paths = []
+    amendment_file_paths = []
+    vote_file_paths = []
 
     for root, dirs, files in os.walk(rootdir):
         if 'bills' in root:
             for name in files:
                 if name.endswith((".json")):
                     full_path = os.path.join(root, name)
-                    bills.append(full_path)
-    return bills
+                    bill_file_paths.append(full_path)
+        if 'amendments' in root:
+            for name in files:
+                if name.endswith((".json")):
+                    full_path = os.path.join(root, name)
+                    amendment_file_paths.append(full_path)
+        if 'votes' in root:
+            for name in files:
+                if name.endswith((".json")):
+                    full_path = os.path.join(root, name)
+                    vote_file_paths.append(full_path)
+
+    return bill_file_paths, amendment_file_paths, vote_file_paths
 
 
 def migrate_legislative_members():
@@ -29,13 +51,7 @@ def migrate_legislative_members():
         legislative_members.from_legislative_member(member)
 
 
-def migrate_bills():
-    # us_government.govinfo()
-    # us_government.bills()
-    log.info('Started migration of bills')
-    bill_file_paths = collect_data_file_paths()
-    log.info('Collected all file paths')
-
+def migrate_bills(bill_file_paths):
     for bill_file_path in bill_file_paths:
         bill_data = utils.read_json_file(bill_file_path)
         bills.from_bills_data(bill_data)
@@ -43,17 +59,32 @@ def migrate_bills():
     log.info('Finished migration of bills')
 
 
-def migrate_votes():
-    # us_government.votes()
-    log.info('Started migration of votes')
-    vote_file_paths = collect_data_file_paths()
+def migrate_amendments(amendment_file_paths):
+    for amendment_file_path in amendment_file_paths:
+        amendment_data = utils.read_json_file(amendment_file_path)
+        amendments.from_bills_data(amendment_data)
 
+    log.info('Finished migration of amendments')
+
+
+def migrate_votes(vote_file_paths):
     for vote_file_path in vote_file_paths:
         vote_data = utils.read_json_file(vote_file_path)
         proposals.from_vote_data(vote_data)
         votes.from_vote_data(vote_data)
 
+    log.info('Finished migration of votes')
 
-migrate_bills()
-# migrate_legislative_members()
-# migrate_votes()
+
+# Download and parse the data from official resources
+# downloadVotes()
+# downloadBillsAndAmendments()
+
+# Gather the file paths of the downloaded files
+bill_file_paths, amendment_file_paths, vote_file_paths = collect_data_file_paths()
+
+# Insert data into database
+migrate_bills(bill_file_paths)
+migrate_amendments(amendment_file_paths)
+migrate_votes(vote_file_paths)
+migrate_legislative_members()
