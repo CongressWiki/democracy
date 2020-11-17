@@ -1,7 +1,7 @@
 import logging
-from repositories import us_government
-from migrations import legislative_members, proposals, votes, bills, amendments
-import utils
+from .repositories import us_government
+from .migrations import legislative_members, proposals, votes, bills, amendments
+from . import utils
 import os
 
 logging.basicConfig()
@@ -24,7 +24,9 @@ def collect_data_file_paths():
     amendment_file_paths = []
     vote_file_paths = []
 
-    for root, dirs, files in os.walk(rootdir):
+    log.info('Gathering file paths for downloaded US government files.')
+
+    for root, _dirs, files in os.walk(rootdir):
         if 'bills' in root:
             for name in files:
                 if name.endswith((".json")):
@@ -62,7 +64,7 @@ def migrate_bills(bill_file_paths):
 def migrate_amendments(amendment_file_paths):
     for amendment_file_path in amendment_file_paths:
         amendment_data = utils.read_json_file(amendment_file_path)
-        amendments.from_bills_data(amendment_data)
+        amendments.from_amendments_data(amendment_data)
 
     log.info('Finished migration of amendments')
 
@@ -77,8 +79,8 @@ def migrate_votes(vote_file_paths):
 
 
 # Download and parse the data from official resources
-# downloadVotes()
-# downloadBillsAndAmendments()
+downloadVotes()
+downloadBillsAndAmendments()
 
 # Gather the file paths of the downloaded files
 bill_file_paths, amendment_file_paths, vote_file_paths = collect_data_file_paths()

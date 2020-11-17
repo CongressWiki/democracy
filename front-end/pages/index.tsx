@@ -1,9 +1,10 @@
+import BillsTable from '../components/BillsTable'
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-// import { withApollo } from '../lib/withApollo'
+import { withApollo } from '../lib/withApollo'
 
-export default function Home() {
+function Home() {
   return (
     <div className={styles.container}>
       <Head>
@@ -19,6 +20,10 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
+          <BillsTable />
+        </div>
+
+        {/* <div className={styles.grid}>
           <Link href='/proposals'>
             <a className={styles.card}>
               <h3>House of Congress &rarr;</h3>
@@ -52,7 +57,7 @@ export default function Home() {
               <p>Track the latest orders signed by the President's cabinet.</p>
             </a>
           </Link>
-        </div>
+        </div> */}
       </main>
 
       {/* <footer className={styles.footer}>
@@ -69,4 +74,4 @@ export default function Home() {
   )
 }
 
-// export default withApollo()(Home)
+export default withApollo()(Home)

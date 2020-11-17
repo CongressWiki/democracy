@@ -4,32 +4,32 @@ import { useApolloClient, useSubscription } from "@apollo/react-hooks";
 import DataTable from 'react-data-table-component';
 import gql from "graphql-tag";
 import moment from 'moment'
-import styles from '../styles/Proposals.module.css'
+import styles from '../styles/Bills.module.css'
 
 const columns = [
   {
-    name: 'Category',
-    selector: 'category',
+    name: 'Subject',
+    selector: 'subjects_top_term',
     sortable: true,
     wrap: true,
-    format: row => row.category.charAt(0).toUpperCase() + row.category.slice(1)
   },
   {
-    name: 'Question',
-    selector: 'question',
+    name: 'Title',
+    selector: 'official_title',
     sortable: true,
     grow: 3,
     wrap: true
   },
   {
-    name: 'Result',
-    selector: 'result',
+    name: 'Status',
+    selector: 'actions',
     sortable: true,
-    wrap: true
+    wrap: true,
+    cell: row => <div><p>{row.actions[row.actions.length - 1]?.text}</p></div>
   },
   {
-    name: 'Date',
-    selector: 'date',
+    name: 'Updated at',
+    selector: 'updated_at',
     sortable: true,
     wrap: true,
     format: row => moment(row.date).format('ll')
@@ -62,6 +62,8 @@ const customStyles = {
   },
 };
 
+const ExpandableComponent = ({ data }) => <div><p>{data.summary.text}</p></div>;
+
 const Table = props => {
   const [state, setState] = useState({
     proposals: []
@@ -83,7 +85,7 @@ const Table = props => {
   return (
     <Fragment>
       <DataTable
-        title="Senate Proposals"
+        // title="Bills"
         columns={columns}
         data={state.proposals}
         dense
@@ -91,35 +93,50 @@ const Table = props => {
         highlightOnHover
         onRowClicked={onRowClicked}
         customStyles={customStyles}
-        paginationPerPage={3}
+        paginationPerPage={10}
         overflowY
+        expandableRows
+        expandOnRowClicked
+        expandableRowsComponent={<ExpandableComponent />}
+        // noTableHead
         />
     </Fragment>
   );
 };
 
 // Run a subscription to get the latest Proposal
-const GET_LATEST_PROPOSALS = gql`
-  subscription getLatestProposals {
-    proposals(
+const GET_LATEST_BILLS = gql`
+  subscription getLatestBills {
+    bills(
       limit: 50
-      order_by: { date: desc }
+      order_by: { updated_at: desc }
     ) {
       id
-      category
-      type
-      question
-      subject
-      created_at
-      result
-      source_url
-      date
+      introduced_at
+      official_title
+      popular_title
+      short_title
+      sponsor
+      status
+      status_at
+      subjects
+      subjects_top_term
+      summary
+      titles
+      updated_at
+      history
+      enacted_as
+      cosponsors
+      committees
+      committee_reports
+      amendments
+      actions
     }
   }
 `;
 
-const ProposalsTable = () => {
-  const { loading, error, data } = useSubscription(GET_LATEST_PROPOSALS);
+const BillsTable = () => {
+  const { loading, error, data } = useSubscription(GET_LATEST_BILLS);
   if (loading) {
     return <span>Loading...</span>;
   }
@@ -129,8 +146,8 @@ const ProposalsTable = () => {
 
   if (data) {
     return (
-      <Table proposals={data.proposals.length ? data.proposals : null} />
+      <Table proposals={data.bills.length ? data.bills : null} />
     )
   }
 };
-export default ProposalsTable;
+export default BillsTable;

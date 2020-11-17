@@ -12,28 +12,46 @@ HEADERS = {'x-hasura-admin-secret': 'hasurapassword', "Content-Type": "applicati
 
 def insert_proposal(proposal):
     query = """\
-        mutation ($category: String, $chamber: String, $congress: Int, $date: timestamptz,
-        $number: Int, $question: String, $requires: String, $result: String, $result_text: String, $session: String,
-        $source_url: String, $subject: String, $type: String, $id: String) {
+        mutation (
+            $number: Int,
+            $congress: Int,
+            $date: timestamptz,
+            $updated_at: timestamp,
+            $record_modified: timestamp,
+            $nomination: json,
+            $id: String,
+            $type: String,
+            $result: String,
+            $session: String,
+            $chamber: String,
+            $subject: String,
+            $category: String,
+            $question: String,
+            $requires: String,
+            $source_url: String,
+            $result_text: String,
+        ) {
             insert_proposals(objects: {
-                id: $id,
-                category: $category,
-                chamber: $chamber,
+                number: $number,
                 congress: $congress,
                 date: $date,
-                number: $number,
+                updated_at: $updated_at,
+                nomination: $nomination,
+                id: $id,
+                type: $type,
+                result: $result,
+                session: $session,
+                chamber: $chamber,
+                subject: $subject,
+                category: $category,
                 question: $question,
                 requires: $requires,
-                result: $result,
-                result_text: $result_text,
-                session: $session,
                 source_url: $source_url,
-                subject: $subject,
-                type: $type
+                result_text: $result_text
             }, on_conflict: {
                 constraint: votes_pkey,
                 update_columns: [
-                    category, chamber, congress, date, number,
+                    category, chamber, congress, date, nomination, number,
                     question, requires, result, result_text, session,
                     source_url, subject, type, updated_at
                 ]
@@ -41,8 +59,6 @@ def insert_proposal(proposal):
             {
                 returning {
                     id
-                    number
-                    question
                 }
             }
         }
@@ -63,33 +79,46 @@ def insert_proposal(proposal):
 def insert_legislative_member(proposal):
     query = """\
         mutation (
-            $id: String, $bioguide: String, $govtrack: Int, $lis: String,
-            $address: String, $bio_url: String, $birthday: date,
-            $contact_form_url: String, $first_name: String, $last_name: String,
-            $official_full: String, $gender: String, $isHouseMember: Boolean,
-            $isSenateMember: Boolean, $party: String, $phone: String,
-            $state: String, $state_rank: String, $terms: jsonb
+            $id: String,
+            $bioguide: String,
+            $govtrack: Int,
+            $lis: String,
+            $address: String,
+            $bio_url: String,
+            $birthday: date,
+            $contact_form_url: String,
+            $first_name: String,
+            $last_name: String,
+            $official_full: String,
+            $gender: String,
+            $isHouseMember: Boolean,
+            $isSenateMember: Boolean,
+            $party: String,
+            $phone: String,
+            $state: String,
+            $state_rank: String,
+            $terms: jsonb
         ) {
             insert_legislative_members(objects: {
                 id: $id,
-                bioguide: $bioguide,
-                govtrack: $govtrack,
                 lis: $lis,
-                address: $address,
-                bio_url: $bio_url,
-                birthday: $birthday,
-                contact_form_url: $contact_form_url,
-                first_name: $first_name,
-                last_name: $last_name,
-                official_full: $official_full,
-                gender: $gender,
-                isHouseMember: $isHouseMember,
-                isSenateMember: $isSenateMember,
                 party: $party,
                 phone: $phone,
                 state: $state,
+                terms: $terms,
+                gender: $gender,
+                bio_url: $bio_url,
+                address: $address,
+                bioguide: $bioguide,
+                birthday: $birthday,
+                govtrack: $govtrack,
                 state_rank: $state_rank,
-                terms: $terms
+                first_name: $first_name,
+                last_name: $last_name,
+                isHouseMember: $isHouseMember,
+                official_full: $official_full,
+                isSenateMember: $isSenateMember,
+                contact_form_url: $contact_form_url,
             }, on_conflict: {
                 constraint: legislative_members_pkey,
                 update_columns: [
@@ -103,9 +132,6 @@ def insert_legislative_member(proposal):
             {
                 returning {
                     id
-                    official_full
-                    updated_at
-                    created_at
                 }
             }
         }
@@ -126,9 +152,13 @@ def insert_legislative_member(proposal):
 def insert_vote(vote):
     query = """\
         mutation (
-            $legislative_member_id: String, $proposal_id: String, $decision: decisions_enum
+            $id: String,
+            $legislative_member_id: String,
+            $proposal_id: String,
+            $decision: decisions_enum
         ) {
             insert_votes(objects: {
+                id: $id,
                 legislative_member_id: $legislative_member_id,
                 proposal_id: $proposal_id,
                 decision: $decision
@@ -142,10 +172,6 @@ def insert_vote(vote):
             {
                 returning {
                     id
-                    updated_at
-                    legislative_member_id
-                    proposal_id
-                    decision
                 }
             }
         }
@@ -166,10 +192,24 @@ def insert_vote(vote):
 def insert_bill(bill):
     query = """\
         mutation (
-            $id: String, $introduced_at: timestamp, $updated_at: timestamptz, $official_title: String,
-            $popular_title: String, $short_title: String, $titles: json, $subjects_top_term: String,
-            $subjects: json, $summary: json, $status: String, $status_at: timestamptz, $history: json,
-            $enacted_as: json, $sponsor: json, $cosponsors: json, $committees: json, $amendments: json,
+            $id: String,
+            $introduced_at: timestamp,
+            $updated_at: timestamptz,
+            $official_title: String,
+            $popular_title: String,
+            $short_title: String,
+            $titles: json,
+            $subjects_top_term: String,
+            $subjects: json,
+            $summary: json,
+            $status: String,
+            $status_at: timestamptz,
+            $history: json,
+            $enacted_as: json,
+            $sponsor: json,
+            $cosponsors: json,
+            $committees: json,
+            $amendments: json,
             $actions: json
         ) {
             insert_bills(objects: {
@@ -224,15 +264,27 @@ def insert_bill(bill):
 def insert_amendment(amendment):
     query = """\
         mutation (
-            $id: String, $actions: json, $amends_amendment: json, $amends_bill: json, $amends_treaty: json,
-            $sponsor: json, $number: Int, $amendment_type: String, $amendment_id: String, $chamber: String,
-            $congress: String, $description: String, $purpose: String, $status: String, $introduced_at: timestamp,
-            $proposed_at: timestamp, $status_at: timestamptz, $updated_at: timestamptz
+            $id: String,
+            $actions: json,
+            $amends_amendment: json,
+            $amends_bill: json,
+            $amends_treaty: json,
+            $sponsor: json,
+            $number: Int,
+            $amendment_type: String,
+            $chamber: String,
+            $congress: String,
+            $description: String,
+            $purpose: String,
+            $status: String,
+            $introduced_at: timestamp,
+            $proposed_at: timestamptz,
+            $status_at: timestamptz,
+            $updated_at: timestamptz
         ) {
             insert_amendments(objects: {
                 id: $id,
                 actions: $actions,
-                amendment_id: $amendment_id,
                 amendment_type: $amendment_type,
                 amends_amendment: $amends_amendment,
                 amends_bill: $amends_bill,
@@ -251,7 +303,7 @@ def insert_amendment(amendment):
             }, on_conflict: {
                 constraint: amendments_pkey,
                 update_columns: [
-                    actions, amendment_id, amendment_type, amends_amendment, amends_bill, amends_treaty, chamber,
+                    actions, amendment_type, amends_amendment, amends_bill, amends_treaty, chamber,
                     congress, description, introduced_at, number, proposed_at, purpose, sponsor, status, status_at,
                     updated_at
                 ]

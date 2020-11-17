@@ -23,6 +23,10 @@ def from_vote_data(vote_data):
         'source_url': vote_data.get('source_url'),
         'subject': vote_data.get('subject'),
         'type': vote_data.get('type'),
+        'updated_at': vote_data.get('updated_at'),
+        'nomination': vote_data.get('nomination'),
+        'record_modified': vote_data.get('record_modified')
+        # 'votes': vote_data.get('votes')
     }
 
     log.info('NEW PROPOSAL')
