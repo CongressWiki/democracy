@@ -3,8 +3,6 @@ import { useApolloClient, useSubscription } from "@apollo/react-hooks";
 
 import DataTable from 'react-data-table-component';
 import gql from "graphql-tag";
-import moment from 'moment'
-import styles from '../styles/Bills.module.css'
 
 const columns = [
   {
@@ -27,13 +25,13 @@ const columns = [
     wrap: true,
     cell: row => <div><p>{row.actions[row.actions.length - 1]?.text}</p></div>
   },
-  {
-    name: 'Updated at',
-    selector: 'updated_at',
-    sortable: true,
-    wrap: true,
-    format: row => moment(row.date).format('ll')
-  }
+  // {
+  //   name: 'Updated at',
+  //   selector: 'updated_at',
+  //   sortable: true,
+  //   wrap: true,
+  //   format: row => moment(row.date).format('ll')
+  // }
 ];
 
 const customStyles = {
@@ -62,7 +60,7 @@ const customStyles = {
   },
 };
 
-const ExpandableComponent = ({ data }) => <div><p>{data.summary.text}</p></div>;
+const ExpandableComponent = ({ data }) => <div><p>{data?.summary?.text}</p></div>;
 
 const Table = props => {
   const [state, setState] = useState({

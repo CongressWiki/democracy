@@ -4,7 +4,6 @@ import { useApolloClient, useSubscription } from "@apollo/react-hooks";
 import DataTable from 'react-data-table-component';
 import gql from "graphql-tag";
 import moment from 'moment'
-import styles from '../styles/Proposals.module.css'
 
 const columns = [
   {
