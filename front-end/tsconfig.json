@@ -14,6 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/withApollo.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/with-apollo.js"],
   "exclude": ["node_modules"]
 }
