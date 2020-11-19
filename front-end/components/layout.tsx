@@ -1,35 +1,41 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import React from 'react';
-import styles from '../styles/Layout.module.css';
+import {Theme, createStyles, makeStyles} from '@material-ui/core/styles';
 
-export const siteTitle = 'Keeping US A-ccountable';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import React from 'react';
+
+const useStyles = makeStyles((theme: Theme) => (
+	createStyles({
+		root: {
+			flexGrow: 1,
+			justifyContent: 'center'
+		},
+		paper: {
+			padding: theme.spacing(2),
+			textAlign: 'center',
+			color: theme.palette.text.secondary
+		}
+	}))
+);
 
 const Layout = ({
-	children,
-	home
+	children
 }: {
 	children: React.ReactNode;
-	home?: boolean;
 }) => {
+	const classes = useStyles();
+
 	return (
-		<div className={styles.container}>
-			<Head>
-				<link rel="icon" href="/favicon.ico"/>
-				<meta
-					name="description"
-					content="Keeping US A-ccountable"
-				/>
-				<meta
-					property="og:image"
-					content={`https://og-image.now.sh/${encodeURI(
-						siteTitle
-					)}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.zeit.co%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-				/>
-				<meta name="og:title" content={siteTitle}/>
-				<meta name="twitter:card" content="summary_large_image"/>
-			</Head>
-			<main>{children}</main>
+		<div className={classes.root}>
+			<Grid container spacing={3}>
+				<Grid item xs={12}>
+					<h1>USA Counts</h1>
+					<p>Do our elected officials vote for us?</p>
+				</Grid>
+				<Grid item xs={12}>
+					<main>{children}</main>
+				</Grid>
+			</Grid>
 		</div>
 	);
 };

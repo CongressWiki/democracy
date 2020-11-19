@@ -1,12 +1,6 @@
-// @xo-ignore
-// import 'fontsource-roboto';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Head from 'next/head';
 import PropTypes from 'prop-types';
 import React from 'react';
-import Theme from '../components/theme';
-import {ThemeProvider} from '@material-ui/core/styles';
+import TopLayout from '../components/top-layout';
 
 const App = props => {
 	const {Component, pageProps} = props;
@@ -20,17 +14,9 @@ const App = props => {
 	}, []);
 
 	return (
-		<>
-			<Head>
-				<title>My page</title>
-				<meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
-			</Head>
-			<ThemeProvider theme={Theme}>
-				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-				<CssBaseline/>
-				<Component {...pageProps}/>
-			</ThemeProvider>
-		</>
+		<TopLayout>
+			<Component {...pageProps}/>
+		</TopLayout>
 	);
 };
 

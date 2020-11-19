@@ -1,10 +1,12 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {useApolloClient, useSubscription} from '@apollo/react-hooks';
+import React, {useEffect, useState} from 'react';
 
-import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import {makeStyles} from '@material-ui/core/styles';
+import {useQuery} from '@apollo/react-hooks';
 
 const useStyles = makeStyles({
 	root: {
@@ -40,24 +42,28 @@ const Bill = props => {
 
 	return (
 		<Container style={{position: 'relative', width: '100%', height: '100%'}}>
-			{state.bills.map((bill, index) => {
+			{state.bills.map(bill => {
 				return (
-					<Box key={index} color="text.primary" className={classes.root}>
-						<p>{bill.subjects_top_term}</p>
+					<Paper key={bill.id} elevation={3} color="text.primary" className={classes.root}>
+						<h3>{bill.subjects_top_term}</h3>
 						<b>{bill.official_title}</b>
 						<p>{bill?.summary?.text}</p>
-					</Box>
+					</Paper>
 				);
 			})}
 		</Container>
 	);
 };
 
+Bill.propTypes = {
+	bills: PropTypes.array.isRequired
+};
+
 // Run a subscription to get the latest Proposal
 const GET_LATEST_BILLS = gql`
-  subscription getLatestBills {
+  query getLatestBills {
     bills(
-      limit: 10
+      limit: 3
       order_by: { updated_at: desc }
     ) {
       id
@@ -85,9 +91,9 @@ const GET_LATEST_BILLS = gql`
 `;
 
 const BillCanvas = () => {
-	const {loading, error, data} = useSubscription(GET_LATEST_BILLS);
+	const {loading, error, data} = useQuery(GET_LATEST_BILLS);
 	if (loading) {
-		return <span>Loading...</span>;
+		return <CircularProgress/>;
 	}
 
 	if (error) {
