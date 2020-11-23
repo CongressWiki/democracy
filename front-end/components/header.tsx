@@ -1,31 +1,47 @@
-import Head from 'next/head';
+import './header.css';
+
+import {Button} from './Button';
 import React from 'react';
 
-export const siteTitle = 'Keeping US A-ccountable';
+export interface HeaderProps {
+	user?: Record<string, unknown>;
+	onLogin: () => void;
+	onLogout: () => void;
+	onCreateAccount: () => void;
+}
 
-const Header = () => {
-	return (
-		<Head>
-			<title>{siteTitle}</title>
-			<meta
-				name="description"
-				content={siteTitle}
-			/>
-			<meta
-				property="og:image"
-				content={`https://og-image.now.sh/${encodeURI(
-					siteTitle
-				)}.png?theme=light&md=0&fontSize=75px&images=https%3A%2F%2Fassets.zeit.co%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fnextjs-black-logo.svg`}
-			/>
-			<meta name="og:title" content={siteTitle}/>
-			<meta name="twitter:card" content="summary_large_image"/>
-			<link rel="icon" href="/favicon.ico"/>
-			<link
-				href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
-				rel="stylesheet"
-			/>
-		</Head>
-	);
-};
-
-export default Header;
+export const Header: React.FC<HeaderProps> = ({user, onLogin, onLogout, onCreateAccount}) => (
+	<header>
+		<div className="wrapper">
+			<div>
+				<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+					<g fill="none" fillRule="evenodd">
+						<path
+							d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
+							fill="#FFF"
+						/>
+						<path
+							d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z"
+							fill="#555AB9"
+						/>
+						<path
+							d="M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z"
+							fill="#91BAF8"
+						/>
+					</g>
+				</svg>
+				<h1>Acme</h1>
+			</div>
+			<div>
+				{user ? (
+					<Button size="small" label="Log out" onClick={onLogout}/>
+				) : (
+					<>
+						<Button size="small" label="Log in" onClick={onLogin}/>
+						<Button primary size="small" label="Sign up" onClick={onCreateAccount}/>
+					</>
+				)}
+			</div>
+		</div>
+	</header>
+);

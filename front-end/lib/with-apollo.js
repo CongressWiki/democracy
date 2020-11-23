@@ -112,14 +112,14 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 
 	if (ssr || PageComponent.getInitialProps) {
 		WithApollo.getInitialProps = async ctx => {
-			const {AppTree} = ctx;
-
 			// Initialize ApolloClient, add it to the ctx object so
 			// we can use it in `PageComponent.getInitialProp`.
-			const apolloClient = (ctx.apolloClient = initApolloClient(
+			ctx.apolloClient = initApolloClient(
 				null,
 				await getHeaders(ctx)
-			));
+			);
+
+			const {apolloClient, AppTree} = ctx;
 
 			// Run wrapped getInitialProps methods
 			let pageProps = {};

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import TopLayout from '../components/top-layout';
+import TopLayout from '../top-layer-layout/top-layout';
 
 const App = props => {
 	const {Component, pageProps} = props;

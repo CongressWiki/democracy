@@ -23,7 +23,11 @@
     ],
     "extends": [
       "xo-react"
-    ]
+    ],
+    "rules": {
+      "unicorn/filename-case": 0,
+      "react/prop-types": 0
+    }
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
