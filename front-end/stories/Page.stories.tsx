@@ -2,7 +2,7 @@ import * as HeaderStories from './Header.stories';
 
 // Also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import {Meta, Story} from '@storybook/react/types-6-0';
-import {Page, PageProps} from '../pages/Page';
+import {Page, PageProps} from '../pages/page';
 
 import React from 'react';
 

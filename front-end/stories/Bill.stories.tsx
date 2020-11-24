@@ -6,16 +6,13 @@ import React from 'react';
 
 export default {
 	title: 'Example/Bill',
-	component: Bill,
-	argTypes: {
-		backgroundColor: {control: 'color'}
-	}
+	component: Bill
 } as Meta;
 
 const Template: Story<BillProps> = args => <Bill {...args}/>;
 
-export const Primary = Template.bind({});
-Primary.args = {
+export const Default = Template.bind({});
+Default.args = {
 	subjects_top_term: 'Health',
 	official_title: 'Title',
 	summary: 'summary'
