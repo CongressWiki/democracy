@@ -1,53 +1,63 @@
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Skeleton from '@material-ui/lab/Skeleton';
 import {makeStyles} from '@material-ui/core/styles';
 
 export interface BillProps {
-	/**
-   * Category of bill
-   */
-	subjects_top_term: string;
+	id: string;
+
 	/**
    * Bill title
    */
-	official_title: string;
+	title: string;
 	/**
    * Summary of bill
    */
 	summary: string;
 }
 
-const useStyles = makeStyles({
-	root: {
-		// Position: 'absolute',
-		display: 'inline-block',
-		background: 'linear-gradient(45deg, #2979ff 30%, #f44336 90%)',
-		border: 1,
-		borderRadius: 3,
-		boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-		color: 'white',
-		// Height: '100%',
-		padding: '30px',
-		top: '-10px',
-		margin: '30px 0 30px 0'
+const useStyles = makeStyles(theme => ({
+	paper: {
+		width: '67%',
+		margin: 'auto',
+		borderRadius: 1,
+		padding: theme.spacing(2),
+		background: 'rgba(251, 251, 248)',
+		boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)'
+	},
+	header: {
+		margin: 0,
+		padding: 0,
+		justifyContent: 'flex-start'
 	}
-});
+}));
 
 export const Bill = props => {
 	const classes = useStyles();
 
 	return (
-		<Paper elevation={3} className={classes.root}>
-			<h3>{props.subjects_top_term}</h3>
-			<b>{props.official_title}</b>
-			<p>{props.summary}</p>
+		<Paper elevation={3} className={classes.paper}>
+			<Grid container spacing={1}>
+				<Grid item xs className={classes.header}>
+					{props.id ? <p>{props.id}</p> : <Skeleton variant="text" animation="wave" height={22} width="10%" style={{marginBottom: 30}}/>}
+				</Grid>
+				<Grid item xs={12}>
+					{props.title ?
+						<h3>{props.title}</h3> :
+						<Skeleton variant="text" animation="wave" height={22} width="80%" style={{marginBottom: 30}}/>}
+				</Grid>
+				<Grid item xs={12}>
+					{props.summary ? <p>{props.summary}</p> : <Skeleton variant="text" animation="wave" height={18}/>}
+				</Grid>
+			</Grid>
 		</Paper>
 	);
 };
 
 Bill.propTypes = {
-	subjects_top_term: PropTypes.string.isRequired,
-	official_title: PropTypes.string.isRequired,
-	summary: PropTypes.string.isRequired
+	id: PropTypes.string,
+	title: PropTypes.string,
+	summary: PropTypes.string
 };

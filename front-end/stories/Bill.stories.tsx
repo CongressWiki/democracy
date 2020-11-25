@@ -13,7 +13,21 @@ const Template: Story<BillProps> = args => <Bill {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-	subjects_top_term: 'Health',
-	official_title: 'Title',
-	summary: 'summary'
+	id: 'H.R.1234',
+	title: 'Title',
+	summary: 'Summary'
+};
+
+export const ExampleA = Template.bind({});
+ExampleA.args = {
+	id: 'H.R.1234',
+	title: 'To amend the Controlled Substances Act to clarify the process for registrants to exercise due diligence upon discovering a suspicious order, and for other purposes.',
+	summary: 'Block, Report, And Suspend Suspicious Shipments Act of 2020\n\nThis bill creates additional requirements for drug manufacturers and distributors who discover a suspicious order for controlled substances.\n\nIn addition to reporting the suspicious order to the Drug Enforcement Administration, a manufacturer or distributor must also exercise due diligence and decline to fill the order.'
+};
+
+export const Skeleton = Template.bind({});
+Skeleton.args = {
+	id: null,
+	title: null,
+	summary: null
 };

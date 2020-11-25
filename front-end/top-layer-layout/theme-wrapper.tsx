@@ -12,7 +12,7 @@ const defaultState = {
 
 export const ThemeContext = React.createContext(defaultState);
 
-export const ThemeWrapper = props => {
+export const ThemeWrapper = ({children}: {children: React.ReactNode}) => {
 	const [theme, setTheme] = useLocalStorage('theme', 'light');
 	const toggleDarkMode = () => {
 		setTheme(theme === 'light' ? 'dark' : 'light');
@@ -24,7 +24,6 @@ export const ThemeWrapper = props => {
 				type: theme
 			}
 		});
-
 		return newTheme;
 	}, [theme]);
 
@@ -37,7 +36,7 @@ export const ThemeWrapper = props => {
 		>
 			<ThemeProvider theme={nextTheme}>
 				<CssBaseline/>
-				{props.children}
+				{children}
 			</ThemeProvider>
 		</ThemeContext.Provider>
 	);

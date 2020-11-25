@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {ThemeWrapper} from './theme-wrapper';
 
-const TopLayout = props => {
+const TopLayout = ({children}: {children: React.ReactNode}) => {
 	return (
 		<>
 			<Header/>
 			<ThemeWrapper>
-				{props.children}
+				{children}
 			</ThemeWrapper>
 		</>
 	);
