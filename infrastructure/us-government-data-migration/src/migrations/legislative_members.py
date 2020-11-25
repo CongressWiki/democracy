@@ -2,16 +2,33 @@ import logging
 import json
 from ..repositories import graphql_engine
 
-logging.basicConfig()
-log = logging.getLogger('[legislative_members.py]')
-log.setLevel(logging.DEBUG)
+logging.basicConfig(
+    filename="legislative_members.log",
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s'
+)
+log = logging.getLogger('')
 
 
-def from_legislative_member(legislative_member):
-    member_id = legislative_member.get('id')
-    member_name = legislative_member.get('name')
-    member_bio = legislative_member.get('bio')
-    member_terms = legislative_member.get('terms')
+def from_legislative_member(legislative_member_data):
+    log.info("MIGRATING LEGISLATIVE MEMBER")
+
+    legislative_member_keys = [
+        "id", "name", "bio", "terms"
+    ]
+
+    for key in legislative_member_data:
+        if key not in legislative_member_keys:
+            log.warn(
+                'Missed migration of Legislative Member property: "' +
+                key + '": ' +
+                json.dumps(legislative_member_data[key])
+            )
+
+    member_id = legislative_member_data.get('id')
+    member_name = legislative_member_data.get('name')
+    member_bio = legislative_member_data.get('bio')
+    member_terms = legislative_member_data.get('terms')
     last_active_term = member_terms[-1]
 
     new_member = {
@@ -36,7 +53,9 @@ def from_legislative_member(legislative_member):
         'terms': member_terms,
     }
 
-    log.info('NEW MEMBER')
-    log.info(json.dumps(new_member))
-
-    return graphql_engine.insert_legislative_member(new_member)
+    try:
+        return graphql_engine.insert_legislative_member(new_member)
+    except Exception as error:
+        log.warn(type(error))
+        log.warn(error)
+        log.warn(json.dumps(new_member))

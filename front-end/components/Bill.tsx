@@ -1,9 +1,12 @@
+import {makeStyles, useTheme} from '@material-ui/core/styles';
+
+import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import {makeStyles} from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 export interface BillProps {
 	id: string;
@@ -31,25 +34,41 @@ const useStyles = makeStyles(theme => ({
 		margin: 0,
 		padding: 0,
 		justifyContent: 'flex-start'
-	}
+	},
+	indent: props => ({
+		textIndent: '-3em',
+		paddingLeft: '3em'
+		// Display: 'inline-flex'
+		// '&:(first-line)': {
+		// 	textIndent: 0
+		// }
+	})
 }));
 
 export const Bill = props => {
 	const classes = useStyles();
+	const theme = useTheme();
 
 	return (
 		<Paper elevation={3} className={classes.paper}>
 			<Grid container spacing={1}>
 				<Grid item xs className={classes.header}>
-					{props.id ? <p>{props.id}</p> : <Skeleton variant="text" animation="wave" height={22} width="10%" style={{marginBottom: 30}}/>}
+					{props.id ?
+						<Typography variant="h6">{props.id}</Typography> :
+						<Skeleton variant="text" animation="wave" height={22} width="10%" style={{marginBottom: theme.spacing(4)}}/>}
 				</Grid>
 				<Grid item xs={12}>
 					{props.title ?
-						<h3>{props.title}</h3> :
-						<Skeleton variant="text" animation="wave" height={22} width="80%" style={{marginBottom: 30}}/>}
+						<Typography variant="subtitle1" className={classes.indent}>{props.title}</Typography> :
+						<Skeleton variant="text" animation="wave" height={22} width="80%" style={{marginBottom: theme.spacing(4)}}/>}
+				</Grid>
+				<Grid item xs={12} className={classes.header}>
+					<Divider variant="middle"/>
 				</Grid>
 				<Grid item xs={12}>
-					{props.summary ? <p>{props.summary}</p> : <Skeleton variant="text" animation="wave" height={18}/>}
+					{props.summary ?
+						<Typography className={classes.indent}>{props.summary}</Typography> :
+						<Skeleton variant="text" animation="wave" height={18}/>}
 				</Grid>
 			</Grid>
 		</Paper>

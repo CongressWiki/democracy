@@ -16,8 +16,8 @@ const Layout = ({children}: {children: React.ReactNode}) => {
 
 	return (
 		<div className={classes.root}>
-			<Grid container spacing={3} className={classes.header}>
-				<Grid item xs={12}>
+			<Grid container spacing={3}>
+				<Grid item xs={12} className={classes.header}>
 					<h1>USA Counts</h1>
 					<p>Do our elected officials vote for us?</p>
 				</Grid>

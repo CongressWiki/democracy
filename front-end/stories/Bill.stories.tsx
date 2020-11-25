@@ -13,7 +13,7 @@ const Template: Story<BillProps> = args => <Bill {...args}/>;
 
 export const Default = Template.bind({});
 Default.args = {
-	id: 'H.R.1234',
+	id: 'id',
 	title: 'Title',
 	summary: 'Summary'
 };

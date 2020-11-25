@@ -6,7 +6,8 @@ logging.basicConfig()
 log = logging.getLogger('[graphql_engine.py]')
 log.setLevel(logging.ERROR)
 
-GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
+# GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
+GRAPHQL_URL = 'http://localhost:8080/v1/graphql'
 HEADERS = {'x-hasura-admin-secret': 'hasurapassword', "Content-Type": "application/json"}
 
 
@@ -71,7 +72,7 @@ def insert_proposal(proposal):
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -144,7 +145,7 @@ def insert_legislative_member(proposal):
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -184,7 +185,7 @@ def insert_vote(vote):
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -210,7 +211,14 @@ def insert_bill(bill):
             $cosponsors: json,
             $committees: json,
             $amendments: json,
-            $actions: json
+            $actions: json,
+            $type: String,
+            $by_request: String,
+            $congress: String,
+            $number: String,
+            $related_bills: json,
+            $url: String,
+            $committee_reports: json
         ) {
             insert_bills(objects: {
                 id: $id,
@@ -232,12 +240,19 @@ def insert_bill(bill):
                 committees: $committees,
                 amendments: $amendments,
                 actions: $actions,
+                type: $type,
+                by_request: $by_request,
+                congress: $congress,
+                number: $number,
+                related_bills: $related_bills,
+                url: $url,
+                committee_reports: $committee_reports
             }, on_conflict: {
                 constraint: bills_pkey,
                 update_columns: [
                     introduced_at, updated_at, official_title, popular_title, short_title, titles, subjects_top_term,
                     subjects, summary, status, status_at, history, enacted_as, sponsor, cosponsors, committees,
-                    amendments, actions
+                    amendments, actions, type, by_request, congress, number, related_bills, url, committee_reports
                 ]
             })
             {
@@ -256,7 +271,7 @@ def insert_bill(bill):
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -323,7 +338,7 @@ def insert_amendment(amendment):
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -351,7 +366,7 @@ def subscribe_to_recent_proposals():
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()
 
@@ -384,6 +399,6 @@ def subscribe_to_votes_by_legislative_member():
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
-            response.raise_for_status()
+            return response.raise_for_status()
 
         return response.json()

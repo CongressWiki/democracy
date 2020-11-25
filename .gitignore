@@ -31,3 +31,5 @@ yarn-error.log*
 
 # Python
 .venv
+
+infrastructure/us-government-data-migration/congress
