@@ -9,6 +9,9 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
 
 export interface BillProps {
+	/**
+   * Bill ID
+   */
 	id: string;
 
 	/**
@@ -26,7 +29,7 @@ const useStyles = makeStyles(theme => ({
 		width: '67%',
 		margin: 'auto',
 		borderRadius: 1,
-		padding: theme.spacing(2),
+		padding: theme.spacing(4),
 		background: 'rgba(251, 251, 248)',
 		boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .3)'
 	},
@@ -42,7 +45,14 @@ const useStyles = makeStyles(theme => ({
 		// '&:(first-line)': {
 		// 	textIndent: 0
 		// }
-	})
+	}),
+	divider: {
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2),
+		backgroundColor: 'black',
+		height: 1
+		// Width: '60%'
+	}
 }));
 
 export const Bill = props => {
@@ -52,19 +62,23 @@ export const Bill = props => {
 	return (
 		<Paper elevation={3} className={classes.paper}>
 			<Grid container spacing={1}>
-				<Grid item xs className={classes.header}>
+				<Grid item xs/>
+				<Grid item xs>
 					{props.id ?
-						<Typography variant="h6">{props.id}</Typography> :
+						<Typography variant="h3">{props.id}</Typography> :
 						<Skeleton variant="text" animation="wave" height={22} width="10%" style={{marginBottom: theme.spacing(4)}}/>}
 				</Grid>
+				<Grid item xs/>
 				<Grid item xs={12}>
 					{props.title ?
 						<Typography variant="subtitle1" className={classes.indent}>{props.title}</Typography> :
 						<Skeleton variant="text" animation="wave" height={22} width="80%" style={{marginBottom: theme.spacing(4)}}/>}
 				</Grid>
-				<Grid item xs={12} className={classes.header}>
-					<Divider variant="middle"/>
+				<Grid item xs/>
+				<Grid item xs>
+					<Divider variant="middle" className={classes.divider}/>
 				</Grid>
+				<Grid item xs/>
 				<Grid item xs={12}>
 					{props.summary ?
 						<Typography className={classes.indent}>{props.summary}</Typography> :

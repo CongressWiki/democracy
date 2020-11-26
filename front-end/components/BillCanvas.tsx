@@ -9,28 +9,20 @@ const GET_LATEST_BILLS = gql`
 	query getLatestBills {
 		bills(
 			limit: 3
-			order_by: { updated_at: desc }
+			order_by: { status_at: desc }
 		) {
 			id
 			introduced_at
 			official_title
 			popular_title
-			short_title
+      short_title
 			sponsor
 			status
 			status_at
 			subjects
 			subjects_top_term
 			summary
-			titles
-			updated_at
-			history
-			enacted_as
 			cosponsors
-			committees
-			committee_reports
-			amendments
-			actions
 		}
 	}
 `;
@@ -43,7 +35,7 @@ const BillCanvas = () => {
 	}
 
 	if (error) {
-		return <span>Error {JSON.stringify(error)}</span>;
+		return <span>Error {JSON.stringify(error, null, 2)}</span>;
 	}
 
 	if (data) {
@@ -54,7 +46,7 @@ const BillCanvas = () => {
 						<Bill
 							id={billData?.id}
 							title={billData?.official_title}
-							summary={billData?.summary?.text}
+							summary={JSON.stringify(billData, null, 2)}
 						/>
 					</Grid>
 				))}

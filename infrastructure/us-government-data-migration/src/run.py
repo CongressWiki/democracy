@@ -4,9 +4,17 @@ from .migrations import legislative_members, proposals, votes, bills, amendments
 from . import utils
 import os
 
-logging.basicConfig()
-log = logging.getLogger('[run.py]')
-log.setLevel(logging.DEBUG)
+logging.basicConfig(
+    filename="run.log",
+    level=logging.DEBUG,
+    format='%(asctime)s %(levelname)s %(name)s %(message)s'
+)
+log = logging.getLogger(__name__)
+
+
+#############
+# Downloads #
+#############
 
 
 def download_votes():
@@ -14,12 +22,17 @@ def download_votes():
 
 
 def download_bills_and_amendments():
-    us_government.govinfo()
-    us_government.bills()
+    us_government.downloadBillXml()
+    us_government.convertBillXmlToJson()
+    us_government.bill_text()
 
 
 def download_nominations():
     us_government.nominations()
+
+#####################
+# Collect downloads #
+#####################
 
 
 def collect_data_file_paths():
@@ -55,6 +68,10 @@ def collect_data_file_paths():
                     vote_file_paths.append(full_path)
 
     return bill_file_paths, amendment_file_paths, vote_file_paths, nomination_file_paths
+
+##############
+# Migrations #
+##############
 
 
 def migrate_legislative_members():
@@ -96,6 +113,10 @@ def migrate_nominations(nomination_file_paths):
 
     log.info('Finished migration of votes')
 
+###############
+# Invocations #
+###############
+
 
 # Download and parse the data from official resources
 download_votes()
@@ -110,4 +131,4 @@ migrate_bills(bill_file_paths)
 migrate_amendments(amendment_file_paths)
 migrate_votes(vote_file_paths)
 migrate_legislative_members()
-migrate_nominations(nomination_file_paths)
+# migrate_nominations(nomination_file_paths)

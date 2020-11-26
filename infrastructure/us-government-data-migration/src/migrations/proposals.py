@@ -3,7 +3,7 @@ import json
 from ..repositories import graphql_engine
 
 logging.basicConfig(
-    filename="proposals.log",
+    filename="temp/proposals.log",
     level=logging.DEBUG,
     format='%(asctime)s %(levelname)s %(name)s %(message)s'
 )

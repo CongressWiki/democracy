@@ -3,7 +3,7 @@ import json
 import logging
 
 logging.basicConfig(
-    filename="votes.log",
+    filename="temp/votes.log",
     level=logging.DEBUG,
     format='%(asctime)s %(levelname)s %(name)s %(message)s'
 )

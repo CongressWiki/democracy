@@ -4,7 +4,7 @@ from ..repositories import graphql_engine
 
 
 logging.basicConfig(
-    filename="bills.log",
+    filename="temp/bills.log",
     level=logging.DEBUG,
     format='%(asctime)s %(levelname)s %(name)s %(message)s'
 )
