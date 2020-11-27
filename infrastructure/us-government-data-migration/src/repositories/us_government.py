@@ -1,7 +1,8 @@
 import logging
 import subprocess
-import requests
 from os import path
+
+import requests
 
 logging.basicConfig()
 log = logging.getLogger("[UsGovernment.py]")
@@ -12,7 +13,7 @@ def run_task(task="", args=[]):
     log.info("Fetching " + task)
 
     command = [path.join("..", "congress", "run"), task] + args + ["--log=info"]
-    log.info(command)
+    print(command)
 
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     process.wait()

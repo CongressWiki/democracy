@@ -27,13 +27,13 @@ services:
   #   depends_on:
   #     - graphql-engine
   #   build:
-  #     context: infrastructure/us-government-data-migration
+  #     context: infrastructure/
   #     dockerfile: dockerfile
   #   links:
   #     - graphql-engine
   #   volumes:
-  #    - ./build/us-government-data/:/app/data
-  #    - ./build/tmp/:/app/temp
+  #    - ./build/us-government-data/:/infrastructure/congress/data
+  #    - ./build/tmp/:/infrastructure/us-government-data-migration/temp
   # next-js-server:
   #   depends_on:
   #     - graphql-engine

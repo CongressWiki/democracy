@@ -1,0 +1,16 @@
+FROM python:3.9
+
+
+# Clone the open source "@unitedstates/congress" XML scrapper
+RUN mkdir -p /infrastructure/congress/
+COPY congress infrastructure/congress
+RUN python3 -m pip install -r /infrastructure/congress/requirements.txt
+
+# Clone the migration app to manage migration.
+RUN mkdir -p /infrastructure/us-government-data-migration/
+COPY us-government-data-migration /infrastructure/us-government-data-migration
+RUN python3 -m pip install -r /infrastructure/us-government-data-migration/requirements.txt
+
+# Execute migration
+WORKDIR /infrastructure/us-government-data-migration
+ENTRYPOINT ["python3", "-m", "src.run"]
