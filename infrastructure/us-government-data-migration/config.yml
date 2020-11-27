@@ -1,0 +1,20 @@
+# output directories
+output:
+  data: "../../build/us-government-data"
+  cache: "../../cache"
+
+# email settings
+# email:
+
+#   # smtp details
+#   hostname:
+#   port:
+#   user_name:
+#   password:
+#   starttls:
+
+  # email content
+  # subject: "[THOMAS] Notice"
+  # from:
+  # from_name:
+  # to:
