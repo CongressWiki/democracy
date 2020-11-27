@@ -33,5 +33,5 @@ yarn-error.log*
 .venv
 
 # infrastructure/
-data
-cache
+/infrastructure/us-government-data-migration/data/**/*
+/infrastructure/us-government-data-migration/cache/**/*
