@@ -1,10 +1,33 @@
 {
-  "cSpell.words": [
-    "dockerfiles"
-  ],
-  "python.pythonPath": "/Users/ryanparker/Documents/GitHub/democracy/.venv/bin/python",
   "python.testing.promptToConfigure": false,
   "python.testing.pytestEnabled": false,
   "python.testing.unittestEnabled": false,
-  "python.testing.nosetestsEnabled": false
+  "python.testing.nosetestsEnabled": false,
+  "python.autoComplete.extraPaths": ["./python"],
+  "python.linting.pylintEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": ["--config=${workspaceFolder}/infrastructure/us-government-data-migration/setup.cfg"],
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": ["--config=${workspaceFolder}/infrastructure/us-government-data-migration/setup.cfg"],
+  "python.pythonPath": "${workspaceFolder}/.venv/bin/python3",
+  "python.venvPath": ".venv",
+  "vsintellicode.features.python.deepLearning": "enabled",
+  "python.linting.pydocstyleEnabled": false,
+  "python.sortImports.args": [
+    "-rc",
+    "--settings-path=${workspaceFolder}/infrastructure/us-government-data-migration/setup.cfg"
+  ],
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveTimeout": 3000,
+  "[python]": {
+    "editor.formatOnPaste": false,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "python.languageServer": "Microsoft",
+  "cSpell.words": [
+    "devops"
+  ]
 }

@@ -1,13 +1,20 @@
 import logging
 from .repositories import us_government
-from .migrations import legislative_members, proposals, votes, bills, amendments, nominations
+from .migrations import (
+    legislative_members,
+    proposals,
+    votes,
+    bills,
+    amendments,
+    nominations,
+)
 from . import utils
 import os
 
 logging.basicConfig(
     filename="run.log",
     level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(name)s %(message)s'
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
 log = logging.getLogger(__name__)
 
@@ -30,44 +37,46 @@ def download_bills_and_amendments():
 def download_nominations():
     us_government.nominations()
 
+
 #####################
 # Collect downloads #
 #####################
 
 
 def collect_data_file_paths():
-    rootdir = os.path.join('data')
+    rootdir = os.path.join("data")
     bill_file_paths = []
     amendment_file_paths = []
     vote_file_paths = []
     nomination_file_paths = []
 
-    log.info('Gathering file paths for downloaded US government files.')
+    log.info("Gathering file paths for downloaded US government files.")
 
     for root, _dirs, files in os.walk(rootdir):
         json_extension = ".json"
-        if 'bills' in root:
+        if "bills" in root:
             for name in files:
                 if name.endswith((json_extension)):
                     full_path = os.path.join(root, name)
                     bill_file_paths.append(full_path)
-        if 'amendments' in root:
+        if "amendments" in root:
             for name in files:
                 if name.endswith((json_extension)):
                     full_path = os.path.join(root, name)
                     amendment_file_paths.append(full_path)
-        if 'votes' in root:
+        if "votes" in root:
             for name in files:
                 if name.endswith((json_extension)):
                     full_path = os.path.join(root, name)
                     vote_file_paths.append(full_path)
-        if 'nominations' in root:
+        if "nominations" in root:
             for name in files:
                 if name.endswith((json_extension)):
                     full_path = os.path.join(root, name)
                     vote_file_paths.append(full_path)
 
     return bill_file_paths, amendment_file_paths, vote_file_paths, nomination_file_paths
+
 
 ##############
 # Migrations #
@@ -86,7 +95,7 @@ def migrate_bills(bill_file_paths):
         bill_data = utils.read_json_file(bill_file_path)
         bills.from_bills_data(bill_data)
 
-    log.info('Finished migration of bills')
+    log.info("Finished migration of bills")
 
 
 def migrate_amendments(amendment_file_paths):
@@ -94,7 +103,7 @@ def migrate_amendments(amendment_file_paths):
         amendment_data = utils.read_json_file(amendment_file_path)
         amendments.from_amendments_data(amendment_data)
 
-    log.info('Finished migration of amendments')
+    log.info("Finished migration of amendments")
 
 
 def migrate_votes(vote_file_paths):
@@ -103,7 +112,7 @@ def migrate_votes(vote_file_paths):
         proposals.from_vote_data(vote_data)
         votes.from_vote_data(vote_data)
 
-    log.info('Finished migration of votes')
+    log.info("Finished migration of votes")
 
 
 def migrate_nominations(nomination_file_paths):
@@ -111,7 +120,8 @@ def migrate_nominations(nomination_file_paths):
         nomination_data = utils.read_json_file(nomination_file_path)
         nominations.from_nomination_data(nomination_data)
 
-    log.info('Finished migration of votes')
+    log.info("Finished migration of votes")
+
 
 ###############
 # Invocations #
@@ -124,7 +134,12 @@ download_bills_and_amendments()
 download_nominations()
 
 # Gather the file paths of the downloaded files
-bill_file_paths, amendment_file_paths, vote_file_paths, nomination_file_paths = collect_data_file_paths()
+(
+    bill_file_paths,
+    amendment_file_paths,
+    vote_file_paths,
+    nomination_file_paths,
+) = collect_data_file_paths()
 
 # Insert data into database
 migrate_bills(bill_file_paths)

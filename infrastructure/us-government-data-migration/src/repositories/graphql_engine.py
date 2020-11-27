@@ -3,12 +3,15 @@ import requests
 import json
 
 logging.basicConfig()
-log = logging.getLogger('[graphql_engine.py]')
+log = logging.getLogger("[graphql_engine.py]")
 log.setLevel(logging.ERROR)
 
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
-GRAPHQL_URL = 'http://localhost:8080/v1/graphql'
-HEADERS = {'x-hasura-admin-secret': 'hasurapassword', "Content-Type": "application/json"}
+GRAPHQL_URL = "http://localhost:8080/v1/graphql"
+HEADERS = {
+    "x-hasura-admin-secret": "hasurapassword",
+    "Content-Type": "application/json",
+}
 
 
 def insert_proposal(proposal):
@@ -68,7 +71,7 @@ def insert_proposal(proposal):
     payload = {"query": query, "variables": proposal}
 
     with requests.Session() as session:
-        log.info('Sending request to ' + GRAPHQL_URL)
+        log.info("Sending request to " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -141,7 +144,7 @@ def insert_legislative_member(proposal):
     payload = {"query": query, "variables": proposal}
 
     with requests.Session() as session:
-        log.info('GRAPHQL_URL: ' + GRAPHQL_URL)
+        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -181,7 +184,7 @@ def insert_vote(vote):
     payload = {"query": query, "variables": vote}
 
     with requests.Session() as session:
-        log.info('GRAPHQL_URL: ' + GRAPHQL_URL)
+        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -267,7 +270,7 @@ def insert_bill(bill):
     payload = {"query": query, "variables": bill}
 
     with requests.Session() as session:
-        log.info('GRAPHQL_URL: ' + GRAPHQL_URL)
+        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -334,7 +337,7 @@ def insert_amendment(amendment):
     payload = {"query": query, "variables": amendment}
 
     with requests.Session() as session:
-        log.info('GRAPHQL_URL: ' + GRAPHQL_URL)
+        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:

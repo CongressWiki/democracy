@@ -5,82 +5,88 @@ import logging
 logging.basicConfig(
     filename="temp/votes.log",
     level=logging.DEBUG,
-    format='%(asctime)s %(levelname)s %(name)s %(message)s'
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
 )
-log = logging.getLogger('')
+log = logging.getLogger("")
 
 
 def from_vote_data(vote_data):
     log.info("MIGRATING VOTE")
 
-    vote_groups = vote_data.get('votes')
-    proposal_id = vote_data.get('vote_id')
+    vote_groups = vote_data.get("votes")
+    proposal_id = vote_data.get("vote_id")
     log.info("proposal_id: " + proposal_id)
 
-    NAY = 'Nay'
-    NO = 'No'
+    NAY = "Nay"
+    NO = "No"
     if NAY in vote_groups or NO in vote_groups:
         for vote in vote_groups.get(NAY):
             check_for_missing_vote_properties(vote)
 
-            voter_id = vote.get('id')
+            voter_id = vote.get("id")
             new_vote_id = proposal_id + "-" + voter_id
-            insert_vote({
-                'id': new_vote_id,
-                'legislative_member_id': vote.get('id'),
-                'proposal_id': proposal_id,
-                'decision': NAY
-            })
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": NAY,
+                }
+            )
 
-    NOT_VOTING = 'Not_Voting'
-    if 'Not Voting' in vote_groups:
-        for vote in vote_groups.get('Not Voting'):
+    NOT_VOTING = "Not_Voting"
+    if "Not Voting" in vote_groups:
+        for vote in vote_groups.get("Not Voting"):
             check_for_missing_vote_properties(vote)
 
-            voter_id = vote.get('id')
+            voter_id = vote.get("id")
             new_vote_id = proposal_id + "-" + voter_id
-            insert_vote({
-                'id': new_vote_id,
-                'legislative_member_id': vote.get('id'),
-                'proposal_id': proposal_id,
-                'decision': NOT_VOTING
-            })
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": NOT_VOTING,
+                }
+            )
 
-    PRESENT = 'Present'
+    PRESENT = "Present"
     if PRESENT in vote_groups:
         for vote in vote_groups.get(PRESENT):
             check_for_missing_vote_properties(vote)
 
-            voter_id = vote.get('id')
+            voter_id = vote.get("id")
             new_vote_id = proposal_id + "-" + voter_id
-            insert_vote({
-                'id': new_vote_id,
-                'legislative_member_id': vote.get('id'),
-                'proposal_id': proposal_id,
-                'decision': PRESENT
-            })
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": PRESENT,
+                }
+            )
 
-    YES = 'Yes'
-    YEA = 'Yea'
-    AYE = 'Aye'
+    YES = "Yes"
+    YEA = "Yea"
+    AYE = "Aye"
     if YES in vote_groups or YEA in vote_groups or AYE in vote_groups:
         for vote in vote_groups.get(YEA):
             check_for_missing_vote_properties(vote)
 
-            voter_id = vote.get('id')
+            voter_id = vote.get("id")
             new_vote_id = proposal_id + "-" + voter_id
-            insert_vote({
-                'id': new_vote_id,
-                'legislative_member_id': vote.get('id'),
-                'proposal_id': proposal_id,
-                'decision': YEA
-            })
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": YEA,
+                }
+            )
 
 
 def check_for_missing_vote_properties(vote):
-    vote_keys = [
-        "id"
-    ]
+    vote_keys = ["id"]
 
     for key in vote:
         if key not in vote_keys:
