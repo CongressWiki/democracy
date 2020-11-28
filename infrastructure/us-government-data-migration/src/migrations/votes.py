@@ -1,21 +1,15 @@
-from ..repositories import graphql_engine
 import json
 import logging
 
-logging.basicConfig(
-    filename="temp/votes.log",
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s %(name)s %(message)s",
-)
-log = logging.getLogger("")
+from ..repositories import graphql_engine
 
 
 def from_vote_data(vote_data):
-    log.info("MIGRATING VOTE")
+    logging.debug("MIGRATING VOTE")
 
     vote_groups = vote_data.get("votes")
     proposal_id = vote_data.get("vote_id")
-    log.info("proposal_id: " + proposal_id)
+    logging.info("proposal_id: " + proposal_id)
 
     NAY = "Nay"
     NO = "No"
@@ -90,13 +84,18 @@ def check_for_missing_vote_properties(vote):
 
     for key in vote:
         if key not in vote_keys:
-            log.warn('Missed migration of Vote property: "' + key + '": ' + vote[key])
+            logging.warn(
+                'Missed migration of Vote property: "'
+                + key
+                + '": '
+                + json.dumps(vote[key])
+            )
 
 
 def insert_vote(vote):
     try:
         return graphql_engine.insert_proposal(vote)
     except Exception as error:
-        log.warn(type(error))
-        log.warn(error)
-        log.warn(json.dumps(vote))
+        logging.warn(type(error))
+        logging.warn(error)
+        logging.warn(json.dumps(vote))

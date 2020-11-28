@@ -1,17 +1,11 @@
-import logging
 import json
+import logging
+
 from ..repositories import graphql_engine
 
 
-# Set up logging
-logging.basicConfig(filename="example.logging", level=logging.DEBUG)
-logging.debug("This message should go to the logging file")
-logging.info("So should this")
-logging.warning("And this, too")
-
-
 def from_bills_data(bill_data):
-    logging.info("MIGRATING BILL")
+    logging.debug("MIGRATING BILL")
 
     bill_keys = [
         "bill_id",
@@ -45,7 +39,10 @@ def from_bills_data(bill_data):
     for key in bill_data:
         if key not in bill_keys:
             logging.warn(
-                'Missed migration of Bill property: "' + key + '": ' + bill_data[key]
+                'Missed migration of Bill property: "'
+                + key
+                + '": '
+                + json.dumps(bill_data[key])
             )
 
     bill = {

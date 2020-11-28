@@ -4,15 +4,11 @@ from os import path
 
 import requests
 
-logging.basicConfig()
-log = logging.getLogger("[UsGovernment.py]")
-log.setLevel(logging.DEBUG)
-
 
 def run_task(task="", args=[]):
-    log.info("Fetching " + task)
+    logging.info("Fetching " + task)
 
-    command = [path.join("..", "congress", "run"), task] + args + ["--log=info"]
+    command = [path.join("..", "congress", "run"), task] + args + ["--years=2008-2020"]
     print(command)
 
     process = subprocess.Popen(command, stdout=subprocess.PIPE)

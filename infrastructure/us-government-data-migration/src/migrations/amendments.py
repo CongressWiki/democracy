@@ -1,16 +1,11 @@
-import logging
 import json
-from ..repositories import graphql_engine
+import logging
 
-# Set up logging
-logging.basicConfig(filename="example.logging", level=logging.DEBUG)
-logging.debug("This message should go to the logging file")
-logging.info("So should this")
-logging.warning("And this, too")
+from ..repositories import graphql_engine
 
 
 def from_amendments_data(amendment_data):
-    logging.info("MIGRATING AMENDMENT")
+    logging.debug("MIGRATING AMENDMENT")
 
     amendment_keys = [
         "actions",
@@ -29,6 +24,7 @@ def from_amendments_data(amendment_data):
         "status",
         "status_at",
         "updated_at",
+        "proposed_at"
     ]
 
     for key in amendment_data:
@@ -37,7 +33,7 @@ def from_amendments_data(amendment_data):
                 'Missed migration of Amendment property: "'
                 + key
                 + '": '
-                + amendment_data[key]
+                + json.dumps(amendment_data[key])
             )
 
     amendment = {
@@ -57,6 +53,7 @@ def from_amendments_data(amendment_data):
         "status": amendment_data.get("status"),
         "status_at": amendment_data.get("status_at"),
         "updated_at": amendment_data.get("updated_at"),
+        "proposed_at": amendment_data.get("proposed_at")
     }
 
     try:

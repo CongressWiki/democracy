@@ -1,7 +1,7 @@
 # output directories
 output:
-  data: "../../build/us-government-data"
-  cache: "../../cache"
+  data: ../../build/us-government-data
+  cache: ../../cache
 
 # email settings
 # email:

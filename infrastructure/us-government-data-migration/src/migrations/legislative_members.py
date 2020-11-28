@@ -1,18 +1,16 @@
-import logging
 import json
-from ..repositories import graphql_engine
+import logging
 
-# Set up logging
-logging.basicConfig(filename="example.logging", level=logging.DEBUG)
-logging.debug("This message should go to the logging file")
-logging.info("So should this")
-logging.warning("And this, too")
+from ..repositories import graphql_engine
 
 
 def from_legislative_member(legislative_member_data):
-    logging.info("MIGRATING LEGISLATIVE MEMBER")
+    logging.debug("MIGRATING LEGISLATIVE MEMBER")
 
-    legislative_member_keys = ["id", "name", "bio", "terms"]
+    legislative_member_keys = [
+        "id", "name", "bio", "terms",
+        "leadership_roles", "family"
+    ]
 
     for key in legislative_member_data:
         if key not in legislative_member_keys:
@@ -51,6 +49,8 @@ def from_legislative_member(legislative_member_data):
         "phone": last_active_term.get("phone"),
         "contact_form_url": last_active_term.get("contact_form"),
         "terms": member_terms,
+        "leadership_roles": legislative_member_data.get("leadership_roles"),
+        "family": legislative_member_data.get("family")
     }
 
     try:

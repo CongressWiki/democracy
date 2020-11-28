@@ -1,10 +1,9 @@
-import logging
-import requests
 import json
 
-logging.basicConfig()
-log = logging.getLogger("[graphql_engine.py]")
-log.setLevel(logging.ERROR)
+import requests
+
+# import logging
+
 
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
 GRAPHQL_URL = "http://localhost:8080/v1/graphql"
@@ -71,7 +70,6 @@ def insert_proposal(proposal):
     payload = {"query": query, "variables": proposal}
 
     with requests.Session() as session:
-        log.info("Sending request to " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -101,7 +99,9 @@ def insert_legislative_member(proposal):
             $phone: String,
             $state: String,
             $state_rank: String,
-            $terms: jsonb
+            $terms: jsonb,
+            $leadership_roles: jsonb,
+            $family: jsonb
         ) {
             insert_legislative_members(objects: {
                 id: $id,
@@ -123,6 +123,8 @@ def insert_legislative_member(proposal):
                 official_full: $official_full,
                 isSenateMember: $isSenateMember,
                 contact_form_url: $contact_form_url,
+                leadership_roles: $leadership_roles,
+                family: $family
             }, on_conflict: {
                 constraint: legislative_members_pkey,
                 update_columns: [
@@ -130,7 +132,8 @@ def insert_legislative_member(proposal):
                     contact_form_url, first_name, last_name,
                     official_full, gender, isHouseMember,
                     party, phone, state,
-                    state_rank, terms, updated_at
+                    state_rank, terms, updated_at, lis, bioguide, govtrack,
+                    isSenateMember, leadership_roles, family
                 ]
             })
             {
@@ -144,7 +147,6 @@ def insert_legislative_member(proposal):
     payload = {"query": query, "variables": proposal}
 
     with requests.Session() as session:
-        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -184,7 +186,6 @@ def insert_vote(vote):
     payload = {"query": query, "variables": vote}
 
     with requests.Session() as session:
-        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -253,9 +254,12 @@ def insert_bill(bill):
             }, on_conflict: {
                 constraint: bills_pkey,
                 update_columns: [
-                    introduced_at, updated_at, official_title, popular_title, short_title, titles, subjects_top_term,
-                    subjects, summary, status, status_at, history, enacted_as, sponsor, cosponsors, committees,
-                    amendments, actions, type, by_request, congress, number, related_bills, url, committee_reports
+                    introduced_at, updated_at, official_title, popular_title,
+                    short_title, titles, subjects_top_term,
+                    subjects, summary, status, status_at, history, enacted_as,
+                    sponsor, cosponsors, committees,
+                    amendments, actions, type, by_request, congress, number,
+                    related_bills, url, committee_reports
                 ]
             })
             {
@@ -270,7 +274,6 @@ def insert_bill(bill):
     payload = {"query": query, "variables": bill}
 
     with requests.Session() as session:
-        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
@@ -321,9 +324,10 @@ def insert_amendment(amendment):
             }, on_conflict: {
                 constraint: amendments_pkey,
                 update_columns: [
-                    actions, amendment_type, amends_amendment, amends_bill, amends_treaty, chamber,
-                    congress, description, introduced_at, number, proposed_at, purpose, sponsor, status, status_at,
-                    updated_at
+                    actions, amendment_type, amends_amendment, amends_bill,
+                    amends_treaty, chamber,
+                    congress, description, introduced_at, number, proposed_at,
+                    purpose, sponsor, status, status_at, updated_at
                 ]
             })
             {
@@ -337,7 +341,6 @@ def insert_amendment(amendment):
     payload = {"query": query, "variables": amendment}
 
     with requests.Session() as session:
-        log.info("GRAPHQL_URL: " + GRAPHQL_URL)
         response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
 
         if response.status_code != 200:
