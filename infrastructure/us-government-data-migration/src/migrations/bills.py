@@ -5,13 +5,14 @@ from ..repositories import graphql_engine
 
 
 def from_bills_data(bill_data: dict):
-    logging.debug("MIGRATING BILL")
+    logging.info(f"MIGRATING BILL {bill_data.get('bill_id')}")
 
     check_for_missing_props(bill_data)
 
     migrate_bill(bill_data)
     migrate_bill_actions(bill_data)
     migrate_bill_subjects(bill_data)
+    migrate_bill_sponsors(bill_data)
 
 
 def check_for_missing_props(bill_data: dict):
@@ -112,7 +113,7 @@ def migrate_bill_actions(bill_data: dict):
         }
 
         try:
-            graphql_engine.insert_action(action)
+            graphql_engine.insert_bill_action(action)
         except Exception as error:
             logging.warn('Error inserting bill.')
             logging.warn(error)
@@ -157,6 +158,26 @@ def migrate_bill_subjects(bill_data: dict):
 
         try:
             graphql_engine.insert_bill_subjects(subject)
+        except Exception as error:
+            logging.warn('Error inserting bill.')
+            logging.warn(error)
+
+
+def migrate_bill_sponsors(bill_data: dict):
+    bill_cosponsors = bill_data.get("cosponsors")
+
+    for index, bill_cosponsor in enumerate(bill_cosponsors):
+        cosponsorship = {
+            "id": bill_data.get('bill_id') + '-' + bill_cosponsor.get('bioguide_id'),
+            "legislative_member_id": bill_cosponsor.get('bioguide_id'),
+            "bill_id": bill_data.get('bill_id'),
+            "original_cosponsor": bool(bill_cosponsor.get('original_cosponsor')),
+            "sponsored_at": bill_cosponsor.get('sponsored_at'),
+            "withdrawn_at": bill_cosponsor.get('withdrawn_at')
+        }
+
+        try:
+            graphql_engine.insert_bill_cosponsorship(cosponsorship)
         except Exception as error:
             logging.warn('Error inserting bill.')
             logging.warn(error)

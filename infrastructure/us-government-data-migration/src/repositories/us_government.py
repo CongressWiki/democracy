@@ -5,10 +5,10 @@ from os import path
 import requests
 
 
-def run_task(task="", args=[]):
+def run_task(task="", optional_args=['']):
     logging.info("Fetching " + task)
 
-    command = [path.join("..", "congress", "run"), task] + args + ["--years=2008-2020"]
+    command = [path.join("..", "congress", "run"), task] + optional_args
 
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     process.wait()
@@ -32,7 +32,7 @@ def downloadBillXml():
 
 
 def convertBillXmlToJson():
-    run_task("bills", "--logs=info")
+    run_task("bills", ["--logs=info"])
 
 
 def statutes():
@@ -53,5 +53,5 @@ def legislative_members():
 def bill_text():
     run_task(
         "govinfo",
-        ["--collections=BILLS", "--store=pdf,mods,xml,text", "--bulkdata=False"],
+        ["--collections=BILLS", "--bulkdata=False", "--store=text", "--logs=info"]
     )

@@ -28,8 +28,8 @@ def send_graphql_request(payload: dict):
 
         responseJson = response.json()
 
-        if responseJson.get('level') == 'error':
-            logging.error("GraphQL error:" + json.dumps(responseJson))
+        if 'errors' in responseJson:
+            logging.error("GraphQL error:\n" + json.dumps(responseJson))
 
         return responseJson
 
@@ -253,7 +253,7 @@ def insert_bill(bill: dict):
     return send_graphql_request(payload)
 
 
-def insert_action(action: dict):
+def insert_bill_action(action: dict):
     query = """\
         mutation (
             $id: String,
@@ -346,48 +346,41 @@ def insert_amendment(amendment: dict):
     query = """\
         mutation (
             $id: String,
-            $actions: json,
-            $amends_amendment: json,
-            $amends_bill: json,
-            $amends_treaty: json,
-            $sponsor: json,
+            $bill_id: String,
+            $amendment_id: String,
+            $treaty_id: String,
             $number: Int,
-            $amendment_type: String,
+            $type: String,
             $chamber: String,
-            $congress: String,
+            $congress_id: String,
             $description: String,
             $purpose: String,
             $status: String,
             $introduced_at: timestamp,
-            $proposed_at: timestamptz,
-            $status_at: timestamptz,
             $updated_at: timestamptz
+            $proposed_at: timestamptz,
         ) {
             insert_amendments(objects: {
                 id: $id,
-                actions: $actions,
-                amendment_type: $amendment_type,
-                amends_amendment: $amends_amendment,
-                amends_bill: $amends_bill,
-                amends_treaty: $amends_treaty,
+                type: $type,
+                bill_id: $bill_id,
+                amendment_id: $amendment_id,
+                treaty_id: $treaty_id,
                 chamber: $chamber,
-                congress: $congress,
+                congress_id: $congress_id,
                 description: $description,
-                introduced_at: $introduced_at,
                 number: $number,
-                proposed_at: $proposed_at,
                 purpose: $purpose,
-                sponsor: $sponsor,
                 status: $status,
-                status_at: $status_at,
+                introduced_at: $introduced_at,
                 updated_at: $updated_at
+                proposed_at: $proposed_at,
             }, on_conflict: {
                 constraint: amendments_pkey,
                 update_columns: [
-                    actions, amendment_type, amends_amendment, amends_bill,
-                    amends_treaty, chamber,
-                    congress, description, introduced_at, number, proposed_at,
-                    purpose, sponsor, status, status_at, updated_at
+                    type, amendment_id, treaty_id, chamber,
+                    congress_id, description, introduced_at, number,
+                    proposed_at, purpose, status, updated_at, bill_id
                 ]
             })
             {
@@ -399,6 +392,117 @@ def insert_amendment(amendment: dict):
     """
 
     payload = {"query": query, "variables": amendment}
+
+    return send_graphql_request(payload)
+
+
+def insert_amendment_action(amendment: dict):
+    query = """\
+        mutation (
+            $id: String,
+            $amendment_id: String,
+            $type: String,
+            $code: String,
+            $text: String,
+            $acted_at: date,
+        ) {
+            insert_amendment_actions(objects: {
+                id: $id,
+                amendment_id: $amendment_id,
+                type: $type,
+                code: $code,
+                text: $text
+                acted_at: $acted_at,
+            }, on_conflict: {
+                constraint: amendment_actions_pkey,
+                update_columns: [
+                    amendment_id, type, code,
+                    text, acted_at
+                ]
+            })
+            {
+                returning {
+                    id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": amendment}
+
+    return send_graphql_request(payload)
+
+
+def insert_amendment_cosponsorship(cosponsorship: dict):
+    query = """\
+        mutation (
+            $id: String,
+            $legislative_member_id: String,
+            $amendment_id: String,
+            $original_cosponsor: Boolean,
+            $sponsored_at: date,
+            $withdrawn_at: date
+        ) {
+            insert_amendment_sponsorships(objects: {
+                id: $id,
+                legislative_member_id: $legislative_member_id,
+                amendment_id: $amendment_id,
+                original_cosponsor: $original_cosponsor,
+                sponsored_at: $sponsored_at,
+                withdrawn_at: $withdrawn_at
+            }, on_conflict: {
+                constraint: amendment_sponsorships_pkey,
+                update_columns: [
+                    legislative_member_id, amendment_id, original_cosponsor,
+                    sponsored_at, withdrawn_at
+                ]
+            })
+            {
+                returning {
+                    id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": cosponsorship}
+
+    return send_graphql_request(payload)
+
+
+def insert_bill_cosponsorship(cosponsorship: dict):
+    query = """\
+        mutation (
+            $id: String,
+            $legislative_member_id: String,
+            $bill_id: String,
+            $original_cosponsor: Boolean,
+            $sponsored_at: date,
+            $withdrawn_at: date
+        ) {
+            insert_bill_cosponsorships(objects: {
+                id: $id,
+                legislative_member_id: $legislative_member_id,
+                bill_id: $bill_id,
+                original_cosponsor: $original_cosponsor,
+                sponsored_at: $sponsored_at,
+                withdrawn_at: $withdrawn_at
+            }, on_conflict: {
+                constraint: bill_sponsorships_pkey,
+                update_columns: [
+                    legislative_member_id, bill_id, original_cosponsor,
+                    sponsored_at, withdrawn_at
+                ]
+            })
+            {
+                returning {
+                    id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": cosponsorship}
 
     return send_graphql_request(payload)
 
