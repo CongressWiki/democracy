@@ -9,7 +9,7 @@ def from_legislative_member(legislative_member_data):
 
     legislative_member_keys = [
         "id", "name", "bio", "terms",
-        "leadership_roles", "family"
+        "leadership_roles", "family", "other_names"
     ]
 
     for key in legislative_member_data:
@@ -50,7 +50,8 @@ def from_legislative_member(legislative_member_data):
         "contact_form_url": last_active_term.get("contact_form"),
         "terms": member_terms,
         "leadership_roles": legislative_member_data.get("leadership_roles"),
-        "family": legislative_member_data.get("family")
+        "family": legislative_member_data.get("family"),
+        "other_names": legislative_member_data.get("other_names")
     }
 
     try:

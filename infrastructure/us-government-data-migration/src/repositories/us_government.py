@@ -9,7 +9,6 @@ def run_task(task="", args=[]):
     logging.info("Fetching " + task)
 
     command = [path.join("..", "congress", "run"), task] + args + ["--years=2008-2020"]
-    print(command)
 
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     process.wait()
@@ -29,11 +28,11 @@ def committee_meetings():
 
 # Run once every 6hrs
 def downloadBillXml():
-    run_task("govinfo", ["--bulkdata=BILLSTATUS"])
+    run_task("govinfo", ["--bulkdata=BILLSTATUS", "--logs=info"])
 
 
 def convertBillXmlToJson():
-    run_task("bills")
+    run_task("bills", "--logs=info")
 
 
 def statutes():

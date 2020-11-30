@@ -26,6 +26,8 @@ def from_vote_data(vote_data):
         "nomination",
         "record_modified",
         "votes",
+        "amendment",
+        "bill"
     ]
 
     for key in vote_data:
@@ -54,7 +56,9 @@ def from_vote_data(vote_data):
         "type": vote_data.get("type"),
         "updated_at": vote_data.get("updated_at"),
         "nomination": vote_data.get("nomination"),
-        "record_modified": vote_data.get("record_modified")
+        "record_modified": vote_data.get("record_modified"),
+        "amendment": vote_data.get("amendment"),
+        "bill": vote_data.get("bill"),
         # 'votes': vote_data.get('votes')
     }
 

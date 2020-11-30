@@ -1,4 +1,5 @@
 import json
+import logging
 
 import requests
 
@@ -13,7 +14,27 @@ HEADERS = {
 }
 
 
-def insert_proposal(proposal):
+def send_graphql_request(payload: dict):
+    with requests.Session() as session:
+        response = session.post(
+            GRAPHQL_URL,
+            headers=HEADERS,
+            data=json.dumps(payload)
+        )
+
+        if response.status_code != 200:
+            logging.error("Request failed. Response")
+            response.raise_for_status()
+
+        responseJson = response.json()
+
+        if responseJson.get('level') == 'error':
+            logging.error("GraphQL error:" + json.dumps(responseJson))
+
+        return responseJson
+
+
+def insert_proposal(proposal: dict):
     query = """\
         mutation (
             $number: Int,
@@ -33,6 +54,8 @@ def insert_proposal(proposal):
             $requires: String,
             $source_url: String,
             $result_text: String,
+            $amendment: jsonb,
+            $bill: jsonb
         ) {
             insert_proposals(objects: {
                 number: $number,
@@ -50,13 +73,15 @@ def insert_proposal(proposal):
                 question: $question,
                 requires: $requires,
                 source_url: $source_url,
-                result_text: $result_text
+                result_text: $result_text,
+                amendment: $amendment,
+                bill: $bill
             }, on_conflict: {
                 constraint: votes_pkey,
                 update_columns: [
                     category, chamber, congress, date, nomination, number,
                     question, requires, result, result_text, session,
-                    source_url, subject, type, updated_at
+                    source_url, subject, type, updated_at, amendment, bill
                 ]
             })
             {
@@ -69,16 +94,10 @@ def insert_proposal(proposal):
 
     payload = {"query": query, "variables": proposal}
 
-    with requests.Session() as session:
-        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
-
-        if response.status_code != 200:
-            return response.raise_for_status()
-
-        return response.json()
+    return send_graphql_request(payload)
 
 
-def insert_legislative_member(proposal):
+def insert_legislative_member(legislative_memeber: dict):
     query = """\
         mutation (
             $id: String,
@@ -101,7 +120,8 @@ def insert_legislative_member(proposal):
             $state_rank: String,
             $terms: jsonb,
             $leadership_roles: jsonb,
-            $family: jsonb
+            $family: jsonb,
+            $other_names: jsonb
         ) {
             insert_legislative_members(objects: {
                 id: $id,
@@ -124,7 +144,8 @@ def insert_legislative_member(proposal):
                 isSenateMember: $isSenateMember,
                 contact_form_url: $contact_form_url,
                 leadership_roles: $leadership_roles,
-                family: $family
+                family: $family,
+                other_names: $other_names
             }, on_conflict: {
                 constraint: legislative_members_pkey,
                 update_columns: [
@@ -133,7 +154,7 @@ def insert_legislative_member(proposal):
                     official_full, gender, isHouseMember,
                     party, phone, state,
                     state_rank, terms, updated_at, lis, bioguide, govtrack,
-                    isSenateMember, leadership_roles, family
+                    isSenateMember, leadership_roles, family, other_names
                 ]
             })
             {
@@ -144,18 +165,12 @@ def insert_legislative_member(proposal):
         }
     """
 
-    payload = {"query": query, "variables": proposal}
+    payload = {"query": query, "variables": legislative_memeber}
 
-    with requests.Session() as session:
-        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
-
-        if response.status_code != 200:
-            return response.raise_for_status()
-
-        return response.json()
+    return send_graphql_request(payload)
 
 
-def insert_vote(vote):
+def insert_vote(vote: dict):
     query = """\
         mutation (
             $id: String,
@@ -185,87 +200,49 @@ def insert_vote(vote):
 
     payload = {"query": query, "variables": vote}
 
-    with requests.Session() as session:
-        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
-
-        if response.status_code != 200:
-            return response.raise_for_status()
-
-        return response.json()
+    return send_graphql_request(payload)
 
 
-def insert_bill(bill):
+def insert_bill(bill: dict):
     query = """\
         mutation (
             $id: String,
             $introduced_at: timestamp,
             $updated_at: timestamptz,
-            $official_title: String,
-            $popular_title: String,
-            $short_title: String,
-            $titles: json,
-            $subjects_top_term: String,
-            $subjects: json,
-            $summary: json,
+            $title: String,
+            $subject: String,
+            $summary: String,
             $status: String,
-            $status_at: timestamptz,
-            $history: json,
-            $enacted_as: json,
-            $sponsor: json,
-            $cosponsors: json,
-            $committees: json,
-            $amendments: json,
-            $actions: json,
             $type: String,
-            $by_request: String,
-            $congress: String,
+            $by_request: Boolean,
             $number: String,
-            $related_bills: json,
-            $url: String,
-            $committee_reports: json
+            $congress_id: String,
+            $sponsor_id: String
         ) {
             insert_bills(objects: {
                 id: $id,
                 introduced_at: $introduced_at,
                 updated_at: $updated_at,
-                official_title: $official_title,
-                popular_title: $popular_title,
-                short_title: $short_title,
-                titles: $titles,
-                subjects_top_term: $subjects_top_term,
-                subjects: $subjects,
+                title: $title,
+                subject: $subject,
                 summary: $summary,
                 status: $status,
-                status_at: $status_at,
-                history: $history,
-                enacted_as: $enacted_as,
-                sponsor: $sponsor,
-                cosponsors: $cosponsors,
-                committees: $committees,
-                amendments: $amendments,
-                actions: $actions,
                 type: $type,
                 by_request: $by_request,
-                congress: $congress,
                 number: $number,
-                related_bills: $related_bills,
-                url: $url,
-                committee_reports: $committee_reports
+                congress_id: $congress_id,
+                sponsor_id: $sponsor_id
             }, on_conflict: {
                 constraint: bills_pkey,
                 update_columns: [
-                    introduced_at, updated_at, official_title, popular_title,
-                    short_title, titles, subjects_top_term,
-                    subjects, summary, status, status_at, history, enacted_as,
-                    sponsor, cosponsors, committees,
-                    amendments, actions, type, by_request, congress, number,
-                    related_bills, url, committee_reports
+                    introduced_at, updated_at, title, subject,
+                    summary, status, type, by_request, number,
+                    congress_id, sponsor_id
                 ]
             })
             {
                 returning {
                     id
-                    official_title
                 }
             }
         }
@@ -273,16 +250,99 @@ def insert_bill(bill):
 
     payload = {"query": query, "variables": bill}
 
-    with requests.Session() as session:
-        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
-
-        if response.status_code != 200:
-            return response.raise_for_status()
-
-        return response.json()
+    return send_graphql_request(payload)
 
 
-def insert_amendment(amendment):
+def insert_action(action: dict):
+    query = """\
+        mutation (
+            $id: String,
+            $bill_id: String,
+            $type: String,
+            $code: String,
+            $text: String,
+            $acted_at: date,
+        ) {
+            insert_bill_actions(objects: {
+                id: $id,
+                bill_id: $bill_id,
+                type: $type,
+                code: $code,
+                text: $text
+                acted_at: $acted_at,
+            }, on_conflict: {
+                constraint: bill_actions_pkey,
+                update_columns: [
+                    bill_id, type, code,
+                    text, acted_at
+                ]
+            })
+            {
+                returning {
+                    id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": action}
+
+    return send_graphql_request(payload)
+
+
+def insert_committee(committee: dict):
+    query = """\
+        mutation (
+            $id: String,
+            $name: String
+        ) {
+            insert_committees(objects: {
+                id: $id,
+                name: $name
+            }, on_conflict: {
+                constraint: committees_pkey,
+                update_columns: [
+                    name
+                ]
+            })
+            {
+                returning {
+                    id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": committee}
+
+    return send_graphql_request(payload)
+
+
+def insert_committee_has_bill(committee_has_bill: dict):
+    query = """\
+        mutation (
+            $committee_id: String,
+            $bill_id: String
+        ) {
+            insert_committee_has_bill(objects: {
+                committee_id: $id,
+                bill_id: $name
+            })
+            {
+                returning {
+                    committee_id,
+                    bill_id
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": committee_has_bill}
+
+    return send_graphql_request(payload)
+
+
+def insert_amendment(amendment: dict):
     query = """\
         mutation (
             $id: String,
@@ -340,10 +400,32 @@ def insert_amendment(amendment):
 
     payload = {"query": query, "variables": amendment}
 
-    with requests.Session() as session:
-        response = session.post(GRAPHQL_URL, headers=HEADERS, data=json.dumps(payload))
+    return send_graphql_request(payload)
 
-        if response.status_code != 200:
-            return response.raise_for_status()
 
-        return response.json()
+def insert_bill_subjects(bill_subject: dict):
+    query = """\
+        mutation (
+            $value: String,
+            $comment: String
+        ) {
+            insert_bill_subjects(objects: {
+                value: $value,
+                comment: $comment
+            }, on_conflict: {
+                constraint: bill_subjects_pkey,
+                update_columns: [
+                    comment
+                ]
+            })
+            {
+                returning {
+                    value
+                }
+            }
+        }
+    """
+
+    payload = {"query": query, "variables": bill_subject}
+
+    return send_graphql_request(payload)

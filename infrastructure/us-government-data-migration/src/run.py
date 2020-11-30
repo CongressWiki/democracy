@@ -136,8 +136,8 @@ def migrate_nominations(nomination_file_paths):
 ) = collect_data_file_paths()
 
 # Insert data into database
-# migrate_bills(bill_file_paths)
-migrate_amendments(amendment_file_paths)
-migrate_votes(vote_file_paths)
-migrate_legislative_members()
+migrate_bills(bill_file_paths)
+# migrate_amendments(amendment_file_paths)
+# migrate_votes(vote_file_paths)
+# migrate_legislative_members()
 # migrate_nominations(nomination_file_paths)

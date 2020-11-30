@@ -9,11 +9,9 @@ def from_vote_data(vote_data):
 
     vote_groups = vote_data.get("votes")
     proposal_id = vote_data.get("vote_id")
-    logging.info("proposal_id: " + proposal_id)
 
     NAY = "Nay"
-    NO = "No"
-    if NAY in vote_groups or NO in vote_groups:
+    if vote_groups.get(NAY):
         for vote in vote_groups.get(NAY):
             check_for_missing_vote_properties(vote)
 
@@ -28,8 +26,24 @@ def from_vote_data(vote_data):
                 }
             )
 
+    NO = "No"
+    if vote_groups.get(NO):
+        for vote in vote_groups.get(NO):
+            check_for_missing_vote_properties(vote)
+
+            voter_id = vote.get("id")
+            new_vote_id = proposal_id + "-" + voter_id
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": NAY,
+                }
+            )
+
     NOT_VOTING = "Not_Voting"
-    if "Not Voting" in vote_groups:
+    if vote_groups.get("Not Voting"):
         for vote in vote_groups.get("Not Voting"):
             check_for_missing_vote_properties(vote)
 
@@ -45,7 +59,7 @@ def from_vote_data(vote_data):
             )
 
     PRESENT = "Present"
-    if PRESENT in vote_groups:
+    if vote_groups.get(PRESENT):
         for vote in vote_groups.get(PRESENT):
             check_for_missing_vote_properties(vote)
 
@@ -60,10 +74,8 @@ def from_vote_data(vote_data):
                 }
             )
 
-    YES = "Yes"
     YEA = "Yea"
-    AYE = "Aye"
-    if YES in vote_groups or YEA in vote_groups or AYE in vote_groups:
+    if vote_groups.get(YEA):
         for vote in vote_groups.get(YEA):
             check_for_missing_vote_properties(vote)
 
@@ -74,13 +86,48 @@ def from_vote_data(vote_data):
                     "id": new_vote_id,
                     "legislative_member_id": vote.get("id"),
                     "proposal_id": proposal_id,
-                    "decision": YEA,
+                    "decision": YEA
+                }
+            )
+
+    YES = "Yes"
+    if vote_groups.get(YES):
+        for vote in vote_groups.get(YES):
+            check_for_missing_vote_properties(vote)
+
+            voter_id = vote.get("id")
+            new_vote_id = proposal_id + "-" + voter_id
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": YEA
+                }
+            )
+
+    AYE = "Aye"
+    if vote_groups.get(AYE):
+        for vote in vote_groups.get(AYE):
+            check_for_missing_vote_properties(vote)
+
+            voter_id = vote.get("id")
+            new_vote_id = proposal_id + "-" + voter_id
+            insert_vote(
+                {
+                    "id": new_vote_id,
+                    "legislative_member_id": vote.get("id"),
+                    "proposal_id": proposal_id,
+                    "decision": YEA
                 }
             )
 
 
 def check_for_missing_vote_properties(vote):
-    vote_keys = ["id"]
+    vote_keys = [
+        "id", "display_name", "party", "state",
+        "first_name", "last_name"
+        ]
 
     for key in vote:
         if key not in vote_keys:
