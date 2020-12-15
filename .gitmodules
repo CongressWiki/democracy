@@ -1,3 +1,0 @@
-[submodule "infrastructure/congress"]
-	path = infrastructure/congress
-	url = https://github.com/unitedstates/congress.git
