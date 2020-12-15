@@ -19,7 +19,7 @@ def votes():
 
 
 def nominations():
-    run_task("nominations")
+    run_task("nominations", ["--congress=116"])
 
 
 def committee_meetings():
