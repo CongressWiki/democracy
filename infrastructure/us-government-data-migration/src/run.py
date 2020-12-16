@@ -123,9 +123,9 @@ def migrate_nominations(nomination_file_paths):
 # Invocations #
 ###############
 # Download and parse the data from official resources
-# download_votes()
+download_votes()
 download_bills_and_amendments()
-# download_nominations()
+download_nominations()
 
 # Gather the file paths of the downloaded files
 (

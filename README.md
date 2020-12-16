@@ -9,3 +9,7 @@ Goals:
 - Ability to view how your state officials (senate & house) vote on bills.
 
 - Ability to vote on bills (yay/nay).
+
+Possible integrations:
+
+- [Google Pinpoint](https://journaliststudio.google.com/pinpoint/about)
