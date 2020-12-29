@@ -30,71 +30,10 @@ def send_graphql_request(payload: dict):
 
         if 'errors' in responseJson:
             logging.error("GraphQL error:\n" + json.dumps(responseJson))
+            logging.error("Failed request payload:")
+            logging.error(payload)
 
         return responseJson
-
-
-def insert_proposal(proposal: dict):
-    query = """\
-        mutation (
-            $number: Int,
-            $congress: Int,
-            $date: timestamptz,
-            $updated_at: timestamp,
-            $record_modified: timestamp,
-            $nomination: json,
-            $id: String,
-            $type: String,
-            $result: String,
-            $session: String,
-            $chamber: String,
-            $subject: String,
-            $category: String,
-            $question: String,
-            $requires: String,
-            $source_url: String,
-            $result_text: String,
-            $amendment: jsonb,
-            $bill: jsonb
-        ) {
-            insert_proposals(objects: {
-                number: $number,
-                congress: $congress,
-                date: $date,
-                updated_at: $updated_at,
-                nomination: $nomination,
-                id: $id,
-                type: $type,
-                result: $result,
-                session: $session,
-                chamber: $chamber,
-                subject: $subject,
-                category: $category,
-                question: $question,
-                requires: $requires,
-                source_url: $source_url,
-                result_text: $result_text,
-                amendment: $amendment,
-                bill: $bill
-            }, on_conflict: {
-                constraint: votes_pkey,
-                update_columns: [
-                    category, chamber, congress, date, nomination, number,
-                    question, requires, result, result_text, session,
-                    source_url, subject, type, updated_at, amendment, bill
-                ]
-            })
-            {
-                returning {
-                    id
-                }
-            }
-        }
-    """
-
-    payload = {"query": query, "variables": proposal}
-
-    return send_graphql_request(payload)
 
 
 def insert_legislative_member(legislative_memeber: dict):
@@ -172,28 +111,19 @@ def insert_legislative_member(legislative_memeber: dict):
 
 def insert_vote(vote: dict):
     query = """\
-        mutation (
+        mutation insert_votes_one(
             $id: String,
-            $legislative_member_id: String,
-            $proposal_id: String,
-            $decision: decisions_enum
+            $member_id: String,
+            $bill_id: String,
+            $decision: String
         ) {
-            insert_votes(objects: {
+            insert_votes_one(object: {
                 id: $id,
-                legislative_member_id: $legislative_member_id,
-                proposal_id: $proposal_id,
+                member_id: $member_id,
+                bill_id: $bill_id,
                 decision: $decision
-            }, on_conflict: {
-                constraint: votes_pkey1,
-                update_columns: [
-                    updated_at, legislative_member_id, proposal_id,
-                    decision
-                ]
-            })
-            {
-                returning {
-                    id
-                }
+            }) {
+                id
             }
         }
     """
@@ -205,47 +135,45 @@ def insert_vote(vote: dict):
 
 def insert_bill(bill: dict):
     query = """\
-        mutation (
-            $id: String,
-            $introduced_at: timestamp,
-            $updated_at: timestamptz,
-            $title: String,
-            $subject: String,
-            $summary: String,
-            $status: String,
-            $type: String,
-            $by_request: Boolean,
-            $number: String,
-            $congress_id: String,
-            $sponsor_id: String
+    mutation insert_bills_one(
+        $actions: jsonb = "",
+        $by_request: jsonb = "",
+        $congress: String = "",
+        $id: String = "",
+        $introduced_at: timestamptz = "",
+        $number: Int = 10,
+        $sponsor: String = "",
+        $status: String = "",
+        $status_at: timestamptz = "",
+        $subject: String = "",
+        $summary: String = "",
+        $title: String = "",
+        $type: String = "",
+        $updated_at: timestamptz = ""
         ) {
-            insert_bills(objects: {
-                id: $id,
-                introduced_at: $introduced_at,
-                updated_at: $updated_at,
-                title: $title,
-                subject: $subject,
-                summary: $summary,
-                status: $status,
-                type: $type,
-                by_request: $by_request,
-                number: $number,
-                congress_id: $congress_id,
-                sponsor_id: $sponsor_id
-            }, on_conflict: {
-                constraint: bills_pkey,
-                update_columns: [
-                    introduced_at, updated_at, title, subject,
-                    summary, status, type, by_request, number,
-                    congress_id, sponsor_id
-                ]
-            })
-            {
-                returning {
-                    id
-                }
-            }
+    insert_bills_one(object: {
+        id: $id,
+        updated_at: $updated_at,
+        type: $type,
+        title: $title,
+        summary: $summary,
+        subject: $subject,
+        status_at: $status_at,
+        status: $status,
+        sponsor: $sponsor,
+        number: $number,
+        introduced_at: $introduced_at,
+        congress: $congress,
+        by_request: $by_request,
+        actions: $actions
+    },
+    on_conflict: {
+        constraint: bills_pkey,
+        update_columns: updated_at
+    }) {
+        id
         }
+    }
     """
 
     payload = {"query": query, "variables": bill}
@@ -292,52 +220,26 @@ def insert_bill_action(action: dict):
 
 def insert_committee(committee: dict):
     query = """\
-        mutation (
-            $id: String,
-            $name: String
+    mutation insert_committees_one(
+        $id: String = "",
+        $name: String = "",
+        $description: String = ""
         ) {
-            insert_committees(objects: {
-                id: $id,
-                name: $name
-            }, on_conflict: {
-                constraint: committees_pkey,
-                update_columns: [
-                    name
-                ]
-            })
-            {
-                returning {
-                    id
-                }
-            }
+    insert_committees_one(object: {
+        id: $id,
+        name: $name,
+        description: $description
+        },
+        on_conflict: {
+            constraint: committees_pkey,
+            update_columns: updated_at
+        }) {
+            id
         }
+    }
     """
 
     payload = {"query": query, "variables": committee}
-
-    return send_graphql_request(payload)
-
-
-def insert_committee_has_bill(committee_has_bill: dict):
-    query = """\
-        mutation (
-            $committee_id: String,
-            $bill_id: String
-        ) {
-            insert_committee_has_bill(objects: {
-                committee_id: $id,
-                bill_id: $name
-            })
-            {
-                returning {
-                    committee_id,
-                    bill_id
-                }
-            }
-        }
-    """
-
-    payload = {"query": query, "variables": committee_has_bill}
 
     return send_graphql_request(payload)
 
@@ -531,5 +433,95 @@ def insert_bill_subjects(bill_subject: dict):
     """
 
     payload = {"query": query, "variables": bill_subject}
+
+    return send_graphql_request(payload)
+
+
+def insert_member(member: dict):
+    query = """
+    mutation insert_members_one(
+        $id: String = "",
+        $preferred_name: String = "",
+        $first_name: String = "",
+        $last_name: String = "",
+        $gender: String = "",
+        $state: String = "",
+        $is_government_official: Boolean = false,
+        $political_party_id: String = "",
+        $image_url: String = "",
+        $born_at: timestamptz = "",
+        $updated_at: timestamptz = ""
+        ) {
+    insert_members_one(object: {
+        id: $id,
+        preferred_name: $preferred_name,
+        first_name: $first_name,
+        last_name: $last_name,
+        gender: $gender,
+        state: $state,
+        is_government_official: $is_government_official,
+        political_party_id: $political_party_id,
+        image_url: $image_url,
+        born_at: $born_at,
+        updated_at: $updated_at
+    },
+    on_conflict: {
+        constraint: members_pkey,
+        update_columns: updated_at
+    }) {
+            id
+        }
+    }
+    """
+
+    payload = {"query": query, "variables": member}
+
+    return send_graphql_request(payload)
+
+
+def insert_elected_official(member: dict):
+    query = """
+    mutation insert_elected_officials_one(
+        $id: String = "",
+        $is_active: Boolean = false,
+        $member_id: String = "",
+        $position: String = "",
+        $rank: String = "",
+        $state: String = "",
+        $political_party_id: String = "",
+        $senate_terms: Int = 0,
+        $house_terms: Int = 0,
+        $district: Int = "",
+        $description: String = "",
+        $service_start_at: timestamptz = "",
+        $service_end_at: timestamptz = ""
+        $updated_at: timestamptz = ""
+        ) {
+    insert_elected_officials_one(object: {
+        id: $id,
+        is_active: $is_active,
+        member_id: $member_id,
+        position: $position,
+        rank: $rank,
+        state: $state,
+        political_party_id: $political_party_id,
+        senate_terms: $senate_terms,
+        house_terms: $house_terms,
+        district: $district,
+        description: $description,
+        service_start_at: $service_start_at,
+        service_end_at: $service_end_at,
+        updated_at: $updated_at
+    },
+    on_conflict: {
+        constraint: elected_officials_pkey,
+        update_columns: updated_at
+    }) {
+            id
+        }
+    }
+    """
+
+    payload = {"query": query, "variables": member}
 
     return send_graphql_request(payload)

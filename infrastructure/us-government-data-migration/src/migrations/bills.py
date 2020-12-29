@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import date, datetime
 
 from ..repositories import graphql_engine
 
@@ -10,9 +11,10 @@ def from_bills_data(bill_data: dict):
     check_for_missing_props(bill_data)
 
     migrate_bill(bill_data)
-    migrate_bill_actions(bill_data)
-    migrate_bill_subjects(bill_data)
-    migrate_bill_sponsors(bill_data)
+    # migrate_bill_actions(bill_data)
+    # migrate_bill_subjects(bill_data)
+    # migrate_bill_sponsors(bill_data)
+    migrate_committees(bill_data)
 
 
 def check_for_missing_props(bill_data: dict):
@@ -56,25 +58,36 @@ def check_for_missing_props(bill_data: dict):
 
 
 def migrate_bill(bill_data: dict):
-    bill_requested_by = bool(bill_data.get("by_request"))
-    bill_summary_text = get_summary_text(bill_data)
-    bill_sponsor_id = get_sponsor_id(bill_data)
+    summary_text = get_summary_text(bill_data)
+    sponsor_id = get_sponsor_id(bill_data)
+
+    introduced_at = bill_data.get("introduced_at")
+    introduced_at_date = datetime.fromisoformat(introduced_at)
+
+    status_at = bill_data.get("status_at")
+    status_at_date = datetime.fromisoformat(status_at)
+
+    updated_at = bill_data.get("updated_at")
+    updated_at_date = datetime.strptime(updated_at, "%Y-%m-%dT%H:%M:%SZ")
+
+    subject = get_subject(bill_data)
 
     bill = {
         "id": bill_data.get("bill_id"),
         "type": bill_data.get("bill_type"),
-        "by_request": bill_requested_by,
-        "number": bill_data.get("number"),
-        "subject": bill_data.get("subjects_top_term"),
-        "introduced_at": bill_data.get("introduced_at"),
-        "updated_at": bill_data.get("updated_at"),
+        "by_request": bool(bill_data.get("by_request")),
+        "number": int(bill_data.get("number")),
+        "subject": subject,
+        "introduced_at": introduced_at_date.strftime("%Y-%m-%dT%H:%M:%S.%f+00:00"),
+        "updated_at": updated_at_date.strftime("%Y-%m-%dT%H:%M:%S.%f+00:00"),
         "title": bill_data.get("official_title"),
-        "summary": bill_summary_text if bill_summary_text else '',
+        "summary": summary_text or 'No summary available.',
         "status": bill_data.get("status"),
-        "congress_id": bill_data.get("congress"),
-        "sponsor_id": bill_sponsor_id if bill_sponsor_id else ''
+        "status_at": status_at_date.strftime("%Y-%m-%dT%H:%M:%S.%f+00:00"),
+        "congress": bill_data.get("congress"),
+        "actions": bill_data.get("actions"),
+        "sponsor": sponsor_id,
         # "committee_reports": bill_data.get("committee_reports"),
-        # "congress": bill_data.get("congress"),
         # "popular_title": bill_data.get("popular_title"),
         # "short_title": bill_data.get("short_title"),
         # "titles": bill_data.get("titles"),
@@ -82,11 +95,9 @@ def migrate_bill(bill_data: dict):
         # "status_at": bill_data.get("status_at"),
         # "history": bill_data.get("history"),
         # "enacted_as": bill_data.get("enacted_as"),
-        # "sponsor": bill_data.get("sponsor"),
         # "cosponsors": bill_data.get("cosponsors"),
         # "committees": bill_data.get("committees"),
         # "amendments": bill_data.get("amendments"),
-        # "actions": bill_data.get("actions"),
         # "related_bills": bill_data.get("related_bills"),
         # "url": bill_data.get("url"),
     }
@@ -94,7 +105,7 @@ def migrate_bill(bill_data: dict):
     try:
         graphql_engine.insert_bill(bill)
     except Exception as error:
-        logging.warn('Error inserting bill.')
+        logging.warn(type(error))
         logging.warn(error)
 
 
@@ -115,7 +126,7 @@ def migrate_bill_actions(bill_data: dict):
         try:
             graphql_engine.insert_bill_action(action)
         except Exception as error:
-            logging.warn('Error inserting bill.')
+            logging.warn(type(error))
             logging.warn(error)
 
 
@@ -133,18 +144,6 @@ def migrate_committees(bill_data: dict):
         except Exception as error:
             logging.warn(type(error))
             logging.warn(error)
-            logging.warn(json.dumps(committee))
-
-        committee_has_bill = {
-            "bill_id": bill_data.get('bill_id'),
-            "committee_id": committee.get('id')
-        }
-
-        try:
-            graphql_engine.insert_committee_has_bill(committee_has_bill)
-        except Exception as error:
-            logging.warn('Error inserting bill.')
-            logging.warn(error)
 
 
 def migrate_bill_subjects(bill_data: dict):
@@ -159,27 +158,7 @@ def migrate_bill_subjects(bill_data: dict):
         try:
             graphql_engine.insert_bill_subjects(subject)
         except Exception as error:
-            logging.warn('Error inserting bill.')
-            logging.warn(error)
-
-
-def migrate_bill_sponsors(bill_data: dict):
-    bill_cosponsors = bill_data.get("cosponsors")
-
-    for index, bill_cosponsor in enumerate(bill_cosponsors):
-        cosponsorship = {
-            "id": bill_data.get('bill_id') + '-' + bill_cosponsor.get('bioguide_id'),
-            "legislative_member_id": bill_cosponsor.get('bioguide_id'),
-            "bill_id": bill_data.get('bill_id'),
-            "original_cosponsor": bool(bill_cosponsor.get('original_cosponsor')),
-            "sponsored_at": bill_cosponsor.get('sponsored_at'),
-            "withdrawn_at": bill_cosponsor.get('withdrawn_at')
-        }
-
-        try:
-            graphql_engine.insert_bill_cosponsorship(cosponsorship)
-        except Exception as error:
-            logging.warn('Error inserting bill.')
+            logging.warn(type(error))
             logging.warn(error)
 
 
@@ -199,3 +178,16 @@ def get_sponsor_id(bill_data: dict):
         return sponsor.get('bioguide_id')
 
     return None
+
+
+def get_subject(bill_data: dict):
+    subjects_top_term = bill_data.get("subjects_top_term")
+    other_subjects = bill_data.get("subjects")
+
+    if subjects_top_term:
+        return subjects_top_term
+
+    if isinstance(other_subjects, list) and len(other_subjects) > 0:
+        return other_subjects[0]
+
+    return 'none'

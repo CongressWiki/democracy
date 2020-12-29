@@ -20,7 +20,6 @@
 - alt_subjects -  jsonb - [string]
 - title - text <!-- index -->
 - summary - text
-- status - text
 
 ### bill_activity
 
@@ -39,6 +38,7 @@
 - created_at - timestamp
 - updated_at - timestamp
 - introduced_at - timestamp
+- introduced_by_chamber - text <!-- index? -->
 - status_at - timestamp
 - status - text
 - bill_id - (fkey:bills) text <!-- index -->
@@ -106,14 +106,14 @@
 - status_at - timestamp
 - status - text
 - member_id - (fkey:members) text <!-- index -->
-- party_id - (fkey:parties) text <!-- index -->
+<!-- - party_id - (fkey:parties) text index -->
 - state - (enum:state) text
 - district - text
 - position - text <!-- Senator/House representative/Justice/President --> <!-- index -->
 - rank - text <!-- Junior/Senior/Whip/Leader --> <!-- index? -->
 - terms_served - number
 - terms_remaining - number
-- active - boolean <!-- index? -->
+- is_active - boolean <!-- index? -->
 - description - text
 
 ### votes
@@ -125,7 +125,7 @@
 - member_id - (fkey:members) text <!-- index -->
 - decision - text
 
-### parties
+### political_parties
 
 - id - text
 - name - text
