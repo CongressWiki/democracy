@@ -1,3 +1,6 @@
 [submodule "infrastructure/congress"]
 	path = infrastructure/congress
 	url = git://github.com/unitedstates/congress
+[submodule "front-end/public/elected_official_images"]
+  path = unitedstates/images
+  url = https://github.com/unitedstates/images

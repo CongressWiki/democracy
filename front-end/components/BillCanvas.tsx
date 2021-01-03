@@ -12,17 +12,19 @@ const GET_LATEST_BILLS = gql`
 			order_by: { status_at: desc }
 		) {
 			id
+			type
+			by_request
+			number
+      subject
 			introduced_at
-			official_title
-			popular_title
-      short_title
-			sponsor
+			updated_at
+			title
+			summary
 			status
 			status_at
-			subjects
-			subjects_top_term
-			summary
-			cosponsors
+      congress
+      actions
+      sponsor
 		}
 	}
 `;
@@ -45,7 +47,7 @@ const BillCanvas = () => {
 					<Grid key={billData?.id} item xs={12}>
 						<Bill
 							id={billData?.id}
-							title={billData?.official_title}
+							title={billData?.title}
 							summary={JSON.stringify(billData, null, 2)}
 						/>
 					</Grid>
