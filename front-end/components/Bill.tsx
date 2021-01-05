@@ -57,7 +57,7 @@ const useStyles = makeStyles(theme => ({
 
 export const Bill = props => {
 	const classes = useStyles();
-	const theme = useTheme();
+  const theme = useTheme();
 
 	return (
 		<Paper elevation={3} className={classes.paper}>
@@ -65,7 +65,7 @@ export const Bill = props => {
 				<Grid item xs/>
 				<Grid item xs>
 					{props.id ?
-						<Typography variant="h3">{props.id}</Typography> :
+						<Typography variant="h4">{props.id}</Typography> :
 						<Skeleton variant="text" animation="wave" height={22} width="10%" style={{marginBottom: theme.spacing(4)}}/>}
 				</Grid>
 				<Grid item xs/>
@@ -74,11 +74,9 @@ export const Bill = props => {
 						<Typography variant="subtitle1" className={classes.indent}>{props.title}</Typography> :
 						<Skeleton variant="text" animation="wave" height={22} width="80%" style={{marginBottom: theme.spacing(4)}}/>}
 				</Grid>
-				<Grid item xs/>
 				<Grid item xs>
-					<Divider variant="middle" className={classes.divider}/>
+					<Divider variant="fullWidth" className={classes.divider}/>
 				</Grid>
-				<Grid item xs/>
 				<Grid item xs={12}>
 					{props.summary ?
 						<Typography className={classes.indent}>{props.summary}</Typography> :

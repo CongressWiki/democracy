@@ -117,15 +117,19 @@ def insert_vote(vote: dict):
             $bill_id: String,
             $decision: String
         ) {
-            insert_votes_one(object: {
-                id: $id,
-                member_id: $member_id,
-                bill_id: $bill_id,
-                decision: $decision
-            }) {
-                id
-            }
+        insert_votes_one(object: {
+            id: $id,
+            member_id: $member_id,
+            bill_id: $bill_id,
+            decision: $decision
+        }),
+        on_conflict: {
+            constraint: bills_pkey,
+            update_columns: updated_at
+        }) {
+            id
         }
+    }
     """
 
     payload = {"query": query, "variables": vote}

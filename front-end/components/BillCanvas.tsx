@@ -13,8 +13,8 @@ const GET_LATEST_BILLS = gql`
 		) {
 			id
 			type
-			by_request
 			number
+			by_request
       subject
 			introduced_at
 			updated_at
@@ -33,7 +33,13 @@ const BillCanvas = () => {
 	const {loading, error, data} = useQuery(GET_LATEST_BILLS);
 
 	if (loading) {
-		return <CircularProgress/>;
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    )
 	}
 
 	if (error) {
@@ -46,9 +52,9 @@ const BillCanvas = () => {
 				{data.bills.map(billData => (
 					<Grid key={billData?.id} item xs={12}>
 						<Bill
-							id={billData?.id}
+							id={`${billData.type}.${billData.number}`.toUpperCase()}
 							title={billData?.title}
-							summary={JSON.stringify(billData, null, 2)}
+							summary={billData?.summary}
 						/>
 					</Grid>
 				))}

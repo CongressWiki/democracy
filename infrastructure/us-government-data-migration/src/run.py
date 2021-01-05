@@ -3,7 +3,7 @@ import os
 
 from . import utils
 from .migrations import (amendments, bills, legislative_members, nominations,
-                         proposals, votes)
+                         votes)
 from .repositories import us_government
 
 logging.basicConfig(
@@ -26,7 +26,7 @@ def download_votes():
 def download_bills_and_amendments():
     us_government.downloadBillXml()
     us_government.convertBillXmlToJson()
-    us_government.bill_text()
+    # us_government.bill_text()
 
 
 def download_nominations():
