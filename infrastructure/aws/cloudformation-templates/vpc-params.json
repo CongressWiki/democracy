@@ -1,0 +1,34 @@
+[
+  {
+    "ParameterKey": "VPCCIDR",
+    "ParameterValue": "vpc-0f7693dc73483108f"
+  },
+  {
+    "ParameterKey": "PublicSubnet1",
+    "ParameterValue": "subnet-06a9914c0f6b2bd6d"
+  },
+  {
+    "ParameterKey": "PublicSubnet2",
+    "ParameterValue": "subnet-0880b8bb173c06cc9"
+  },
+  {
+    "ParameterKey": "PrivateSubnet1",
+    "ParameterValue": "subnet-0409fa757abe4e6bd"
+  },
+  {
+    "ParameterKey": "PrivateSubnet2",
+    "ParameterValue": "subnet-053bcea155bfcce86"
+  },
+  {
+    "ParameterKey": "UATApprovalEmail",
+    "ParameterValue": "ryparker33@gmail.com"
+  },
+  {
+    "ParameterKey": "ProdApprovalEmail",
+    "ParameterValue": "ryparker33@gmail.com"
+  },
+  {
+    "ParameterKey": "TagPrefix",
+    "ParameterValue": "CPNestedCFN"
+  }
+]
