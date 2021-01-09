@@ -39,9 +39,9 @@ phases:
       - |
         for child_template in $CHILD_TEMPLATES; do
           if [ "X$TEMPLATE_PREFIX" = "X" ]; then
-            aws s3 cp "$child_template" "s3://$TEMPLATE_BUCKET/$child_template"
+            aws s3 cp "infrastructure/aws/cloudformation-templates/$child_template" "s3://$TEMPLATE_BUCKET/$child_template"
           else
-            aws s3 cp "$child_template" "s3://$TEMPLATE_BUCKET/$TEMPLATE_PREFIX/$child_template"
+            aws s3 cp "infrastructure/aws/cloudformation-templates/$child_template" "s3://$TEMPLATE_BUCKET/$TEMPLATE_PREFIX/$child_template"
           fi
         done
       - echo "Updating template configuration files to use the appropriate values"
