@@ -31,7 +31,7 @@ phases:
       - |
         for conf in $CONFIG_FILES; do
           echo "Validating CFN parameters config file $conf"
-          jsonlint -q $conf
+          jsonlint -q infrastructure/aws/cloudformation-templates/$conf
         done
   build:
     commands:
