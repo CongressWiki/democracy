@@ -414,6 +414,8 @@ Resources:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
       Artifacts:
         Type: CODEPIPELINE
+        BuildSpec:
+          Fn::Sub: ${ValidateResourcesRepoPath}/buildspec.yml
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
