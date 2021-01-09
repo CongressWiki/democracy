@@ -58,5 +58,6 @@ phases:
 
 artifacts:
   files:
-    - main-stack.yml
-    - config-*.json
+    - infrastructure/aws/cloudformation-templates/main-stack.yml
+    - infrastructure/aws/cloudformation-templates/config-*.json
+  discard-paths: yes
