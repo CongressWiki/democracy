@@ -25,7 +25,7 @@ describe_load_balancers:
 describe_launch_configurations:
   Name: WebServerLaunchConfig
   Properties:
-    KeyName: democraccy-stack
+    KeyName: democracy-stack
     ImageId: ami-0a5193c623a23421c
     InstanceType: t2.large
 describe_auto_scaling_groups:
