@@ -8,7 +8,7 @@
     "PublicSubnet2": "subnet-0880b8bb173c06cc9",
     "S3BucketName": "nestedcfn-basestack-s3bucket-1ry7v0oek3j8p",
     "KeyPair": "APKAJIBXH6EISLE5IUIQ",
-    "AMIId": "ami-e5083683",
+    "AMIId": "ami-013d6c44",
     "WebInstanceType": "t2.large",
     "WebMinSize": "1",
     "WebMaxSize": "1",

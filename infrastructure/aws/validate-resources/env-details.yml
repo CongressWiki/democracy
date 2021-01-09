@@ -26,7 +26,7 @@ describe_launch_configurations:
   Name: WebServerLaunchConfig
   Properties:
     KeyName: APKAJIBXH6EISLE5IUIQ
-    ImageId: ami-e5083683
+    ImageId: ami-013d6c44
     InstanceType: t2.large
 describe_auto_scaling_groups:
   Name: WebServerASG
