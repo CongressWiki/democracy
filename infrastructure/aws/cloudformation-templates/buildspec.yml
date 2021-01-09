@@ -58,5 +58,5 @@ phases:
 
 artifacts:
   files:
-    - main-stack.yml
+    - infrastructure/aws/cloudformation-templates/main-stack.yml
     - config-*.json
