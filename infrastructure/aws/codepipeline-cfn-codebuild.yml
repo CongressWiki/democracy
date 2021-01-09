@@ -414,14 +414,14 @@ Resources:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
       Artifacts:
         Type: CODEPIPELINE
-        BuildSpec:
-          Fn::Sub: ${ValidateResourcesRepoPath}/buildspec.yml
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/python:2.7.12
       Source:
         Type: CODEPIPELINE
+        BuildSpec:
+          Fn::Sub: ${ValidateResourcesRepoPath}/buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
