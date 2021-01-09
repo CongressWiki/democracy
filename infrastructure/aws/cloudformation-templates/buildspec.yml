@@ -7,7 +7,7 @@ environment_variables:
       infrastructure/aws/cloudformation-templates/server-stack.yml
       infrastructure/aws/cloudformation-templates/database-stack.yml
     TEMPLATE_FILES: |
-      main-stack.yml
+      infrastructure/aws/cloudformation-templates/main-stack.yml
       infrastructure/aws/cloudformation-templates/security-stack.yml
       infrastructure/aws/cloudformation-templates/server-stack.yml
       infrastructure/aws/cloudformation-templates/database-stack.yml
