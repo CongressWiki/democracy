@@ -2,7 +2,8 @@ version: 0.1
 
 environment_variables:
   plaintext:
-    CONFIG_FILE: env-details.yml
+    CONFIG_FILE: infrastructure/aws/validate-resources/env-details.yml
+    EXECUTION_FILE: infrastructure/aws/validate-resources/validate-env.py
 
 phases:
   install:
@@ -18,5 +19,5 @@ phases:
   build:
     commands:
       - echo "Validating resources..."
-      - python validate-env.py
+      - python $EXECUTION_FILE
       - exit $?
