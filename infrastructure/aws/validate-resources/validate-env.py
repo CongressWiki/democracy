@@ -13,7 +13,7 @@ try:
     for cmd, props in doc.iteritems():
         if cmd == 'describe_security_groups':
             print 'Checking Security group ' + props['Name']
-            ec2 = boto3.client('ec2', region_name='eu-west-1')
+            ec2 = boto3.client('ec2', region_name='us-west-1')
             sg_res = ec2.describe_security_groups(Filters=[{'Name': 'group-name',
                                                             'Values': ['*' + props['Name'] + '*']}])
             sg_perms = sg_res['SecurityGroups'][0]['IpPermissions'][0]
@@ -38,7 +38,7 @@ try:
                 continue
         if cmd == 'describe_load_balancers':
             print 'Checking ELB ' + props['Name']
-            elb = boto3.client('elb', region_name='eu-west-1')
+            elb = boto3.client('elb', region_name='us-west-1')
             elb_res = elb.describe_load_balancers()
             for lbs in elb_res['LoadBalancerDescriptions']:
                 if props['Name'] in lbs['LoadBalancerName']:
@@ -57,7 +57,7 @@ try:
                 continue
         if cmd == 'describe_launch_configurations':
             print 'Checking Launch Configuration ' + props['Name']
-            asg = boto3.client('autoscaling', region_name='eu-west-1')
+            asg = boto3.client('autoscaling', region_name='us-west-1')
             lc_res = asg.describe_launch_configurations()
             for lcs in lc_res['LaunchConfigurations']:
                 if props['Name'] in lcs['LaunchConfigurationName']:
@@ -72,7 +72,7 @@ try:
                 continue
         if cmd == 'describe_auto_scaling_groups':
             print 'Checking Auto Scaling group ' + props['Name']
-            asg = boto3.client('autoscaling', region_name='eu-west-1')
+            asg = boto3.client('autoscaling', region_name='us-west-1')
             asg_res = asg.describe_auto_scaling_groups()
             for asgs in asg_res['AutoScalingGroups']:
                 for tag in asgs['Tags']:

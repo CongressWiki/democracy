@@ -1,23 +1,23 @@
 [
   {
     "ParameterKey": "VPCCIDR",
-    "ParameterValue": "vpc-0f7693dc73483108f"
+    "ParameterValue": "172.21.1.0/24"
   },
   {
     "ParameterKey": "PublicSubnet1",
-    "ParameterValue": "subnet-06a9914c0f6b2bd6d"
+    "ParameterValue": "172.21.1.0/26"
   },
   {
     "ParameterKey": "PublicSubnet2",
-    "ParameterValue": "subnet-0880b8bb173c06cc9"
+    "ParameterValue": "172.21.1.64/26"
   },
   {
     "ParameterKey": "PrivateSubnet1",
-    "ParameterValue": "subnet-0409fa757abe4e6bd"
+    "ParameterValue": "172.21.1.128/26"
   },
   {
     "ParameterKey": "PrivateSubnet2",
-    "ParameterValue": "subnet-053bcea155bfcce86"
+    "ParameterValue": "172.21.1.192/26"
   },
   {
     "ParameterKey": "UATApprovalEmail",
