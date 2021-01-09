@@ -3,18 +3,18 @@ version: 0.1
 environment_variables:
   plaintext:
     CHILD_TEMPLATES: |
-      security-stack.yml
-      server-stack.yml
-      database-stack.yml
+      infrastructure/aws/cloudformation-templates/security-stack.yml
+      infrastructure/aws/cloudformation-templates/server-stack.yml
+      infrastructure/aws/cloudformation-templates/database-stack.yml
     TEMPLATE_FILES: |
       main-stack.yml
-      security-stack.yml
-      server-stack.yml
-      database-stack.yml
+      infrastructure/aws/cloudformation-templates/security-stack.yml
+      infrastructure/aws/cloudformation-templates/server-stack.yml
+      infrastructure/aws/cloudformation-templates/database-stack.yml
     CONFIG_FILES: |
-      config-prod.json
-      config-test.json
-      config-uat.json
+      infrastructure/aws/cloudformation-templates/config-prod.json
+      infrastructure/aws/cloudformation-templates/config-test.json
+      infrastructure/aws/cloudformation-templates/config-uat.json
 
 phases:
   install:
@@ -58,6 +58,6 @@ phases:
 
 artifacts:
   files:
-    - main-stack.yml
-    - config-*.json
+    - infrastructure/aws/cloudformation-templates/main-stack.yml
+    - infrastructure/aws/cloudformation-templates/config-*.json
   discard-paths: yes
