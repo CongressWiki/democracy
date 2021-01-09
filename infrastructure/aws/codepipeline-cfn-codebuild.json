@@ -9,7 +9,7 @@
   },
   {
     "ParameterKey": "ValidateResourcesRepoName",
-    "ParameterValue": "validate-resources"
+    "ParameterValue": "democracy"
   },
   {
     "ParameterKey": "ValidateResourcesRepoPath",

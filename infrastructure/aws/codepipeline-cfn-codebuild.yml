@@ -55,6 +55,7 @@ Resources:
                   - "s3:ListBucket"
                   - "s3:PutObject"
                   - "s3:GetBucketPolicy"
+                  - "s3:*"
                 Resource:
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}/*
@@ -65,18 +66,19 @@ Resources:
                 Resource:
                   - Fn::Sub: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${UATTopic}
                   - Fn::Sub: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${ProdTopic}
-              # -
-              #   Effect: "Allow"
-              #   Action:
-              #     - "codecommit:ListBranches"
-              #     - "codecommit:ListRepositories"
-              #     - "codecommit:BatchGetRepositories"
-              #     - "codecommit:Get*"
-              #     - "codecommit:GitPull"
-              #     - "codecommit:UploadArchive"
-              #   Resource:
-              #     - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${CFNTemplateRepoName}
-              #     - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${ValidateResourcesRepoName}
+              -
+                Effect: "Allow"
+                Action:
+                  - "codestar-connections:CreateConnection"
+                  - "codestar-connections:DeleteConnection"
+                  - "codestar-connections:UseConnection"
+                  - "codestar-connections:GetConnection"
+                  - "codestar-connections:ListConnections"
+                  - "codestar-connections:TagResource"
+                  - "codestar-connections:ListTagsForResource"
+                  - "codestar-connections:UntagResource"
+                Resource:
+                  - Fn::Sub: arn:aws:codestar-connections:${AWS::Region}:${AWS::AccountId}:connection/26fe5895-4c6e-4a24-aaec-8e21d5257bed
               -
                 Effect: "Allow"
                 Action:
@@ -291,9 +293,11 @@ Resources:
                 Action:
                   - "s3:GetObject"
                   - "s3:ListBucket"
+                  - "s3:PutObject"
                 Resource:
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}/*
+
   CodeBuildRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -324,17 +328,16 @@ Resources:
                   - "cloudformation:List*"
                 Resource:
                   - Fn::Sub: arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/Test-${AWS::StackName}*
-              # -
-              #   Effect: "Allow"
-              #   Action:
-              #     - "codecommit:ListBranches"
-              #     - "codecommit:ListRepositories"
-              #     - "codecommit:BatchGetRepositories"
-              #     - "codecommit:Get*"
-              #     - "codecommit:GitPull"
-              #   Resource:
-              #     - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${CFNTemplateRepoName}
-              #     - Fn::Sub: arn:aws:codecommit:${AWS::Region}:${AWS::AccountId}:${ValidateResourcesRepoName}
+              -
+                Effect: "Allow"
+                Action:
+                  - "codecommit:ListBranches"
+                  - "codecommit:ListRepositories"
+                  - "codecommit:BatchGetRepositories"
+                  - "codecommit:Get*"
+                  - "codecommit:GitPull"
+                Resource:
+                  - Fn::Sub: arn:aws:codestar-connections:${AWS::Region}:${AWS::AccountId}:connection/26fe5895-4c6e-4a24-aaec-8e21d5257bed
               -
                 Effect: "Allow"
                 Action:
@@ -368,6 +371,7 @@ Resources:
                   - Fn::Sub: arn:aws:s3:::codepipeline-${AWS::Region}-*
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}/*
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}
+
   BuildCopyCFNProject:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -377,11 +381,7 @@ Resources:
       ServiceRole:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
       Artifacts:
-        Type: S3
-        Location:
-          Ref: ArtifactStoreS3Location
-        Name:
-          Fn::Sub: BuildCopyCFN-${AWS::StackName}
+        Type: CODEPIPELINE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -393,9 +393,9 @@ Resources:
           - Name: TEMPLATE_PREFIX
             Value: codebuild
       Source:
-        Location:
-          Fn::Sub: https://github.com/ryparker/${CFNTemplateRepoName}/${CFNTemplateRepoPath}
-        Type: CODECOMMIT
+        Type: CODEPIPELINE
+        BuildSpec:
+          Fn::Sub: ${CFNTemplateRepoPath}/buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
@@ -413,19 +413,13 @@ Resources:
       ServiceRole:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
       Artifacts:
-        Type: S3
-        Location:
-          Ref: ArtifactStoreS3Location
-        Name:
-          Fn::Sub: ValidateResource-${AWS::StackName}
+        Type: CODEPIPELINE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/python:2.7.12
       Source:
-        Location:
-          Fn::Sub: https://github.com/ryparker/${ValidateResourcesRepoName}/${ValidateResourcesPath}
-        Type: CODECOMMIT
+        Type: CODEPIPELINE
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
@@ -448,33 +442,19 @@ Resources:
             -
               Name: CFNTemplateSource
               ActionTypeId:
-                Category: Source
+                Version: '1'
                 Owner: AWS
-                Version: 1
-                Provider: CodeCommit
-              OutputArtifacts:
-                -
-                  Name: CFNTemplateOutput
-              Configuration:
-                BranchName: main
-                RepositoryName:
-                  Ref: CFNTemplateRepoName
-              RunOrder: 1
-            -
-              Name: TestArtifactSource
-              ActionTypeId:
                 Category: Source
-                Owner: AWS
-                Version: 1
-                Provider: CodeCommit
+                Provider: CodeStarSourceConnection
               OutputArtifacts:
-                -
-                  Name: TestArtifacts
-              Configuration:
-                BranchName: main
-                RepositoryName:
-                  Ref: ValidateResourcesRepoName
+                - Name: CFNTemplateOutput
               RunOrder: 1
+              Configuration:
+                ConnectionArn:
+                  Fn::Sub: "arn:aws:codestar-connections:${AWS::Region}:${AWS::AccountId}:connection/26fe5895-4c6e-4a24-aaec-8e21d5257bed"
+                FullRepositoryId: "ryparker/democracy"
+                BranchName: "main"
+                OutputArtifactFormat: "CODE_ZIP"
         -
           Name: Validate
           Actions:
@@ -515,13 +495,14 @@ Resources:
                 StackName:
                   Fn::Sub: Test-${AWS::StackName}
                 TemplateConfiguration: CFNTemplateArtifact::config-test.json
-                TemplatePath: CFNTemplateArtifact::main-stack.yml
+                TemplatePath:
+                  Fn::Sub: CFNTemplateArtifact::${CFNTemplateRepoPath}/main-stack.yml
               RunOrder: 2
             -
               Name: ValidateTestStack
               InputArtifacts:
                 -
-                  Name: TestArtifacts
+                  Name: CFNTemplateOutput
               ActionTypeId:
                 Category: Test
                 Owner: AWS
@@ -581,7 +562,8 @@ Resources:
                 StackName:
                   Fn::Sub: UAT-${AWS::StackName}
                 TemplateConfiguration: CFNTemplateArtifact::config-uat.json
-                TemplatePath: CFNTemplateArtifact::main-stack.yml
+                TemplatePath:
+                  Fn::Sub: CFNTemplateArtifact::${CFNTemplateRepoPath}/main-stack.yml
               RunOrder: 1
             -
               Name: ExecuteUATChangeSet
@@ -639,7 +621,8 @@ Resources:
                 StackName:
                   Fn::Sub: Prod-${AWS::StackName}
                 TemplateConfiguration: CFNTemplateArtifact::config-prod.json
-                TemplatePath: CFNTemplateArtifact::main-stack.yml
+                TemplatePath:
+                  Fn::Sub: CFNTemplateArtifact::${CFNTemplateRepoPath}/main-stack.yml
               RunOrder: 1
             -
               Name: ProdApproval
