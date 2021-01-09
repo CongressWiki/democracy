@@ -7,7 +7,7 @@
     "PublicSubnet1": "subnet-06b9b20a51c38e5d4",
     "PublicSubnet2": "subnet-0d0e0410ef0cf8e28",
     "S3BucketName": "nestedcfn-basestack-s3bucket-1cepijla6glk",
-    "KeyPair": "democraccy-stack",
+    "KeyPair": "democracy-stack",
     "AMIId": "ami-0a5193c623a23421c",
     "WebInstanceType": "t2.large",
     "WebMinSize": "1",
