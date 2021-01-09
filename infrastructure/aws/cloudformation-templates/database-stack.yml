@@ -50,7 +50,7 @@ Resources:
       DBSubnetGroupName:
         Ref: DBSubnetGroup
       Engine: mysql
-      EngineVersion: 5.7.11
+      EngineVersion: 5.7.22
       MasterUsername:
         Ref: DBUsername
       MasterUserPassword:
