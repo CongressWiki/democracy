@@ -444,9 +444,9 @@ Resources:
             -
               Name: CFNTemplateSource
               ActionTypeId:
-                Version: '1'
-                Owner: AWS
                 Category: Source
+                Owner: AWS
+                Version: 1
                 Provider: CodeStarSourceConnection
               OutputArtifacts:
                 - Name: CFNTemplateOutput
@@ -462,33 +462,31 @@ Resources:
           Actions:
             -
               Name: CodeBuild
-              InputArtifacts:
-                - Name: CFNTemplateOutput
               ActionTypeId:
                 Category: Build
                 Owner: AWS
                 Version: 1
                 Provider: CodeBuild
+              InputArtifacts:
+                - Name: CFNTemplateOutput
               OutputArtifacts:
-                -
-                  Name: CFNTemplateArtifact
+                - Name: CFNTemplateArtifact
+              RunOrder: 1
               Configuration:
                 ProjectName:
                   Ref: BuildCopyCFNProject
-              RunOrder: 1
             -
               Name: CreateTestCFNStack
-              InputArtifacts:
-                -
-                  Name: CFNTemplateArtifact
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: CFNTemplateArtifact
               OutputArtifacts:
-                -
-                  Name: CreatedTestCFNStack
+                - Name: CreatedTestCFNStack
+              RunOrder: 2
               Configuration:
                 ActionMode: CREATE_UPDATE
                 RoleArn:
@@ -498,44 +496,39 @@ Resources:
                   Fn::Sub: Test-${AWS::StackName}
                 TemplateConfiguration: CFNTemplateArtifact::config-test.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
-              RunOrder: 2
             -
               Name: ValidateTestStack
-              InputArtifacts:
-                -
-                  Name: CFNTemplateOutput
               ActionTypeId:
                 Category: Test
                 Owner: AWS
                 Version: 1
                 Provider: CodeBuild
+              InputArtifacts:
+                - Name: CFNTemplateOutput
               OutputArtifacts:
-                -
-                  Name: ValidatedTestStack
+                - Name: ValidatedTestStack
+              RunOrder: 3
               Configuration:
                 ProjectName:
-                  Ref: ValidateResourceProject
-              RunOrder: 3
+                  Ref: BuildCopyCFNProject
             -
               Name: DeleteTestStack
-              InputArtifacts:
-                -
-                  Name: ValidatedTestStack
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: ValidatedTestStack
               OutputArtifacts:
-                -
-                  Name: ProceedToUAT
+                - Name: ProceedToUAT
+              RunOrder: 4
               Configuration:
                 StackName:
                   Fn::Sub: Test-${AWS::StackName}
                 ActionMode: DELETE_ONLY
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
-              RunOrder: 4
         -
           Name: UAT
           Actions:
