@@ -42,7 +42,7 @@ Resources:
       Path: /
       Policies:
         -
-          PolicyName: "CodePipelineNestedCFNAccessPolicy"
+          PolicyName: "CodePipelineDemocracyAccessPolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -130,7 +130,7 @@ Resources:
       Path: /
       Policies:
         -
-          PolicyName: "CloudFormationNestedCFNAccessPolicy"
+          PolicyName: "CloudFormationDemocracyAccessPolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -316,7 +316,7 @@ Resources:
       Path: /service-role/
       Policies:
         -
-          PolicyName: "CodeBuildNestedCFNAccessPolicy"
+          PolicyName: "CodeBuildDemocracyAccessPolicy"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -434,7 +434,7 @@ Resources:
     Type: "AWS::CodePipeline::Pipeline"
     Properties:
       Name:
-        Fn::Sub: ContinuousDeliveryNestedCFN-${AWS::StackName}
+        Fn::Sub: ContinuousDeliveryDemocracy-${AWS::StackName}
       RoleArn:
           Fn::GetAtt: [ CodePipelineRole, Arn ]
       Stages:
