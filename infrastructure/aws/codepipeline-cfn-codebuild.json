@@ -17,14 +17,14 @@
   },
   {
     "ParameterKey": "UATTopic",
-    "ParameterValue": "Democracy-BaseStack-UATTopic-P940QR1E6GK1"
+    "ParameterValue": "Democracy-BaseStack-UATTopic-1TFZ4Q15S7R4G"
   },
   {
     "ParameterKey": "ProdTopic",
-    "ParameterValue": "Democracy-BaseStack-ProdTopic-1VJ1CXXBG16IC"
+    "ParameterValue": "Democracy-BaseStack-ProdTopic-JZGWIUDTX4JP"
   },
   {
     "ParameterKey": "ArtifactStoreS3Location",
-    "ParameterValue": "nestedcfn-basestack-s3bucket-1cepijla6glk"
+    "ParameterValue": "democracy-basestack-s3bucket-19jgtfqe8nk48"
   }
 ]
