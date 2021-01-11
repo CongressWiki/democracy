@@ -534,19 +534,16 @@ Resources:
           Actions:
             -
               Name: CreateUATChangeSet
-              InputArtifacts:
-                -
-                  Name: CFNTemplateArtifact
-                -
-                  Name: ProceedToUAT
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: CFNTemplateArtifact
+                - Name: ProceedToUAT
               OutputArtifacts:
-                -
-                  Name: CreatedUATChangeSet
+                - Name: CreatedUATChangeSet
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: UATCBChangeSet
@@ -560,17 +557,15 @@ Resources:
               RunOrder: 1
             -
               Name: ExecuteUATChangeSet
-              InputArtifacts:
-                -
-                  Name: CreatedUATChangeSet
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: CreatedUATChangeSet
               OutputArtifacts:
-                -
-                  Name: DeployedUAT
+                - Name: DeployedUAT
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: UATCBChangeSet
@@ -594,17 +589,15 @@ Resources:
           Actions:
             -
               Name: CreateProdChangeSet
-              InputArtifacts:
-                -
-                  Name: CFNTemplateArtifact
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: CFNTemplateArtifact
               OutputArtifacts:
-                -
-                  Name: CreatedProdChangeSet
+                - Name: CreatedProdChangeSet
               Configuration:
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: ProdCBChangeSet
@@ -630,14 +623,13 @@ Resources:
               RunOrder: 2
             -
               Name: DeployProduction
-              InputArtifacts:
-                -
-                  Name: CreatedProdChangeSet
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
                 Version: 1
                 Provider: CloudFormation
+              InputArtifacts:
+                - Name: CreatedProdChangeSet
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: ProdCBChangeSet

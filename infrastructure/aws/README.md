@@ -18,6 +18,8 @@ Stand up the physical layer of this application on AWS.
 
 ## Deploy AWS
 
+![AWS infrastructure diagram](./docs/Pipeline_Design.png)
+
 1. Create base stack
 
 ```shell
@@ -26,7 +28,14 @@ aws cloudformation create-stack --stack-name Democracy-BaseStack --template-body
 
 2. Copy base stack output values into the `cloudformation-templates/*-config.json` files
 
-3. Create deploy pipeline
+3. Create required IAM policies
+```shell
+aws iam create-service-linked-role --aws-service-name autoscaling.amazonaws.com
+aws iam create-service-linked-role --aws-service-name elasticloadbalancing.amazonaws.com
+aws iam create-service-linked-role --aws-service-name rds.amazonaws.com
+```
+
+4. Create deploy pipeline
 
 ```shell
 aws cloudformation create-stack --stack-name Democracy-CodePipeline --template-body file://codepipeline-cfn-codebuild.yml --parameters file://codepipeline-cfn-codebuild.json --capabilities CAPABILITY_NAMED_IAM
