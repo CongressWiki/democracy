@@ -161,6 +161,8 @@ Resources:
                   - "iam:RemoveRoleFromInstanceProfile"
                 Resource:
                   - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/WebServerIAMRole-*
+                  - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ecs-service-creator
+                  - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/ecs-task-executor
               -
                 Effect: "Allow"
                 Action:

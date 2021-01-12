@@ -204,7 +204,7 @@ Resources:
           Action: ['sts:AssumeRole']
       Path: /
       Policies:
-      - PolicyName: ecs-service
+      - PolicyName: ecs-service-creator
         PolicyDocument:
           Statement:
           - Effect: Allow
@@ -236,11 +236,11 @@ Resources:
         Statement:
         - Effect: Allow
           Principal:
-            Service: [ecs-tasks.amazonaws.com]
+            Service: ['ecs-tasks.amazonaws.com']
           Action: ['sts:AssumeRole']
       Path: /
       Policies:
-        - PolicyName: AmazonECSTaskExecutionRolePolicy
+        - PolicyName: ecs-task-executor
           PolicyDocument:
             Statement:
             - Effect: Allow
