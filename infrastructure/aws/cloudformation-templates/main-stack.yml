@@ -118,7 +118,7 @@ Resources:
         ContainerPort: 80
         ContainerCpu: 256
         ContainerMemory: 512
-        Path: *
+        Path: '*'
         Role:
       Tags:
         - Key: Name
