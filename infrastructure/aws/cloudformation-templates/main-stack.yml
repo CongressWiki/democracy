@@ -149,7 +149,7 @@ Resources:
         ContainerMemory: 512
         Path: '*'
         Role:
-          Fn::GetAtt: SecurityStack.Outputs.WebIAMProfile
+          Fn::GetAtt: ClusterStack.Outputs.ECSTaskExecutionRole
       Tags:
         - Key: Name
           Value: HasuraStack
