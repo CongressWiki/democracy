@@ -158,4 +158,4 @@ Outputs:
   WebELBURL:
     Description: URL endpoint of web ELB
     Value:
-      Fn::GetAtt: ServerStack.Outputs.WebELBURL
+      Fn::GetAtt: ClusterStack.Outputs.ExternalUrl
