@@ -126,6 +126,7 @@ Resources:
               Service:
                 - "cloudformation.amazonaws.com"
                 - "ecs.amazonaws.com"
+                - "ecs-tasks.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       Path: /
