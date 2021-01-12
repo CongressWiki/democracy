@@ -148,7 +148,8 @@ Resources:
         ContainerCpu: 256
         ContainerMemory: 512
         Path: '*'
-        Role: SecurityStack.Outputs.WebIAMProfile
+        Role:
+          Fn::GetAtt: SecurityStack.Outputs.WebIAMProfile
       Tags:
         - Key: Name
           Value: HasuraStack
