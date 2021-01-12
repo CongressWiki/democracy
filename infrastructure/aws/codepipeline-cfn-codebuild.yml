@@ -33,6 +33,7 @@ Resources:
           - Effect: Allow
             Principal:
               Service:
+              - codepipeline.amazonaws.com
               - ec2.amazonaws.com
               - cloudformation.amazonaws.com
               - ecs.amazonaws.com
