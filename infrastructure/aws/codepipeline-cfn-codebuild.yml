@@ -37,6 +37,9 @@ Resources:
             Principal:
               Service:
                 - "codepipeline.amazonaws.com"
+                - "cloudformation.amazonaws.com"
+                - "ecs.amazonaws.com"
+                - "ecs-tasks.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       Path: /
@@ -301,7 +304,8 @@ Resources:
                 Resource:
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}
                   - Fn::Sub: arn:aws:s3:::${ArtifactStoreS3Location}/*
-              - Effect: Allow
+              -
+                Effect: Allow
                 Action:
                   - 'ec2:AttachNetworkInterface'
                   - 'ec2:CreateNetworkInterface'
