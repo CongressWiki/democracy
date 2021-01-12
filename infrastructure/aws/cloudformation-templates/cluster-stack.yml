@@ -9,19 +9,19 @@ Description: This stack deploys a Fargate cluster that is in a VPC with both
 
 Parameters:
   VPCID:
-    Type: "AWS::EC2::VPC::Id"
+    Type: AWS::EC2::VPC::Id
     Description: Enter a valid VPC Id
   PrivateSubnet1:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of private subnet in AZ1
   PrivateSubnet2:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of private subnet in AZ2
   PublicSubnet1:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of public subnet in AZ1
   PublicSubnet2:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of public subnet in AZ2
 
 Resources:
@@ -89,7 +89,6 @@ Resources:
 
   PublicLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-    DependsOn: GatewayAttachment
     Properties:
       Scheme: internet-facing
       LoadBalancerAttributes:
