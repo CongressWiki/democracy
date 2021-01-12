@@ -221,6 +221,7 @@ Resources:
 
               # Rules which allow ECS to update load balancers on your behalf
               # with the information sabout how to send traffic to your containers
+              - 'elasticloadbalancing:CreateTargetGroup'
               - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
               - 'elasticloadbalancing:DeregisterTargets'
               - 'elasticloadbalancing:Describe*'
