@@ -1,11 +1,34 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Deploy a service on AWS Fargate, hosted in a private subnet, but accessible via a public load balancer.
 Parameters:
-  StackName:
+  ECSTaskExecutionRole:
     Type: String
-    Default: production
-    Description: The name of the parent Fargate networking stack that you created. Necessary
-                 to locate and reference resources created by that stack.
+    Default: ""
+
+  ClusterName:
+    Type: String
+    Default: ""
+
+  FargateContainerSecurityGroup:
+    Type: String
+    Default: ""
+
+  PrivateSubnetOne:
+    Type: String
+    Default: ""
+
+  PrivateSubnetTwo:
+    Type: String
+    Default: ""
+
+  VPCID:
+    Type: String
+    Default: ""
+
+  PublicListener:
+    Type: String
+    Default: ""
+
   ServiceName:
     Type: String
     Default: nginx
@@ -62,9 +85,7 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      ExecutionRoleArn:
-        Fn::ImportValue:
-          !Join [':', [!Ref 'StackName', 'ECSTaskExecutionRole']]
+      ExecutionRoleArn: !Ref ECSTaskExecutionRole
       TaskRoleArn:
         Fn::If:
           - 'HasCustomRole'
@@ -82,9 +103,7 @@ Resources:
     DependsOn: LoadBalancerRule
     Properties:
       ServiceName: !Ref 'ServiceName'
-      Cluster:
-        Fn::ImportValue:
-          !Join [':', [!Ref 'StackName', 'ClusterName']]
+      Cluster: !Ref ClusterName
       LaunchType: FARGATE
       DeploymentConfiguration:
         MaximumPercent: 200
@@ -93,14 +112,10 @@ Resources:
       NetworkConfiguration:
         AwsvpcConfiguration:
           AssignPublicIp: ENABLED
-          SecurityGroups:
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'FargateContainerSecurityGroup']]
+          SecurityGroups: !Ref FargateContainerSecurityGroup
           Subnets:
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'PrivateSubnetOne']]
-            - Fn::ImportValue:
-                !Join [':', [!Ref 'StackName', 'PrivateSubnetTwo']]
+            - !Ref PrivateSubnetOne
+            - !Ref PrivateSubnetTwo
       TaskDefinition: !Ref 'TaskDefinition'
       LoadBalancers:
         - ContainerName: !Ref 'ServiceName'
@@ -120,9 +135,7 @@ Resources:
       Port: !Ref 'ContainerPort'
       Protocol: HTTP
       UnhealthyThresholdCount: 2
-      VpcId:
-        Fn::ImportValue:
-          !Join [':', [!Ref 'StackName', 'VPCId']]
+      VpcId: !Ref VPCID
 
 
   LoadBalancerRule:
@@ -134,7 +147,5 @@ Resources:
       Conditions:
         - Field: path-pattern
           Values: [!Ref 'Path']
-      ListenerArn:
-        Fn::ImportValue:
-          !Join [':', [!Ref 'StackName', 'PublicListener']]
+      ListenerArn: !Ref PublicListener
       Priority: !Ref 'Priority'

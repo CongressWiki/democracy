@@ -140,8 +140,20 @@ Resources:
       TemplateURL:
         Fn::Sub: https://s3.amazonaws.com/${TemplatePath}/hasura-stack.yml
       Parameters:
-        StackName:
+        ECSTaskExecutionRole:
+          Fn::GetAtt: ClusterStack.Outputs.ECSTaskExecutionRole
+        ClusterName:
           Fn::GetAtt: ClusterStack.Outputs.ClusterName
+        FargateContainerSecurityGroup:
+          Fn::GetAtt: ClusterStack.Outputs.FargateContainerSecurityGroup
+        PrivateSubnetOne:
+          Ref: PrivateSubnet1
+        PrivateSubnetTwo:
+          Ref: PrivateSubnet2
+        VPCID:
+          Ref: VPCID
+        PublicListener:
+          Fn::GetAtt: ClusterStack.Outputs.PublicListener
         ServiceName: HasuraService
         ImageUrl: hasura/graphql-engine:latest
         ContainerPort: 80
