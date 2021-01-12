@@ -41,8 +41,8 @@ Resources:
   DBServer:
     Type: "AWS::RDS::DBInstance"
     Properties:
-      AllocatedStorage: 100
-      AllowMajorVersionUpgrade: true
+      AllocatedStorage: 50
+      AllowMajorVersionUpgrade: false
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 0
       DBInstanceClass:

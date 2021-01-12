@@ -196,8 +196,6 @@ Resources:
   ECSRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName:
-        Fn::Sub: ECSRole-ClusterStack
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -235,8 +233,6 @@ Resources:
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName:
-        Fn::Sub: ECSTaskExecutionRole-ClusterStack
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -303,5 +299,3 @@ Outputs:
   FargateContainerSecurityGroup:
     Description: A security group used to allow Fargate containers to receive traffic
     Value: !Ref 'FargateContainerSecurityGroup'
-    Export:
-      Name: !Join [ ':', [ !Ref 'AWS::StackName', 'FargateContainerSecurityGroup' ] ]
