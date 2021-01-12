@@ -8,9 +8,6 @@ Description: This stack deploys a Fargate cluster that is in a VPC with both
              between internal services.
 
 Parameters:
-  TemplatePath:
-    Type: String
-    Description: S3Bucket Path where the templates are stored
   VPCID:
     Type: "AWS::EC2::VPC::Id"
     Description: Enter a valid VPC Id
