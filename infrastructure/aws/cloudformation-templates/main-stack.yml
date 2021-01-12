@@ -45,35 +45,6 @@ Parameters:
   DBSubnetGroup:
     Type: String
     Description: Enter a valid DB Subnet Group
-  DBUsername:
-    Type: String
-    Description: Enter a valid Database main username
-    MinLength: 1
-    MaxLength: 16
-    AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
-  DBPassword:
-    Type: String
-    Description: Enter a valid Database main password
-    NoEcho: true
-    MinLength: 1
-    MaxLength: 41
-    AllowedPattern: "[a-zA-Z0-9]*"
-  DBInstanceType:
-    Type: String
-    Description: Enter one of the possible instance type for database
-    AllowedValues:
-      - db.t2.micro
-      - db.t2.small
-      - db.t2.medium
-      - db.t2.large
-  Environment:
-    Type: String
-    Description: Select the appropriate environment
-    AllowedValues:
-      - dev
-      - test
-      - uat
-      - prod
 
 Resources:
   SecurityStack:
@@ -112,13 +83,13 @@ Resources:
           Ref: Environment
       Tags:
         - Key: Name
-          Value:   DatabaseStack
+          Value: DatabaseStack
 
-  ServerStack:
-    Type: "AWS::CloudFormation::Stack"
+  ClusterStack:
+    Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/server-stack.yml"
+        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/cluster-stack.yml"
       Parameters:
         VPCID:
           Ref: VPCID
@@ -130,29 +101,28 @@ Resources:
           Ref: PublicSubnet1
         PublicSubnet2:
           Ref: PublicSubnet2
-        KeyPair:
-          Ref: KeyPair
-        AMIId:
-          Ref: AMIId
-        WebSG:
-          Fn::GetAtt: SecurityStack.Outputs.WebSG
-        ELBSG:
-          Fn::GetAtt: SecurityStack.Outputs.ELBSG
-        DBClientSG:
-          Fn::GetAtt: SecurityStack.Outputs.DBClientSG
-        WebIAMProfile:
-          Fn::GetAtt: SecurityStack.Outputs.WebIAMProfile
-        WebInstanceType:
-          Ref: WebInstanceType
-        WebMinSize:
-          Ref: WebMinSize
-        WebMaxSize:
-          Ref: WebMaxSize
-        Environment:
-          Ref: Environment
       Tags:
         - Key: Name
-          Value: ServerStack
+          Value: ClusterStack
+
+  HasuraStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/hasura-stack.yml"
+      Parameters:
+        StackName:
+          Fn::GetAtt: ClusterStack.Outputs.ClusterName
+        ServiceName: HasuraService
+        ImageUrl: hasura/graphql-engine:latest
+        ContainerPort: 80
+        ContainerCpu: 256
+        ContainerMemory: 512
+        Path: "*"
+        Role:
+      Tags:
+        - Key: Name
+          Value: HasuraStack
 
 Outputs:
   WebELBURL:
