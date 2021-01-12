@@ -196,6 +196,8 @@ Resources:
   ECSRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName:
+        Fn::Sub: ECSRole-${AWS::StackName}
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow
@@ -233,6 +235,8 @@ Resources:
   ECSTaskExecutionRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName:
+        Fn::Sub: ECSTaskExecutionRole-${AWS::StackName}
       AssumeRolePolicyDocument:
         Statement:
         - Effect: Allow

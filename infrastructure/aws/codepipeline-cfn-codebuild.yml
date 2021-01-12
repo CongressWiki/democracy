@@ -52,6 +52,8 @@ Resources:
   CloudFormationRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName:
+        Fn::Sub: CodePipelineRole-${AWS::StackName}
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
