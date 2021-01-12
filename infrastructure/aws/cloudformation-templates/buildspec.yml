@@ -4,12 +4,14 @@ environment_variables:
   plaintext:
     CHILD_TEMPLATES: |
       security-stack.yml
-      server-stack.yml
+      cluster-stack.yml
+      hasura-stack.yml
       database-stack.yml
     TEMPLATE_FILES: |
       main-stack.yml
       security-stack.yml
-      server-stack.yml
+      cluster-stack.yml
+      hasura-stack.yml
       database-stack.yml
     CONFIG_FILES: |
       config-prod.json

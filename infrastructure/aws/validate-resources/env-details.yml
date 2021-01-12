@@ -9,11 +9,10 @@ get_role:
   Name: WebServerIAMRole-test
   Properties:
     AssumeRolePolicyDocument:
-      -
-        Effect: "Allow"
+      - Effect: Allow
         Principal:
-          Service: "ec2.amazonaws.com"
-        Action: "sts:AssumeRole"
+          Service: ec2.amazonaws.com
+        Action: sts:AssumeRole
 describe_load_balancers:
   Name: WebELB
   Properties:

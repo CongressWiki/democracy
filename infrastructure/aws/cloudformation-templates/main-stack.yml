@@ -5,28 +5,28 @@ Parameters:
     Type: String
     Description: S3Bucket Path where the templates are stored
   VPCID:
-    Type: "AWS::EC2::VPC::Id"
+    Type: AWS::EC2::VPC::Id
     Description: Enter a valid VPC Id
   PrivateSubnet1:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of private subnet in AZ1
   PrivateSubnet2:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of private subnet in AZ2
   PublicSubnet1:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of public subnet in AZ1
   PublicSubnet2:
-    Type: "AWS::EC2::Subnet::Id"
+    Type: AWS::EC2::Subnet::Id
     Description: Enter a valid SubnetId of public subnet in AZ2
   S3BucketName:
     Type: String
     Description: Name of the S3 bucket to allow access to the Web Server IAM Role.
   KeyPair:
-    Type: "AWS::EC2::KeyPair::KeyName"
+    Type: AWS::EC2::KeyPair::KeyName
     Description: Enter a valid KeyPair Name
   AMIId:
-    Type: "AWS::EC2::Image::Id"
+    Type: AWS::EC2::Image::Id
     Description: Enter a valid AMI ID to launch the instance
   WebInstanceType:
     Type: String
@@ -48,10 +48,10 @@ Parameters:
 
 Resources:
   SecurityStack:
-    Type: "AWS::CloudFormation::Stack"
+    Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/security-stack.yml"
+        Fn::Sub: https://s3.amazonaws.com/${TemplatePath}/security-stack.yml
       Parameters:
         S3BucketName:
           Ref: S3BucketName
@@ -64,10 +64,10 @@ Resources:
           Value: SecurityStack
 
   DatabaseStack:
-    Type: "AWS::CloudFormation::Stack"
+    Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/database-stack.yml"
+        Fn::Sub: https://s3.amazonaws.com/${TemplatePath}/database-stack.yml
       Parameters:
         DBSubnetGroup:
           Ref: DBSubnetGroup
@@ -89,7 +89,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/cluster-stack.yml"
+        Fn::Sub: https://s3.amazonaws.com/${TemplatePath}/cluster-stack.yml
       Parameters:
         VPCID:
           Ref: VPCID
@@ -109,7 +109,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: "https://s3.amazonaws.com/${TemplatePath}/hasura-stack.yml"
+        Fn::Sub: https://s3.amazonaws.com/${TemplatePath}/hasura-stack.yml
       Parameters:
         StackName:
           Fn::GetAtt: ClusterStack.Outputs.ClusterName
@@ -118,7 +118,7 @@ Resources:
         ContainerPort: 80
         ContainerCpu: 256
         ContainerMemory: 512
-        Path: "*"
+        Path: *
         Role:
       Tags:
         - Key: Name
@@ -126,6 +126,6 @@ Resources:
 
 Outputs:
   WebELBURL:
-    Description: "URL endpoint of web ELB"
+    Description: URL endpoint of web ELB
     Value:
       Fn::GetAtt: ServerStack.Outputs.WebELBURL
