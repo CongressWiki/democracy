@@ -28,7 +28,7 @@ Resources:
   HasuraService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/services/product-service/service.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yaml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
@@ -39,7 +39,7 @@ Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/services/product-service/service.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yaml
       Parameters:
         DBSubnetGroup:
         DBUsername:
