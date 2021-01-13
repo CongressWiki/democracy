@@ -29,9 +29,11 @@ Parameters:
     Default: /products
 
   DBSubnetGroup:
+    Description: Database subnet
     Type: String
 
   DBServerSecurityGroup:
+    Description: Database to server security group
     Type: String
 
 Resources:
