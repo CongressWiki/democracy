@@ -35,7 +35,7 @@ Resources:
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: "product-service"
-          ContainerPort: 8001
+          ContainerPort: 8080
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
@@ -48,7 +48,7 @@ Resources:
           Image: hasura/graphql-engine:v1.3.3
           Memory: 128
           PortMappings:
-            - ContainerPort: 8001
+            - ContainerPort: 8080
           LogConfiguration:
             LogDriver: awslogs
             Options:
