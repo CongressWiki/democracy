@@ -75,6 +75,7 @@ Resources:
         Path: /products
         DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
         DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
+        EnvironmentName: !Ref Environment
 
   WebsiteService:
     Type: AWS::CloudFormation::Stack
