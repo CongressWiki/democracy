@@ -24,7 +24,7 @@ Resources:
   VPC:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/infrastructure/vpc.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/vpc.yml
       Parameters:
         EnvironmentName: !Ref Environment
         VpcCIDR: 10.180.0.0/16
@@ -36,7 +36,7 @@ Resources:
   SecurityGroups:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/infrastructure/security-groups.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/security-groups.yml
       Parameters:
         EnvironmentName: !Ref Environment
         VPC: !GetAtt VPC.Outputs.VPC
@@ -44,7 +44,7 @@ Resources:
   ALB:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/infrastructure/load-balancers.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/load-balancers.yml
       Parameters:
         EnvironmentName: !Ref Environment
         VPC: !GetAtt VPC.Outputs.VPC
@@ -54,7 +54,7 @@ Resources:
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/infrastructure/ecs-cluster.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/ecs-cluster.yml
       Parameters:
         EnvironmentName: !Ref Environment
         InstanceType: t2.large
@@ -66,7 +66,7 @@ Resources:
   GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/services/product-service/service.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
@@ -77,7 +77,7 @@ Resources:
   WebsiteService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/services/website-service/service.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/website-service/service.yml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
@@ -91,7 +91,7 @@ Resources:
   LifecycleHook:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: s3://democracy-stack/aws/infrastructure/lifecyclehook.yaml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/lifecyclehook.yml
       Parameters:
         Cluster: !GetAtt ECS.Outputs.Cluster
         ECSAutoScalingGroupName: !GetAtt ECS.Outputs.ECSAutoScalingGroupName
