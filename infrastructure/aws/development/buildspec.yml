@@ -11,17 +11,17 @@ phases:
   pre_build:
     commands:
       # Validate all of the CloudFormation templates
-      - chmod a+x ./infrastructure/aws/tests/validate-templates.sh
-      - ./infrastructure/aws/tests/validate-templates.sh
+      - chmod a+x $CODEBUILD_SRC_DIR/infrastructure/aws/tests/validate-templates.sh
+      - cd $CODEBUILD_SRC_DIR/infrastructure/aws && ./tests/validate-templates.sh
 
   build:
     commands:
 
       # Sync the templates
-      - aws s3 sync . s3://${TEMPLATE_BUCKET}
+      - aws s3 sync $CODEBUILD_SRC_DIR/infrastructure/aws s3://${TEMPLATE_BUCKET}
 
 artifacts:
   files:
-    - infrastructure/aws/main-stack.yml
-    - infrastructure/aws/config-*.json
+    - $CODEBUILD_SRC_DIR/infrastructure/aws/main-stack.yml
+    - $CODEBUILD_SRC_DIR/infrastructure/aws/config-*.json
   discard-paths: yes
