@@ -34,10 +34,10 @@ Resources:
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        # VPC: !GetAtt VPC.Outputs.VPC
+        # Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
-        Listener: !GetAtt ALB.Outputs.Listener
+        # Listener: !GetAtt ALB.Outputs.Listener
         Path: /products
 
   PostgresDatabase:
