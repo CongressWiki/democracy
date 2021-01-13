@@ -124,11 +124,7 @@ Resources:
       ServiceRole:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
       Artifacts:
-        Type: S3
-        Location:
-          Fn::Sub: ArtifactS3Bucket
-        Name:
-          Fn::Sub: BuildCopyCFN-${AWS::StackName}
+        Type: CODEPIPELINE
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -136,10 +132,10 @@ Resources:
         EnvironmentVariables:
           - Name: TEMPLATE_BUCKET
             Value:
-              Fn::Sub: ArtifactS3Bucket
+              Ref: ArtifactS3Bucket
       Source:
         Type: CODEPIPELINE
-        BuildSpec: /infrastructure/aws/development/buildspec.yml
+        BuildSpec: infrastructure/aws/development/buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
@@ -214,7 +210,7 @@ Resources:
 
             - Name: DeleteTestStack
               InputArtifacts:
-                - Name: ValidatedTestStack
+                - Name: CreatedTestCFNStack
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
@@ -338,4 +334,4 @@ Resources:
       ArtifactStore:
         Type: S3
         Location:
-          Fn::Sub: ArtifactS3Bucket
+          Ref: ArtifactS3Bucket

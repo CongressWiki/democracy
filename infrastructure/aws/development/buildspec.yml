@@ -18,7 +18,7 @@ phases:
     commands:
 
       # Sync the templates
-      - aws s3 sync . s3://${S3_BUCKET}
+      - aws s3 sync . s3://${TEMPLATE_BUCKET}
 
 artifacts:
   files:
