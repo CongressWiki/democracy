@@ -111,7 +111,6 @@ Resources:
   ServiceRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub ECSRole-${AWS::StackName}
       Path: /
       AssumeRolePolicyDocument: |
         {
