@@ -45,10 +45,9 @@ Resources:
       AllowMajorVersionUpgrade: false
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 0
-      DBInstanceClass:
-        Ref: DBInstanceType
-      DBSubnetGroupName:
-        Ref: DBSubnetGroup
+      DBInstanceClass: !Ref DBInstanceType
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      DBName: postgres
       Engine: postgres
       EngineVersion: 12.4
       MasterUsername:

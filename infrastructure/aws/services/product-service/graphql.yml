@@ -59,3 +59,4 @@ Resources:
         DesiredCount: 2
         Listener: !Ref Listener
         Path: /products
+        DBEndpoint: PostgresDatabase.Outputs.DBEndpoint

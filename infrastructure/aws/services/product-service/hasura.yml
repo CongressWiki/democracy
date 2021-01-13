@@ -24,6 +24,10 @@ Parameters:
     Type: String
     Default: /products
 
+  DBEndpoint:
+    Description: The url of the Database
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -54,6 +58,23 @@ Resources:
             Options:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
+          Environment:
+            - Name: HASURA_GRAPHQL_DATABASE_URL
+              Value: !Join
+                - postgres://
+                - dbadmin
+                - ':'
+                - dbpAssw0rd
+                - '@'
+                - !Ref DBEndpoint
+                - ':'
+                - 5432
+                - '/'
+                - 'postgres'
+            - Name: HASURA_GRAPHQL_ENABLE_CONSOLE
+              Value: true
+            - Name: HASURA_GRAPHQL_ADMIN_SECRET
+              Value: hasuraAdmin
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
