@@ -28,26 +28,32 @@ Parameters:
     Type: String
     Default: /products
 
-Resources:
-  HasuraService:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yml
-      Parameters:
-        # VPC: !GetAtt VPC.Outputs.VPC
-        # Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
-        # Listener: !GetAtt ALB.Outputs.Listener
-        Path: /products
+  DBSubnetGroup:
+    Type: String
 
+  DBServerSecurityGroup:
+    Type: String
+
+Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/postgres.yml
       Parameters:
-        # DBSubnetGroup:
+        DBSubnetGroup: !Ref DBSubnetGroup
+        DBServerSecurityGroup: !Ref DBServerSecurityGroup
+        Environment: !Ref EnvironmentName
         DBUsername: dbadmin
         DBPassword: dbpAssw0rd
-        # DBServerSecurityGroup:
         DBInstanceType: db.t2.small
-        Environment: !Ref EnvironmentName
+
+  HasuraService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/hasura.yml
+      Parameters:
+        VPC: !Ref VPC
+        Cluster: !Ref Cluster
+        DesiredCount: 2
+        Listener: !Ref Listener
+        Path: /products

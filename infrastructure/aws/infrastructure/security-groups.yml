@@ -45,6 +45,29 @@ Resources:
         - Key: Name
           Value: !Sub ${EnvironmentName}-LoadBalancers
 
+  DBClientSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Database client security group
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-DBClientSecurityGroup
+      VpcId: !Ref VPC
+
+  DBServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Database server security group
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref DBClientSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvironmentName}-DBServerSecurityGroup
+      VpcId: !Ref VPC
+
 Outputs:
   ECSHostSecurityGroup:
     Description: A reference to the security group for ECS hosts
@@ -53,3 +76,11 @@ Outputs:
   LoadBalancerSecurityGroup:
     Description: A reference to the security group for load balancers
     Value: !Ref LoadBalancerSecurityGroup
+
+  DBClientSecurityGroup:
+    Description: Database client security group
+    Value: !Ref DBClientSecurityGroup
+
+  DBServerSecurityGroup:
+    Description: Database server security group
+    Value: !Ref DBServerSecurityGroup

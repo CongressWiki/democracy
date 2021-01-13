@@ -66,13 +66,15 @@ Resources:
   GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/service.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/graphql.yml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /products
+        DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
+        DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
 
   WebsiteService:
     Type: AWS::CloudFormation::Stack

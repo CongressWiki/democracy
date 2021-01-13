@@ -1,7 +1,7 @@
 Description: >
-  This template deploys a VPC, with a pair of public and private subnets spread 
-  across two Availabilty Zones. It deploys an Internet Gateway, with a default 
-  route on the public subnets. It deploys a pair of NAT Gateways (one in each AZ), 
+  This template deploys a VPC, with a pair of public and private subnets spread
+  across two Availabilty Zones. It deploys an Internet Gateway, with a default
+  route on the public subnets. It deploys a pair of NAT Gateways (one in each AZ),
   and default routes for them in the private subnets.
 
 Parameters:
@@ -195,6 +195,18 @@ Resources:
       RouteTableId: !Ref PrivateRouteTable2
       SubnetId: !Ref PrivateSubnet2
 
+  RDSSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: RDS DB Subnet group
+      SubnetIds:
+        - Ref: PrivateSubnet1
+        - Ref: PrivateSubnet2
+      Tags:
+        - Key: Name
+          Value:
+            Fn::Sub: ${TagPrefix}-DBSubnetGroup
+
 Outputs:
   VPC:
     Description: A reference to the created VPC
@@ -223,3 +235,7 @@ Outputs:
   PrivateSubnet2:
     Description: A reference to the private subnet in the 2nd Availability Zone
     Value: !Ref PrivateSubnet2
+
+  DBSubnetGroup:
+    Description: Name of the DB Subnet group
+    Value: !Ref RDSSubnetGroup
