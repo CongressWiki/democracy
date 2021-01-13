@@ -205,7 +205,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Sub: ${TagPrefix}-DBSubnetGroup
+            Fn::Sub: ${EnvironmentName}-DBSubnetGroup
 
 Outputs:
   VPC:
