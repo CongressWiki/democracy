@@ -17,6 +17,7 @@ Description: >
 Parameters:
   environment:
     Type: string
+    Default: test
 
 Resources:
   VPC:

@@ -1,3 +1,5 @@
 {
-  "environment": "uat"
+  "Parameters": {
+    "environment": "uat"
+  }
 }
