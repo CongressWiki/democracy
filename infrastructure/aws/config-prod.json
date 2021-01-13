@@ -1,5 +1,5 @@
 {
   "Parameters": {
-    "environment": "prod"
+    "Environment": "prod"
   }
 }
