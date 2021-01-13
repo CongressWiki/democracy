@@ -203,7 +203,7 @@ Resources:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
                 StackName:
-                  Fn::Sub: Test-Democracy-Stacks
+                  Fn::Sub: Test-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-test.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 2
@@ -246,7 +246,7 @@ Resources:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
                 StackName:
-                  Fn::Sub: UAT-Democracy-Stacks
+                  Fn::Sub: UAT-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-uat.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 1
@@ -265,7 +265,7 @@ Resources:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: UATCBChangeSet
                 StackName:
-                  Fn::Sub: UAT-Democracy-Stacks
+                  Fn::Sub: UAT-Democracy
               RunOrder: 2
 
             - Name: UATApproval
@@ -299,7 +299,7 @@ Resources:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
                 StackName:
-                  Fn::Sub: Prod-Democracy-Stacks
+                  Fn::Sub: Prod-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-prod.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 1
@@ -328,7 +328,7 @@ Resources:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: ProdCBChangeSet
                 StackName:
-                  Fn::Sub: Prod-Democracy-Stacks
+                  Fn::Sub: Prod-Democracy
               RunOrder: 3
 
       ArtifactStore:
