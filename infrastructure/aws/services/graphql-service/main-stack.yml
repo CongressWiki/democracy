@@ -26,7 +26,7 @@ Parameters:
   Path:
     Description: The path to register with the Application Load Balancer
     Type: String
-    Default: /products
+    Default: /
 
   DBSubnetGroup:
     Description: Database subnet
@@ -58,5 +58,5 @@ Resources:
         Cluster: !Ref Cluster
         DesiredCount: 2
         Listener: !Ref Listener
-        Path: /products
+        Path: /
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint

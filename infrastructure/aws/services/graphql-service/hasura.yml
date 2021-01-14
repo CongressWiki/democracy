@@ -22,7 +22,7 @@ Parameters:
   Path:
     Description: The path to register with the Application Load Balancer
     Type: String
-    Default: /products
+    Default: /
 
   DBEndpoint:
     Description: The url of the Database
@@ -82,7 +82,7 @@ Resources:
       Matcher:
         HttpCode: 200-299
       HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /products
+      HealthCheckPath: /healthz
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2

@@ -102,7 +102,7 @@ Resources:
 Outputs:
   GraphqlServiceUrl:
     Description: The URL endpoint for the product service
-    Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "products"]]
+    Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "console"]]
 
   WebsiteServiceUrl:
     Description: The URL endpoint for the website service
