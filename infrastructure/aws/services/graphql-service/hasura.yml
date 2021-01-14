@@ -50,9 +50,10 @@ Resources:
         - Name: product-service
           Essential: true
           Image: hasura/graphql-engine:v1.3.3
-          Memory: 128
+          Memory: 1900
           PortMappings:
             - ContainerPort: 8080
+              HostPort: 0
           LogConfiguration:
             LogDriver: awslogs
             Options:

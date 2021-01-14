@@ -66,30 +66,30 @@ Resources:
   GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/graphql.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/main-stack.yml
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 2
         Listener: !GetAtt ALB.Outputs.Listener
-        Path: /products
+        Path: /
         DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
         DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
         EnvironmentName: !Ref Environment
 
-  WebsiteService:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/website-service/service.yml
-      Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 2
-        ProductServiceUrl:
-          !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "products"]]
-        Listener: !GetAtt ALB.Outputs.Listener
-        Path: /
-        ECSServiceAutoScalingRoleARN: !GetAtt ECS.Outputs.ECSServiceAutoScalingRole
+  # WebsiteService:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/website-service/service.yml
+  #     Parameters:
+  #       VPC: !GetAtt VPC.Outputs.VPC
+  #       Cluster: !GetAtt ECS.Outputs.Cluster
+  #       DesiredCount: 2
+  #       ProductServiceUrl:
+  #         !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "products"]]
+  #       Listener: !GetAtt ALB.Outputs.Listener
+  #       Path: /
+  #       ECSServiceAutoScalingRoleARN: !GetAtt ECS.Outputs.ECSServiceAutoScalingRole
 
   LifecycleHook:
     Type: AWS::CloudFormation::Stack
