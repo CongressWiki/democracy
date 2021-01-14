@@ -80,7 +80,7 @@ Resources:
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
-        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancers
+        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
 
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack
