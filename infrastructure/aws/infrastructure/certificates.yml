@@ -1,6 +1,4 @@
-Description: >
-  This template deploys an ECS cluster to the provided VPC and subnets
-  using an Auto Scaling Group
+Description: This template deploys an ECS cluster to the provided VPC and subnets using an Auto Scaling Group
 
 Parameters:
   EnvironmentName:
