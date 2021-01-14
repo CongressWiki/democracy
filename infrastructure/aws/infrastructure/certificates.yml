@@ -36,7 +36,6 @@ Resources:
 
 Outputs:
   WebsiteRecordSet:
-    Condition: IsNotProdEnvironmentCondition
     Description: WebsiteRecordSet URL
     Value: !Sub https://${EnvironmentName}-${ProjectName}.${DomainName}
     Export:

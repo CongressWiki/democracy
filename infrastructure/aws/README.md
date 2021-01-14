@@ -20,10 +20,10 @@ Stand up the physical layer of this application on AWS.
 
 ![AWS infrastructure diagram](./docs/Pipeline_Design.png)
 
-1. Create base stack
+1. Create codepipeline
 
 ```shell
-aws cloudformation create-stack --stack-name Democracy-InfrastructureStack --template-body file://main-stack.yml --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name Democracy-CodePipeline --template-body file://development/codepipeline.yml --capabilities CAPABILITY_NAMED_IAM
 ```
 
 ## TODO
