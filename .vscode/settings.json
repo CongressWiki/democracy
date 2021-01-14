@@ -10,7 +10,7 @@
   "python.linting.flake8Args": ["--config=${workspaceFolder}/infrastructure/us-government-data-migration/setup.cfg"],
   "python.formatting.provider": "black",
   "python.formatting.blackArgs": ["--config=${workspaceFolder}/infrastructure/us-government-data-migration/setup.cfg"],
-  "python.pythonPath": "${workspaceFolder}/.venv/bin/python3",
+  "python.pythonPath": "/usr/local/bin/python3",
   "python.venvPath": ".venv",
   "vsintellicode.features.python.deepLearning": "enabled",
   "python.linting.pydocstyleEnabled": false,

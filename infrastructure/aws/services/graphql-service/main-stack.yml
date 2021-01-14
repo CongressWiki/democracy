@@ -1,5 +1,4 @@
-Description: >
-  This is an example of a long running ECS service that serves a JSON API of products.
+Description: This is an example of a long running ECS service that serves graphql.
 
 Parameters:
   EnvironmentName:
@@ -40,7 +39,7 @@ Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/postgres.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/postgres.yml
       Parameters:
         DBSubnetGroup: !Ref DBSubnetGroup
         DBServerSecurityGroup: !Ref DBServerSecurityGroup
@@ -52,11 +51,11 @@ Resources:
   HasuraService:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/product-service/hasura.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/hasura.yml
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref Cluster
-        DesiredCount: 2
+        DesiredCount: '2'
         Listener: !Ref Listener
         Path: /
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint

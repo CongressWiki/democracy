@@ -1,5 +1,4 @@
-Description: >
-  This is an example of a long running ECS service that serves a JSON API of products.
+Description: This is an example of a long running ECS service that serves graphql.
 
 Parameters:
   VPC:
@@ -38,16 +37,16 @@ Resources:
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
-        - ContainerName: "product-service"
+        - ContainerName: "graphql-service"
           ContainerPort: 8080
           TargetGroupArn: !Ref TargetGroup
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: product-service
+      Family: graphql-service
       ContainerDefinitions:
-        - Name: product-service
+        - Name: graphql-service
           Essential: true
           Image: hasura/graphql-engine:v1.3.3
           Memory: 1900

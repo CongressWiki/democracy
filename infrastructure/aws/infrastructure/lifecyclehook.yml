@@ -1,24 +1,29 @@
 Description: >
   This template deploys a Lambda Function and Auto Scaling Lifecycle Hook to drain Tasks from your Container Instances when an Instance is selected for Termination in your Auto Scaling Group.
+
 Parameters:
   Cluster:
     Type: String
     Description: Name of ECS Cluster
+
   ECSAutoScalingGroupName:
     Type: String
     Description: Name of Auto Scaling Group
+
 Resources:
   NotificationTopic:
     Type: "AWS::SNS::Topic"
+    DependsOn: LifecycleHandlerFunction
     Properties:
       Subscription:
         - Endpoint: !GetAtt
             - LifecycleHandlerFunction
             - Arn
           Protocol: lambda
-    DependsOn: LifecycleHandlerFunction
+
   InstanceTerminatingHook:
     Type: "AWS::AutoScaling::LifecycleHook"
+    DependsOn: NotificationTopic
     Properties:
       AutoScalingGroupName: !Ref ECSAutoScalingGroupName
       DefaultResult: ABANDON
@@ -28,7 +33,7 @@ Resources:
       RoleARN: !GetAtt
         - AutoscalingNotificationRole
         - Arn
-    DependsOn: NotificationTopic
+
   AutoscalingNotificationRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -43,6 +48,7 @@ Resources:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AutoScalingNotificationAccessRole"
+
   LambdaExecutionRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -82,6 +88,7 @@ Resources:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AutoScalingNotificationAccessRole"
+
   LambdaInvokePermission:
     Type: "AWS::Lambda::Permission"
     Properties:
@@ -89,6 +96,7 @@ Resources:
       Action: "lambda:InvokeFunction"
       Principal: sns.amazonaws.com
       SourceArn: !Ref NotificationTopic
+
   LifecycleHandlerFunction:
     Type: "AWS::Lambda::Function"
     Properties:
