@@ -106,7 +106,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       Certificates:
-        - CertificateArn: !ImportValue usacounts-SSLCertificate
+        - CertificateArn: arn:aws:acm:us-east-1:495634646531:certificate/1896d99b-0e35-444b-81c4-7f2ffe48471b
       DefaultActions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
