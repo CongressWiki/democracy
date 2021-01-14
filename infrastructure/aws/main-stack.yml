@@ -74,7 +74,7 @@ Resources:
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/service.yml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC!GetAtt VPC.Outputs.VPC
+        VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
