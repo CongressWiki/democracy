@@ -9,11 +9,6 @@ Parameters:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
-  DesiredCount:
-    Description: How many instances of this task should we run across our cluster?
-    Type: Number
-    Default: 2
-
   Listener:
     Description: The Application Load Balancer listener to register with
     Type: String
@@ -27,6 +22,9 @@ Parameters:
     Description: The url of the Database
     Type: String
 
+  LoadBalancer:
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -34,7 +32,7 @@ Resources:
     Properties:
       Cluster: !Ref Cluster
       Role: !Ref ServiceRole
-      DesiredCount: !Ref DesiredCount
+      DesiredCount: 2
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: "graphql-service"
@@ -46,7 +44,7 @@ Resources:
     Properties:
       Family: graphql-service
       ContainerDefinitions:
-        - Name: graphql-service
+        - Name: Hasura
           Essential: true
           Image: hasura/graphql-engine:v1.3.3
           Memory: 1900
@@ -62,7 +60,7 @@ Resources:
             - Name: HASURA_GRAPHQL_DATABASE_URL
               Value: !Sub postgres://dbadmin:dbpAssw0rd@${DBEndpoint}:5432/postgres
             - Name: HASURA_GRAPHQL_ENABLE_CONSOLE
-              Value: true
+              Value: 'true'
             - Name: HASURA_GRAPHQL_ADMIN_SECRET
               Value: hasuraAdmin
 
@@ -80,8 +78,8 @@ Resources:
       Protocol: HTTP
       Matcher:
         HttpCode: 200-299
-      HealthCheckIntervalSeconds: 10
-      HealthCheckPath: /healthz
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /console
       HealthCheckProtocol: HTTP
       HealthCheckTimeoutSeconds: 5
       HealthyThresholdCount: 2
@@ -90,7 +88,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::ListenerRule
     Properties:
       ListenerArn: !Ref Listener
-      Priority: 2
+      Priority: 1
       Conditions:
         - Field: path-pattern
           Values:
@@ -99,6 +97,35 @@ Resources:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
 
+  HttpsListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: !ImportValue usacounts-SSLCertificate
+      DefaultActions:
+        - TargetGroupArn: !Ref TargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: HTTPS
+
+  HttpRedirectListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      # resource or cfn does not support tags
+      DefaultActions:
+        - RedirectConfig:
+            Host: '#{host}'
+            Path: '/#{path}'
+            Port: '443'
+            Protocol: 'HTTPS'
+            Query: '#{query}'
+            StatusCode: HTTP_301
+          Type: redirect
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+
   # This IAM Role grants the service access to register/unregister with the
   # Application Load Balancer (ALB). It is based on the default documented here:
   # http://docs.aws.amazon.com/AmazonECS/latest/developerguide/service_IAM_role.html
@@ -106,36 +133,29 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      AssumeRolePolicyDocument: |
-        {
-            "Statement": [{
-                "Effect": "Allow",
-                "Principal": { "Service": [ "ecs.amazonaws.com" ]},
-                "Action": [ "sts:AssumeRole" ]
-            }]
-        }
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs.amazonaws.com
+            Action: sts:AssumeRole
+
       Policies:
         - PolicyName: !Sub ECSRole-${AWS::StackName}
           PolicyDocument:
-            {
-              "Version": "2012-10-17",
-              "Statement":
-                [
-                  {
-                    "Effect": "Allow",
-                    "Action":
-                      [
-                        "ec2:AuthorizeSecurityGroupIngress",
-                        "ec2:Describe*",
-                        "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
-                        "elasticloadbalancing:Describe*",
-                        "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
-                        "elasticloadbalancing:DeregisterTargets",
-                        "elasticloadbalancing:DescribeTargetGroups",
-                        "elasticloadbalancing:DescribeTargetHealth",
-                        "elasticloadbalancing:RegisterTargets"
-                      ],
-                    "Resource": "*"
-                  }
-                ]
-            }
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 'ec2:AuthorizeSecurityGroupIngress'
+                  - 'ec2:Describe*'
+                  - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+                  - 'elasticloadbalancing:Describe*'
+                  - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+                  - 'elasticloadbalancing:DeregisterTargets'
+                  - 'elasticloadbalancing:DescribeTargetGroups'
+                  - 'elasticloadbalancing:DescribeTargetHealth'
+                  - 'elasticloadbalancing:RegisterTargets'
+                Resource: '*'
+

@@ -35,6 +35,9 @@ Parameters:
     Description: Database to server security group
     Type: String
 
+  LoadBalancer:
+    Type: String
+
 Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
@@ -55,7 +58,8 @@ Resources:
       Parameters:
         VPC: !Ref VPC
         Cluster: !Ref Cluster
-        DesiredCount: '2'
+        DesiredCount: !Ref DesiredCount
         Listener: !Ref Listener
-        Path: /
+        Path: !Ref Path
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
+        LoadBalancer: !Ref LoadBalancer

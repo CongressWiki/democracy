@@ -16,7 +16,7 @@ Parameters:
   DomainName:
     Type: String
     Default: usacounts.com
-    Description: The DNS name of an existing Amazon Route 53 hosted zone e.g. globalvetlink.com
+    Description: The DNS name of an existing Amazon Route 53 hosted zone e.g. usacounts.com
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
     ConstraintDescription: must be a valid DNS zone name.
 
@@ -26,7 +26,7 @@ Resources:
     Properties:
       HostedZoneName: !Sub ${DomainName}.
       RecordSets:
-        - Name: !Sub ${EnvironmentName}-${ProjectName}.${DomainName}
+        - Name: !Sub ${EnvironmentName}.${DomainName}
           Type: CNAME
           TTL: '300'
           ResourceRecords:
@@ -35,6 +35,6 @@ Resources:
 Outputs:
   WebsiteUrl:
     Description: WebsiteRecordSet URL
-    Value: !Sub https://${EnvironmentName}-${ProjectName}.${DomainName}
+    Value: !Sub https://${EnvironmentName}.${DomainName}
     Export:
       Name: !Sub ${AWS::StackName}-WebsiteRecordSet
