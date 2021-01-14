@@ -33,7 +33,7 @@ Resources:
             - !Ref LoadBalancerUrl
 
 Outputs:
-  WebsiteRecordSet:
+  WebsiteUrl:
     Description: WebsiteRecordSet URL
     Value: !Sub https://${EnvironmentName}-${ProjectName}.${DomainName}
     Export:

@@ -41,7 +41,7 @@ Resources:
   DBServer:
     Type: "AWS::RDS::DBInstance"
     Properties:
-      AllocatedStorage: 50
+      AllocatedStorage: '100'
       AllowMajorVersionUpgrade: false
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 0
@@ -49,7 +49,7 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
       DBName: postgres
       Engine: postgres
-      EngineVersion: 12.4
+      EngineVersion: '12.4'
       MasterUsername:
         Ref: DBUsername
       MasterUserPassword:
