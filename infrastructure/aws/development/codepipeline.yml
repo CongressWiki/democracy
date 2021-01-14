@@ -220,7 +220,7 @@ Resources:
                 - Name: ProceedToUAT
               Configuration:
                 StackName:
-                  Fn::Sub: Test-${AWS::StackName}
+                  Fn::Sub: Test-Democracy
                 ActionMode: DELETE_ONLY
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
