@@ -67,6 +67,10 @@ Resources:
               Value: 'true'
             - Name: HASURA_GRAPHQL_ADMIN_SECRET
               Value: hasuraAdmin
+            - Name: HASURA_GRAPHQL_LOG_LEVEL
+              Value: debug
+            - Name: HASURA_GRAPHQL_ENABLE_TELEMETRY
+              Value: 'false'
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
