@@ -57,20 +57,30 @@ Resources:
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Subnets: !GetAtt VPC.Outputs.PrivateSubnets
 
-  GraphqlService:
+  PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/main-stack.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/infrastructure/postgres.yml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
+        DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
+        DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
+        Environment: !Ref Environment
+        DBUsername: dbadmin
+        DBPassword: dbpAssw0rd
+        DBInstanceType: db.t2.small
+
+  HasuraService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/service.yml
+      Parameters:
+        VPC: !GetAtt VPC.Outputs.VPC!GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /
-        DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
-        DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
-        EnvironmentName: !Ref Environment
-        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+        DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
+        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancers
 
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack
