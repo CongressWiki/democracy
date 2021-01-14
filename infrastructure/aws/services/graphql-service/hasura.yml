@@ -25,6 +25,11 @@ Parameters:
   LoadBalancer:
     Type: String
 
+  DesiredCount:
+    Description: How many instances of this task should we run across our cluster?
+    Type: Number
+    Default: 1
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -32,7 +37,7 @@ Resources:
     Properties:
       Cluster: !Ref Cluster
       Role: !Ref ServiceRole
-      DesiredCount: 2
+      DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
         - ContainerName: "graphql-service"

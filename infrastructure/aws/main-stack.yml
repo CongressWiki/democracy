@@ -64,7 +64,7 @@ Resources:
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: '2'
+        DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         Path: /
         DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
