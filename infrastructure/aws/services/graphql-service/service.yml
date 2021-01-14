@@ -114,22 +114,21 @@ Resources:
       Port: 443
       Protocol: HTTPS
 
-  HttpRedirectListener:
-    Type: AWS::ElasticLoadBalancingV2::Listener
-    Properties:
-      # resource or cfn does not support tags
-      DefaultActions:
-        - RedirectConfig:
-            Host: '#{host}'
-            Path: '/#{path}'
-            Port: '443'
-            Protocol: 'HTTPS'
-            Query: '#{query}'
-            StatusCode: HTTP_301
-          Type: redirect
-      LoadBalancerArn: !Ref LoadBalancer
-      Port: 80
-      Protocol: HTTP
+  # HttpRedirectListener:
+  #   Type: AWS::ElasticLoadBalancingV2::Listener
+  #   Properties:
+  #     DefaultActions:
+  #       - RedirectConfig:
+  #           Host: '#{host}'
+  #           Path: '/#{path}'
+  #           Port: '443'
+  #           Protocol: 'HTTPS'
+  #           Query: '#{query}'
+  #           StatusCode: HTTP_301
+  #         Type: redirect
+  #     LoadBalancerArn: !Ref LoadBalancer
+  #     Port: 80
+  #     Protocol: HTTP
 
   # This IAM Role grants the service access to register/unregister with the
   # Application Load Balancer (ALB). It is based on the default documented here:
