@@ -47,9 +47,8 @@ Resources:
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
-      Family: graphql-service
       ContainerDefinitions:
-        - Name: Hasura
+        - Name: graphql-service
           Essential: true
           Image: hasura/graphql-engine:v1.3.3
           Memory: 1900
