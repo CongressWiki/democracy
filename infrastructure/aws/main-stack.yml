@@ -43,7 +43,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/load-balancers.yml
       Parameters:
         EnvironmentName: !Ref Environment
-        ALBDnsName: !GetAtt ALB.Outputs.LoadBalancer.DNSName
+        LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   ECS:
     Type: AWS::CloudFormation::Stack

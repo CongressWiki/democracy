@@ -11,7 +11,7 @@ Parameters:
     Type: String
     Default: hasura
 
-  ALBDnsName:
+  LoadBalancerUrl:
     Type: String
     Description: Application load balancer DNS name
 
@@ -32,7 +32,7 @@ Resources:
           Type: CNAME
           TTL: '300'
           ResourceRecords:
-            - !Ref ALBDnsName
+            - !Ref LoadBalancerUrl
 
 Outputs:
   WebsiteRecordSet:
