@@ -37,13 +37,13 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
-  # Certificates:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/certificates.yml
-  #     Parameters:
-  #       EnvironmentName: !Ref Environment
-  #       LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
+  Certificates:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/certificates.yml
+      Parameters:
+        EnvironmentName: !Ref Environment
+        LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   ECS:
     Type: AWS::CloudFormation::Stack

@@ -16,7 +16,7 @@ Parameters:
   Path:
     Description: The path to register with the Application Load Balancer
     Type: String
-    Default: /
+    Default: "/*"
 
   DBEndpoint:
     Description: The url of the Database
@@ -33,7 +33,7 @@ Parameters:
 Resources:
   Service:
     Type: AWS::ECS::Service
-    # DependsOn: ListenerRule
+    DependsOn: ListenerRule
     Properties:
       Cluster: !Ref Cluster
       Role: !Ref ServiceRole
@@ -106,17 +106,17 @@ Resources:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
 
-  # HttpsListener:
-  #   Type: AWS::ElasticLoadBalancingV2::Listener
-  #   Properties:
-  #     Certificates:
-  #       - CertificateArn: arn:aws:acm:us-east-1:495634646531:certificate/1896d99b-0e35-444b-81c4-7f2ffe48471b
-  #     DefaultActions:
-  #       - TargetGroupArn: !Ref TargetGroup
-  #         Type: forward
-  #     LoadBalancerArn: !Ref LoadBalancer
-  #     Port: 443
-  #     Protocol: HTTPS
+  HttpsListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      Certificates:
+        - CertificateArn: arn:aws:acm:us-east-1:495634646531:certificate/1896d99b-0e35-444b-81c4-7f2ffe48471b
+      DefaultActions:
+        - TargetGroupArn: !Ref TargetGroup
+          Type: forward
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 443
+      Protocol: HTTPS
 
   # HttpRedirectListener:
   #   Type: AWS::ElasticLoadBalancingV2::Listener
