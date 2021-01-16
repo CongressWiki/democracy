@@ -128,7 +128,7 @@ Resources:
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
-        Image: aws/codebuild/nodejs:7.0.0
+        Image: aws/codebuild/nodejs:14
         EnvironmentVariables:
           - Name: TEMPLATE_BUCKET
             Value:
@@ -145,10 +145,8 @@ Resources:
             Fn::Sub: BuildCopyCFN-${AWS::StackName}
 
   DeployPipeline:
-    Type: "AWS::CodePipeline::Pipeline"
+    Type: AWS::CodePipeline::Pipeline
     Properties:
-      Name:
-        Fn::Sub: ContinuousDeliveryNestedCFN-${AWS::StackName}
       RoleArn:
           Fn::GetAtt: [ CodePipelineRole, Arn ]
       Stages:
@@ -158,7 +156,7 @@ Resources:
               ActionTypeId:
                 Category: Source
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CodeStarSourceConnection
               OutputArtifacts:
                 - Name: CFNTemplateOutput
@@ -178,7 +176,7 @@ Resources:
               ActionTypeId:
                 Category: Build
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CodeBuild
               OutputArtifacts:
                 - Name: CFNTemplateArtifact
@@ -193,7 +191,7 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               OutputArtifacts:
                 - Name: CreatedTestCFNStack
@@ -202,8 +200,7 @@ Resources:
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
-                StackName:
-                  Fn::Sub: Test-Democracy
+                StackName: Test-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-test.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 2
@@ -214,13 +211,12 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               OutputArtifacts:
                 - Name: ProceedToUAT
               Configuration:
-                StackName:
-                  Fn::Sub: Test-Democracy
+                StackName: Test-Democracy
                 ActionMode: DELETE_ONLY
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
@@ -235,7 +231,7 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               OutputArtifacts:
                 - Name: CreatedUATChangeSet
@@ -245,8 +241,7 @@ Resources:
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
-                StackName:
-                  Fn::Sub: UAT-Democracy
+                StackName: UAT-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-uat.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 1
@@ -257,22 +252,21 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               OutputArtifacts:
                 - Name: DeployedUAT
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: UATCBChangeSet
-                StackName:
-                  Fn::Sub: UAT-Democracy
+                StackName:  UAT-Democracy
               RunOrder: 2
 
             - Name: UATApproval
               ActionTypeId:
                 Category: Approval
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: Manual
               Configuration:
                 NotificationArn:
@@ -288,7 +282,7 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               OutputArtifacts:
                 - Name: CreatedProdChangeSet
@@ -298,8 +292,7 @@ Resources:
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
                 Capabilities: CAPABILITY_NAMED_IAM
-                StackName:
-                  Fn::Sub: Prod-Democracy
+                StackName: Prod-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-prod.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
               RunOrder: 1
@@ -308,7 +301,7 @@ Resources:
               ActionTypeId:
                 Category: Approval
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: Manual
               Configuration:
                 NotificationArn:
@@ -322,13 +315,12 @@ Resources:
               ActionTypeId:
                 Category: Deploy
                 Owner: AWS
-                Version: 1
+                Version: '1'
                 Provider: CloudFormation
               Configuration:
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: ProdCBChangeSet
-                StackName:
-                  Fn::Sub: Prod-Democracy
+                StackName: Prod-Democracy
               RunOrder: 3
 
       ArtifactStore:

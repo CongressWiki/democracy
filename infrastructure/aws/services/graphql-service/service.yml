@@ -66,9 +66,9 @@ Resources:
             - Name: HASURA_GRAPHQL_ENABLE_CONSOLE
               Value: 'true'
             - Name: HASURA_GRAPHQL_ADMIN_SECRET
-              Value: hasuraAdmin
+              Value: hasuraadmin
             - Name: HASURA_GRAPHQL_LOG_LEVEL
-              Value: debug
+              Value: info
             - Name: HASURA_GRAPHQL_ENABLE_TELEMETRY
               Value: 'false'
 
@@ -110,7 +110,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
       Certificates:
-        - CertificateArn: arn:aws:acm:us-east-1:495634646531:certificate/1896d99b-0e35-444b-81c4-7f2ffe48471b
+        - CertificateArn: arn:aws:acm:us-east-1:495634646531:certificate/0caa5967-baea-4717-a0a5-fd598fb936aa
       DefaultActions:
         - TargetGroupArn: !Ref TargetGroup
           Type: forward
