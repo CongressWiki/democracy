@@ -78,7 +78,7 @@ Resources:
         Cluster: !GetAtt ECS.Outputs.Cluster
         DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
-        Path: /
+        Path: "/*"
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
         LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
 
