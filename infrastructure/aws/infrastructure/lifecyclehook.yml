@@ -12,27 +12,23 @@ Parameters:
 
 Resources:
   NotificationTopic:
-    Type: "AWS::SNS::Topic"
-    DependsOn: LifecycleHandlerFunction
+    Type: AWS::SNS::Topic
     Properties:
       Subscription:
-        - Endpoint: !GetAtt
-            - LifecycleHandlerFunction
-            - Arn
+        - Endpoint:
+            Fn::GetAtt: ['LifecycleHandlerFunction', 'Arn']
           Protocol: lambda
 
   InstanceTerminatingHook:
     Type: "AWS::AutoScaling::LifecycleHook"
-    DependsOn: NotificationTopic
     Properties:
       AutoScalingGroupName: !Ref ECSAutoScalingGroupName
       DefaultResult: ABANDON
-      HeartbeatTimeout: "900"
+      HeartbeatTimeout: 900
       LifecycleTransition: "autoscaling:EC2_INSTANCE_TERMINATING"
       NotificationTargetARN: !Ref NotificationTopic
-      RoleARN: !GetAtt
-        - AutoscalingNotificationRole
-        - Arn
+      RoleARN:
+        Fn::GetAtt: [ AutoscalingNotificationRole, Arn ]
 
   AutoscalingNotificationRole:
     Type: "AWS::IAM::Role"
@@ -146,8 +142,7 @@ Resources:
                       time.sleep(5)
                       publishSNSMessage(snsMessage,snsTopicArn)
       Handler: index.lambda_handler
-      Role: !GetAtt
-        - LambdaExecutionRole
-        - Arn
+      Role:
+        Fn::GetAtt: [LambdaExecutionRole, Arn]
       Runtime: python3.6
       Timeout: 10

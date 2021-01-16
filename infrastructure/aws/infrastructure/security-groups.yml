@@ -24,7 +24,7 @@ Resources:
       SecurityGroupIngress:
         # Only allow inbound access to ECS from the ELB
         - SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
-          IpProtocol: -1
+          IpProtocol: '-1'
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-ECS-Hosts
@@ -40,7 +40,7 @@ Resources:
       SecurityGroupIngress:
         # Allow access from anywhere to our ECS services
         - CidrIp: 0.0.0.0/0
-          IpProtocol: -1
+          IpProtocol: '-1'
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-LoadBalancers
@@ -62,7 +62,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 5432
           ToPort: 5432
-          SourceSecurityGroupId: !Ref DBClientSecurityGroup
+          SourceSecurityGroupId: !Ref ECSHostSecurityGroup
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName}-DBServerSecurityGroup

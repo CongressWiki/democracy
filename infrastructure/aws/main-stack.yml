@@ -37,13 +37,13 @@ Resources:
         Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
-  Certificates:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/certificates.yml
-      Parameters:
-        EnvironmentName: !Ref Environment
-        LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
+  # Certificates:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/certificates.yml
+  #     Parameters:
+  #       EnvironmentName: !Ref Environment
+  #       LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   ECS:
     Type: AWS::CloudFormation::Stack
@@ -69,7 +69,7 @@ Resources:
         DBPassword: dbpAssw0rd
         DBInstanceType: db.t2.small
 
-  HasuraService:
+  GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/service.yml
@@ -109,9 +109,9 @@ Outputs:
     Description: The URL endpoint for the graphql service
     Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "console"]]
 
-  GraphqlServiceUrl2:
-    Description: The URL endpoint for the graphql service
-    Value: !Join ["/", [!GetAtt Certificates.Outputs.WebsiteUrl, "console"]]
+  # GraphqlServiceUrl2:
+  #   Description: The URL endpoint for the graphql service
+  #   Value: !Join ["/", [!GetAtt Certificates.Outputs.WebsiteUrl, "console"]]
 
   WebsiteServiceUrl:
     Description: The URL endpoint for the website service
