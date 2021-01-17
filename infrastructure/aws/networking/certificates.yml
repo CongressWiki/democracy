@@ -27,10 +27,14 @@ Resources:
       RecordSets:
         - Name:
             Fn::If:
-              - isProduction
-              - !Sub ${EnvironmentName}.${DomainName}
-              - !Ref DomainName
-          Type: CNAME
+            - isProduction
+            - !Ref DomainName
+            - !Sub ${EnvironmentName}.${DomainName}
+          Type:
+            Fn::If:
+            - isProduction
+            - A
+            - CNAME
           TTL: '300'
           ResourceRecords:
             - !Ref LoadBalancerUrl
