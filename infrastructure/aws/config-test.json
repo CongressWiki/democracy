@@ -1,5 +1,9 @@
 {
   "Parameters": {
-    "Environment": "test"
+    "Environment": "test",
+    "DBEndpoint": "",
+    "DBUsername": "",
+    "DBPassword": "",
+    "DBInstanceType": "db.t2.small"
   }
 }

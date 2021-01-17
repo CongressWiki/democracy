@@ -1,4 +1,4 @@
-Description: Create database server
+Description: Create PostgreSQL database server
 
 Parameters:
   DBSubnetGroup:
@@ -28,7 +28,7 @@ Parameters:
       - db.t2.small
       - db.t2.medium
       - db.t2.large
-  Environment:
+  EnvironmentName:
     Type: String
     Description: Select the appropriate environment
     AllowedValues:
@@ -37,9 +37,14 @@ Parameters:
       - uat
       - prod
 
+Conditions:
+  isProduction: !Equals [!Ref EnvironmentName, prod]
+
 Resources:
   DBServer:
-    Type: "AWS::RDS::DBInstance"
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: !If [isProduction, Retain, Delete]
+    UpdateReplacePolicy: !If [isProduction, Snapshot, Delete]
     Properties:
       AllocatedStorage: '50'
       AllowMajorVersionUpgrade: false
@@ -62,7 +67,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Sub: DBServer-${Environment}
+            Fn::Sub: DBServer-${EnvironmentName}
 
 Outputs:
   DBEndpoint:

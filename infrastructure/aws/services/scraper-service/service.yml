@@ -5,12 +5,12 @@ Parameters:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
-  LoadBalancer:
-    Description: The LoadBalancer
+  LoadBalancerName:
+    Description: The LoadBalancer name
     Type: String
 
-  DBEndpoint:
-    Description: The url of the Database
+  GraphqlEndpoint:
+    Description: The url of the GraphQL server
     Type: String
 
 Resources:
@@ -24,7 +24,7 @@ Resources:
       LoadBalancers:
         - ContainerName: scraper-service
           ContainerPort: 80
-          LoadBalancerName: !Ref LoadBalancer
+          LoadBalancerName: !Ref LoadBalancerName
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -44,16 +44,8 @@ Resources:
               awslogs-group: !Ref CloudWatchLogsGroup
               awslogs-region: !Ref AWS::Region
           Environment:
-            - Name: HASURA_GRAPHQL_DATABASE_URL
-              Value: !Sub postgres://dbadmin:dbpAssw0rd@${DBEndpoint}:5432/postgres
-            - Name: HASURA_GRAPHQL_ENABLE_CONSOLE
-              Value: 'true'
-            - Name: HASURA_GRAPHQL_ADMIN_SECRET
-              Value: hasuraadmin
-            - Name: HASURA_GRAPHQL_LOG_LEVEL
-              Value: info
-            - Name: HASURA_GRAPHQL_ENABLE_TELEMETRY
-              Value: 'false'
+            - Name: GRAPHQL_ENDPOINT
+              Value: !Ref GraphqlEndpoint
 
   CloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup

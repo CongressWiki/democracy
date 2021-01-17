@@ -4,20 +4,45 @@ Parameters:
   Environment:
     Type: String
     Default: test
+  DBUsername:
+    Type: String
+    Default: dbadmin
+  DBPassword:
+    Type: String
+    Default: dbpAssw0rd
+  DBInstanceType:
+    Type: String
+    Default: db.t2.small
+  VPC:
+    Type: String
+    Default: vpc-097a240f8920b71eb
+  PublicSubnets:
+    Description: Choose which subnets the Application Load Balancer should be deployed to
+    Type: String
+    Default: subnet-059738ae36c7812d0,subnet-0b34475f1ceca2216
+  PrivateSubnets:
+    Description: Choose which subnets the Application Load Balancer should be deployed to
+    Type: String
+    Default: subnet-0870f12122ec6829d,subnet-0a9280fdf7896a199
+  DBSubnetGroup:
+    Description: Name of the DB Subnet group
+    Type: String
+    Default: democracy-vpc-rdssubnetgroup-3gakcarf40o3
 
 
 Resources:
-  VPC:
-    Type: AWS::CloudFormation::Stack
-    Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/vpc.yml
-      Parameters:
-        EnvironmentName: !Ref Environment
-        VpcCIDR: 10.180.0.0/16
-        PublicSubnet1CIDR: 10.180.8.0/21
-        PublicSubnet2CIDR: 10.180.16.0/21
-        PrivateSubnet1CIDR: 10.180.24.0/21
-        PrivateSubnet2CIDR: 10.180.32.0/21
+  # Manually created once #
+  # VPC:
+  #   Type: AWS::CloudFormation::Stack
+  #   Properties:
+  #     TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/vpc.yml
+  #     Parameters:
+  #       EnvironmentName: !Ref Environment
+  #       VpcCIDR: 10.180.0.0/16
+  #       PublicSubnet1CIDR: 10.180.8.0/21
+  #       PublicSubnet2CIDR: 10.180.16.0/21
+  #       PrivateSubnet1CIDR: 10.180.24.0/21
+  #       PrivateSubnet2CIDR: 10.180.32.0/21
 
   SecurityGroups:
     Type: AWS::CloudFormation::Stack
@@ -25,7 +50,7 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/security-groups.yml
       Parameters:
         EnvironmentName: !Ref Environment
-        VPC: !GetAtt VPC.Outputs.VPC
+        VPC: !Ref VPC
 
   ALB:
     Type: AWS::CloudFormation::Stack
@@ -33,8 +58,8 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/load-balancers.yml
       Parameters:
         EnvironmentName: !Ref Environment
-        VPC: !GetAtt VPC.Outputs.VPC
-        Subnets: !GetAtt VPC.Outputs.PublicSubnets
+        VPC: !Ref VPC
+        Subnets: !Ref PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
   Certificates:
@@ -52,28 +77,28 @@ Resources:
       Parameters:
         EnvironmentName: !Ref Environment
         InstanceType: t2.large
-        VPC: !GetAtt VPC.Outputs.VPC
+        VPC: !Ref VPC
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
-        Subnets: !GetAtt VPC.Outputs.PrivateSubnets
+        Subnets: !Ref PrivateSubnets
 
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/databases/postgres.yml
       Parameters:
-        DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
+        EnvironmentName: !Ref Environment
+        DBSubnetGroup: !Ref DBSubnetGroup
         DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
-        Environment: !Ref Environment
-        DBUsername: dbadmin
-        DBPassword: dbpAssw0rd
-        DBInstanceType: db.t2.small
+        DBUsername: !Ref DBUsername
+        DBPassword: !Ref DBPassword
+        DBInstanceType: !Ref DBInstanceType
 
   GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/service.yml
       Parameters:
-        VPC: !GetAtt VPC.Outputs.VPC
+        VPC: !Ref VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
         Listener: !GetAtt ALB.Outputs.Listener
         Path: "/*"
@@ -86,8 +111,8 @@ Resources:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/scraper-service/service.yml
       Parameters:
         Cluster: !GetAtt ECS.Outputs.Cluster
-        DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
-        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancerUrl
+        GraphqlEndpoint: !GetAtt Certificates.Outputs.WebsiteUrl
+        LoadBalancerName: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack

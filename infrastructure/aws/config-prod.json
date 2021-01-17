@@ -1,5 +1,9 @@
 {
   "Parameters": {
-    "Environment": "prod"
+    "Environment": "prod",
+    "DBEndpoint": "",
+    "DBUsername": "",
+    "DBPassword": "",
+    "DBInstanceType": "db.t2.small"
   }
 }

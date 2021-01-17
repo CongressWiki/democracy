@@ -4,23 +4,26 @@ Stand up layers 1-5 of the Democracy application on AWS.
 
 ## :rocket: Quick Start
 
-1. Install Python packages
+1. Create VPC base stack
 
-  ```shell
-  pyton3 -m pip install -r requirements.txt
-  ```
+```shell
+aws cloudformation create-stack --stack-name Democracy-Test-VPC --template-body file://base-stack/vpc.yml --capabilities CAPABILITY_NAMED_IAM
+```
 
-2. Deploy resources on AWS
+2. Create PostgreSQL Database for each environment [Test, UAT, Production]
 
-  ```shell
-  python3 -m setup
-  ```
+```shell
+# Test
+aws cloudformation create-stack --stack-name Democracy-Test-VPC --template-body file://database/postgresql.yml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=EnvironmentName,ParameterValue=test
 
-## Deploy AWS
+# UAT
+aws cloudformation create-stack --stack-name Democracy-UAT-VPC --template-body file://database/postgresql.yml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=EnvironmentName,ParameterValue=uat
 
-![AWS infrastructure diagram](./docs/Pipeline_Design.png)
+# Production
+aws cloudformation create-stack --stack-name Democracy-Prod-VPC --template-body file://database/postgresql.yml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=EnvironmentName,ParameterValue=prod
+```
 
-1. Create codepipeline
+3. Create codepipeline
 
 ```shell
 aws cloudformation create-stack --stack-name Democracy-CodePipeline --template-body file://development/codepipeline.yml --capabilities CAPABILITY_NAMED_IAM
