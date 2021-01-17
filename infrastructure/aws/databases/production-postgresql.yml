@@ -28,6 +28,11 @@ Parameters:
       - db.t2.small
       - db.t2.medium
       - db.t2.large
+  EnvironmentName:
+    Type: String
+    Description: Select the appropriate environment
+    AllowedValues: [prod]
+    Default: prod
 
 Resources:
   DBServer:
@@ -56,7 +61,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Sub: DBServer-Production
+            Fn::Sub: DBServer-${EnvironmentName}
 
 Outputs:
   DBEndpoint:
