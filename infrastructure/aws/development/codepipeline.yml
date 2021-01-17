@@ -164,13 +164,12 @@ Resources:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/nodejs:7.0.0
+        PrivilegedMode: true
         EnvironmentVariables:
           - Name: AWS_ACCOUNT_ID
-            Value:
-              Fn::Sub:  ${AWS::AccountId}
+            Value: !Ref AWS::AccountId
           - Name: AWS_DEFAULT_REGION
-            Value:
-              Fn::Sub: ${AWS::Region}
+            Value: !Ref AWS::Region
           - Name: IMAGE_REPO_NAME
             Value: democracy-scraper
           - Name: IMAGE_TAG
