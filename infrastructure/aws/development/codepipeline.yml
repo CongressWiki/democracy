@@ -199,7 +199,7 @@ Resources:
       Stages:
         - Name: Source
           Actions:
-            - Name: CFNTemplateSource
+            - Name: GitHubRepoDemocracy
               ActionTypeId:
                 Category: Source
                 Owner: AWS
@@ -234,7 +234,7 @@ Resources:
 
         - Name: PushImages
           Actions:
-            - Name: CodeBuildScraper
+            - Name: CodeBuildScraperImage
               InputArtifacts:
                 - Name: CFNTemplateOutput
               ActionTypeId:
@@ -247,11 +247,11 @@ Resources:
               Configuration:
                 ProjectName:
                   Ref: BuildScraperProject
-              RunOrder: 2
+              RunOrder: 1
 
         - Name: BuildStackTest
           Actions:
-            - Name: CreateTestCFNStack
+            - Name: CreateTestStack
               InputArtifacts:
                 - Name: CFNTemplateArtifact
               ActionTypeId:
@@ -269,7 +269,7 @@ Resources:
                 StackName: Test-Democracy
                 TemplateConfiguration: CFNTemplateArtifact::config-test.json
                 TemplatePath: CFNTemplateArtifact::main-stack.yml
-              RunOrder: 3
+              RunOrder: 1
 
             - Name: DeleteTestStack
               InputArtifacts:
@@ -286,7 +286,7 @@ Resources:
                 ActionMode: DELETE_ONLY
                 RoleArn:
                   Fn::GetAtt: [ CloudFormationRole, Arn ]
-              RunOrder: 4
+              RunOrder: 2
 
         - Name: UAT
           Actions:
