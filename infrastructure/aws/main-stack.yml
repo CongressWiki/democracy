@@ -75,7 +75,6 @@ Resources:
       Parameters:
         VPC: !GetAtt VPC.Outputs.VPC
         Cluster: !GetAtt ECS.Outputs.Cluster
-        DesiredCount: 1
         Listener: !GetAtt ALB.Outputs.Listener
         Path: "/*"
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
