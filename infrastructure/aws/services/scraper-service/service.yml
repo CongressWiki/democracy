@@ -5,6 +5,10 @@ Parameters:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
+  LoadBalancer:
+    Description: The LoadBalancer
+    Type: String
+
   DBEndpoint:
     Description: The url of the Database
     Type: String
@@ -20,6 +24,7 @@ Resources:
       LoadBalancers:
         - ContainerName: scraper-service
           ContainerPort: 80
+          LoadBalancerName: !Ref LoadBalancer
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
