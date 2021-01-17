@@ -87,7 +87,7 @@ Resources:
       Parameters:
         Cluster: !GetAtt ECS.Outputs.Cluster
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
-        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+        LoadBalancer: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack

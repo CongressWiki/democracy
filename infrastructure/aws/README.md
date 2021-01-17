@@ -1,6 +1,6 @@
 # AWS Automation
 
-Stand up the physical layer of this application on AWS.
+Stand up layers 1-5 of the Democracy application on AWS.
 
 ## :rocket: Quick Start
 
