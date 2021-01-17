@@ -154,7 +154,7 @@ Resources:
     Type: AWS::CodeBuild::Project
     Properties:
       Name:
-        Fn::Sub: BuildCopyCFN-${AWS::StackName}
+        Fn::Sub: BuildScraper-${AWS::StackName}
       Description: Build to scrape US government data
       ServiceRole:
         Fn::GetAtt: [ CodeBuildRole, Arn ]
@@ -184,7 +184,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Sub: BuildCopyCFN-${AWS::StackName}
+            Fn::Sub: BuildScraper-${AWS::StackName}
 
   DeployPipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -212,7 +212,7 @@ Resources:
 
         - Name: Validate
           Actions:
-            - Name: CodeBuild - validate and copy CFN templates
+            - Name: CodeBuildValidate
               InputArtifacts:
                 - Name: CFNTemplateOutput
               ActionTypeId:
@@ -227,7 +227,7 @@ Resources:
                   Ref: BuildCopyCFNProject
               RunOrder: 1
 
-            - Name: CodeBuild - democracy-scraper image
+            - Name: CodeBuildScraper
               InputArtifacts:
                 - Name: CFNTemplateOutput
               ActionTypeId:
