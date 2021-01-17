@@ -177,7 +177,7 @@ Resources:
             Value: latest
       Source:
         Type: CODEPIPELINE
-        BuildSpec: infrastructure/aws/development/buildspec.yml
+        BuildSpec: infrastructure/aws/development/deploy_scraper_image_buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
