@@ -28,24 +28,17 @@ Parameters:
       - db.t2.small
       - db.t2.medium
       - db.t2.large
-  EnvironmentName:
-    Type: String
-    Description: Select the appropriate environment
-    AllowedValues:
-      - dev
-      - test
-      - uat
 
 Resources:
   DBServer:
     Type: AWS::RDS::DBInstance
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Snapshot
     Properties:
-      AllocatedStorage: '50'
+      AllocatedStorage: '100'
       AllowMajorVersionUpgrade: false
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod: 0
+      BackupRetentionPeriod: 1
       DBInstanceClass: !Ref DBInstanceType
       DBSubnetGroupName: !Ref DBSubnetGroup
       DBName: postgres
@@ -63,7 +56,7 @@ Resources:
       Tags:
         - Key: Name
           Value:
-            Fn::Sub: DBServer-${EnvironmentName}
+            Fn::Sub: DBServer-Production
 
 Outputs:
   DBEndpoint:

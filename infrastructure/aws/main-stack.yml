@@ -29,6 +29,8 @@ Parameters:
     Type: String
     Default: democracy-vpc-rdssubnetgroup-3gakcarf40o3
 
+Conditions:
+  isProduction: !Equals [!Ref EnvironmentName, prod]
 
 Resources:
   # Manually created once #
@@ -84,7 +86,11 @@ Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/databases/postgres.yml
+      TemplateURL:
+        Fn::If:
+          - isProduction
+          - https://s3.amazonaws.com/democracy-stack/aws/databases/postgres.yml
+          - https://s3.amazonaws.com/democracy-stack/aws/databases/production-postgres.yml
       Parameters:
         EnvironmentName: !Ref Environment
         DBSubnetGroup: !Ref DBSubnetGroup
