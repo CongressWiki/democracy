@@ -48,7 +48,7 @@ Resources:
       DesiredCount: !Ref DesiredCount
       TaskDefinition: !Ref TaskDefinition
       LoadBalancers:
-        - ContainerName: "website-service"
+        - ContainerName: website-service
           ContainerPort: 8000
           TargetGroupArn: !Ref TargetGroup
 

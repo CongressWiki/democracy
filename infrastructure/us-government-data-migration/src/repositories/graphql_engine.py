@@ -7,9 +7,10 @@ import requests
 
 
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
-GRAPHQL_URL = "http://localhost:8080/v1/graphql"
+# GRAPHQL_URL = "http://localhost:8080/v1/graphql"
+GRAPHQL_URL = "https:uat.usacounts.com/v1/graphql"
 HEADERS = {
-    "x-hasura-admin-secret": "hasurapassword",
+    "x-hasura-admin-secret": "hasuraadmin",
     "Content-Type": "application/json",
 }
 

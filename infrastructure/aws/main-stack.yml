@@ -81,6 +81,14 @@ Resources:
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
         LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
 
+  ScraperService:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/scraper-service/service.yml
+      Parameters:
+        Cluster: !GetAtt ECS.Outputs.Cluster
+        DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
+
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack
   #   Properties:
