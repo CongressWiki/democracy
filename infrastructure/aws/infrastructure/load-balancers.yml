@@ -64,3 +64,6 @@ Outputs:
   Listener:
     Description: A reference to a port 80 listener
     Value: !Ref LoadBalancerListener
+
+  LoadBalancerName:
+    Value: !GetAtt LoadBalancer.LoadBalancerName

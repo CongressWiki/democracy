@@ -118,7 +118,7 @@ Resources:
       Parameters:
         Cluster: !GetAtt ECS.Outputs.Cluster
         GraphqlEndpoint: !GetAtt Certificates.Outputs.WebsiteUrl
-        LoadBalancerName: !GetAtt ALB.Outputs.LoadBalancerUrl
+        LoadBalancerName: !GetAtt ALB.Outputs.LoadBalancerName
 
   # WebsiteService:
   #   Type: AWS::CloudFormation::Stack
