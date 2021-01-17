@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 import requests
 
@@ -8,7 +9,8 @@ import requests
 
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
 # GRAPHQL_URL = "http://localhost:8080/v1/graphql"
-GRAPHQL_URL = "https:uat.usacounts.com/v1/graphql"
+# GRAPHQL_URL = "https://uat.usacounts.com/v1/graphql"
+GRAPHQL_URL = f"{os.environ.get('GRAPHQL_URL')}/v1/graphql"
 HEADERS = {
     "x-hasura-admin-secret": "hasuraadmin",
     "Content-Type": "application/json",
