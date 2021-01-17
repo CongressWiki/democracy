@@ -15,19 +15,19 @@ Parameters:
     Default: db.t2.small
   VPC:
     Type: String
-    Default: vpc-097a240f8920b71eb
+    Default: "vpc-097a240f8920b71eb"
   PublicSubnets:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: String
-    Default: subnet-059738ae36c7812d0,subnet-0b34475f1ceca2216
+    Default: "subnet-059738ae36c7812d0,subnet-0b34475f1ceca2216"
   PrivateSubnets:
     Description: Choose which subnets the Application Load Balancer should be deployed to
     Type: String
-    Default: subnet-0870f12122ec6829d,subnet-0a9280fdf7896a199
+    Default: "subnet-0870f12122ec6829d,subnet-0a9280fdf7896a199"
   DBSubnetGroup:
     Description: Name of the DB Subnet group
     Type: String
-    Default: democracy-vpc-rdssubnetgroup-3gakcarf40o3
+    Default: "democracy-vpc-rdssubnetgroup-3gakcarf40o3"
 
 Conditions:
   isProduction: !Equals [!Ref Environment, prod]
