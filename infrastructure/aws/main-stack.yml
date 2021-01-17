@@ -52,7 +52,6 @@ Resources:
       Parameters:
         EnvironmentName: !Ref Environment
         InstanceType: t2.large
-        ClusterSize: '4'
         VPC: !GetAtt VPC.Outputs.VPC
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
         Subnets: !GetAtt VPC.Outputs.PrivateSubnets
@@ -105,11 +104,7 @@ Resources:
         ECSAutoScalingGroupName: !GetAtt ECS.Outputs.ECSAutoScalingGroupName
 
 Outputs:
-  GraphqlServiceUrl1:
-    Description: The URL endpoint for the graphql service
-    Value: !Join ["/", [!GetAtt ALB.Outputs.LoadBalancerUrl, "console"]]
-
-  GraphqlServiceUrl2:
+  GraphqlServiceUrl:
     Description: The URL endpoint for the graphql service
     Value: !Join ["/", [!GetAtt Certificates.Outputs.WebsiteUrl, "console"]]
 

@@ -12,11 +12,6 @@ Parameters:
     Type: String
     Default: c4.large
 
-  ClusterSize:
-    Description: How many ECS hosts do you want to initially deploy?
-    Type: Number
-    Default: 4
-
   VPC:
     Description: Choose which VPC this ECS cluster should be deployed to
     Type: AWS::EC2::VPC::Id
@@ -46,9 +41,8 @@ Resources:
     Properties:
       VPCZoneIdentifier: !Ref Subnets
       LaunchConfigurationName: !Ref ECSLaunchConfiguration
-      MinSize: !Ref ClusterSize
-      MaxSize: !Ref ClusterSize
-      DesiredCapacity: !Ref ClusterSize
+      MinSize: '1'
+      MaxSize: '4'
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} ECS host
