@@ -30,7 +30,7 @@ Parameters:
     Default: democracy-vpc-rdssubnetgroup-3gakcarf40o3
 
 Conditions:
-  isProduction: !Equals [!Ref EnvironmentName, prod]
+  isProduction: !Equals [!Ref Environment, prod]
 
 Resources:
   # Manually created once #
