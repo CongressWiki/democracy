@@ -90,7 +90,7 @@ Resources:
         Fn::If:
           - isProduction
           - https://s3.amazonaws.com/democracy-stack/aws/databases/production-postgresql.yml
-          - https://s3.amazonaws.com/democracy-stack/aws/databases/postgres.yml
+          - https://s3.amazonaws.com/democracy-stack/aws/databases/postgresql.yml
       Parameters:
         EnvironmentName: !Ref Environment
         DBSubnetGroup: !Ref DBSubnetGroup
