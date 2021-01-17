@@ -197,7 +197,7 @@ Resources:
       RoleArn:
           Fn::GetAtt: [ CodePipelineRole, Arn ]
       Stages:
-        - Name: CFNSource
+        - Name: Source
           Actions:
             - Name: CFNTemplateSource
               ActionTypeId:
