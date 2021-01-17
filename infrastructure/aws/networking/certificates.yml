@@ -16,13 +16,20 @@ Parameters:
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
     ConstraintDescription: must be a valid DNS zone name.
 
+Conditions:
+  isProduction: !Equals [!Ref EnvironmentName, prod]
+
 Resources:
   WebsiteRecordSet:
     Type: AWS::Route53::RecordSetGroup
     Properties:
       HostedZoneName: !Sub ${DomainName}.
       RecordSets:
-        - Name: !Sub ${EnvironmentName}.${DomainName}
+        - Name:
+            Fn::If:
+              - isProduction
+              - !Sub ${EnvironmentName}.${DomainName}
+              - !Ref DomainName
           Type: CNAME
           TTL: '300'
           ResourceRecords:
