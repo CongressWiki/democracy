@@ -11,6 +11,7 @@ Parameters:
   VPC:
     Type: AWS::EC2::VPC::Id
     Description: Choose which VPC the security groups should be deployed to
+    Default: vpc-097a240f8920b71eb
 
 Resources:
   # This security group defines who/where is allowed to access the ECS hosts directly.

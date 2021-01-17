@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "Environment": "prod",
+    "EnvironmentName": "prod",
     "DBInstanceType": "db.t2.small"
   }
 }

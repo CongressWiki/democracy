@@ -1,6 +1,6 @@
 {
   "Parameters": {
-    "Environment": "uat",
+    "EnvironmentName": "uat",
     "DBInstanceType": "db.t2.small"
   }
 }

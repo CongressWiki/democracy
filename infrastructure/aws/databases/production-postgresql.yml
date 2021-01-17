@@ -4,12 +4,14 @@ Parameters:
   DBSubnetGroup:
     Type: String
     Description: Enter a valid DB Subnet Group
+    Default: democracy-vpc-rdssubnetgroup-3gakcarf40o3
   DBUsername:
     Type: String
     Description: Enter a valid Database master username
     MinLength: 1
     MaxLength: 16
     AllowedPattern: "[a-zA-Z][a-zA-Z0-9]*"
+    Default: dbadmin
   DBPassword:
     Type: String
     Description: Enter a valid Database master password
@@ -17,6 +19,7 @@ Parameters:
     MinLength: 1
     MaxLength: 41
     AllowedPattern: "[a-zA-Z0-9]*"
+    Default: dbpAssw0rd
   DBServerSecurityGroup:
     Type: "AWS::EC2::SecurityGroup::Id"
     Description: Enter a valid security group ID for database
@@ -28,6 +31,7 @@ Parameters:
       - db.t2.small
       - db.t2.medium
       - db.t2.large
+    Default: db.t2.small
   EnvironmentName:
     Type: String
     Description: Select the appropriate environment

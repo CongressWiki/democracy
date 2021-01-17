@@ -1,7 +1,7 @@
 Description: This template deploys a VPC, with a pair of public and private subnets spread across two Availabilty Zones. It deploys an Internet Gateway, with a default route on the public subnets. It deploys a pair of NAT Gateways (one in each AZ), and default routes for them in the private subnets. It then deploys a highly available ECS cluster using an AutoScaling Group, with ECS hosts distributed across multiple Availability Zones. Finally, it deploys a pair of example ECS services from containers published in Amazon EC2 Container Registry (Amazon ECR).
 
 Parameters:
-  Environment:
+  EnvironmentName:
     Type: String
     Default: test
   DBUsername:
@@ -13,75 +13,62 @@ Parameters:
   DBInstanceType:
     Type: String
     Default: db.t2.small
-  VPC:
+  EcsInstanceType:
     Type: String
-    Default: "vpc-097a240f8920b71eb"
-  PublicSubnets:
-    Description: Choose which subnets the Application Load Balancer should be deployed to
-    Type: String
-    Default: "subnet-059738ae36c7812d0,subnet-0b34475f1ceca2216"
-  PrivateSubnets:
-    Description: Choose which subnets the Application Load Balancer should be deployed to
-    Type: String
-    Default: "subnet-0870f12122ec6829d,subnet-0a9280fdf7896a199"
-  DBSubnetGroup:
-    Description: Name of the DB Subnet group
-    Type: String
-    Default: "democracy-vpc-rdssubnetgroup-3gakcarf40o3"
+    Default: t2.large
 
 Conditions:
-  isProduction: !Equals [!Ref Environment, prod]
+  isProduction: !Equals [!Ref EnvironmentName, prod]
 
 Resources:
-  # Manually created once #
-  # VPC:
-  #   Type: AWS::CloudFormation::Stack
-  #   Properties:
-  #     TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/vpc.yml
-  #     Parameters:
-  #       EnvironmentName: !Ref Environment
-  #       VpcCIDR: 10.180.0.0/16
-  #       PublicSubnet1CIDR: 10.180.8.0/21
-  #       PublicSubnet2CIDR: 10.180.16.0/21
-  #       PrivateSubnet1CIDR: 10.180.24.0/21
-  #       PrivateSubnet2CIDR: 10.180.32.0/21
+  VPC:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/networking/vpc.yml
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        VpcCIDR: 10.180.0.0/16
+        PublicSubnet1CIDR: 10.180.8.0/21
+        PublicSubnet2CIDR: 10.180.16.0/21
+        PrivateSubnet1CIDR: 10.180.24.0/21
+        PrivateSubnet2CIDR: 10.180.32.0/21
 
   SecurityGroups:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/security-groups.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/security/security-groups.yml
       Parameters:
-        EnvironmentName: !Ref Environment
-        VPC: !Ref VPC
+        EnvironmentName: !Ref EnvironmentName
+        VPC: !GetAtt VPC.Outputs.VPC
 
   ALB:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/load-balancers.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/networking/load-balancers.yml
       Parameters:
-        EnvironmentName: !Ref Environment
-        VPC: !Ref VPC
-        Subnets: !Ref PublicSubnets
+        EnvironmentName: !Ref EnvironmentName
+        VPC: !GetAtt VPC.Outputs.VPC
+        Subnets: !GetAtt VPC.Outputs.PublicSubnets
         SecurityGroup: !GetAtt SecurityGroups.Outputs.LoadBalancerSecurityGroup
 
   Certificates:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/certificates.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/networking/certificates.yml
       Parameters:
-        EnvironmentName: !Ref Environment
+        EnvironmentName: !Ref EnvironmentName
         LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
 
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/ecs-cluster.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/compute/ecs-cluster.yml
       Parameters:
-        EnvironmentName: !Ref Environment
-        InstanceType: t2.large
-        VPC: !Ref VPC
+        EnvironmentName: !Ref EnvironmentName
+        InstanceType: !Ref EcsInstanceType
+        VPC: !GetAtt VPC.Outputs.VPC
         SecurityGroup: !GetAtt SecurityGroups.Outputs.ECSHostSecurityGroup
-        Subnets: !Ref PrivateSubnets
+        Subnets: !GetAtt VPC.Outputs.PrivateSubnets
 
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
@@ -92,31 +79,31 @@ Resources:
           - https://s3.amazonaws.com/democracy-stack/aws/databases/production-postgresql.yml
           - https://s3.amazonaws.com/democracy-stack/aws/databases/postgresql.yml
       Parameters:
-        EnvironmentName: !Ref Environment
-        DBSubnetGroup: !Ref DBSubnetGroup
+        EnvironmentName: !Ref EnvironmentName
+        DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
         DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
+        DBInstanceType: !Ref DBInstanceType
         DBUsername: !Ref DBUsername
         DBPassword: !Ref DBPassword
-        DBInstanceType: !Ref DBInstanceType
 
   GraphqlService:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/graphql-service/service.yml
       Parameters:
-        VPC: !Ref VPC
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        VPC: !GetAtt VPC.Outputs.VPC
+        Cluster: !GetAtt  ECS.Outputs.Cluster
         Listener: !GetAtt ALB.Outputs.Listener
-        Path: "/*"
         DBEndpoint: !GetAtt PostgresDatabase.Outputs.DBEndpoint
         LoadBalancer: !GetAtt ALB.Outputs.LoadBalancer
+        Path: "/*"
 
   ScraperService:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/scraper-service/service.yml
       Parameters:
-        Cluster: !GetAtt ECS.Outputs.Cluster
+        Cluster: !GetAtt  ECS.Outputs.Cluster
         GraphqlEndpoint: !GetAtt Certificates.Outputs.WebsiteUrl
 
   # WebsiteService:
@@ -136,16 +123,14 @@ Resources:
   LifecycleHook:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/lifecyclehook.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/compute/lifecyclehook.yml
       Parameters:
-        Cluster: !GetAtt ECS.Outputs.Cluster
-        ECSAutoScalingGroupName: !GetAtt ECS.Outputs.ECSAutoScalingGroupName
+        Cluster: !GetAtt  ECS.Outputs.Cluster
+        ECSAutoScalingGroupName: !GetAtt ECS.Outputs.AutoScalingGroupName
 
 Outputs:
+  WebsiteUrl:
+    Value: !GetAtt Certificates.Outputs.WebsiteUrl
   GraphqlServiceUrl:
     Description: The URL endpoint for the graphql service
     Value: !Join ["/", [!GetAtt Certificates.Outputs.WebsiteUrl, "console"]]
-
-  WebsiteServiceUrl:
-    Description: The URL endpoint for the website service
-    Value: !Join ["", [!GetAtt ALB.Outputs.LoadBalancerUrl, "/"]]
