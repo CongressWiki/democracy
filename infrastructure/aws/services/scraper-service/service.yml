@@ -5,10 +5,6 @@ Parameters:
     Description: Please provide the ECS Cluster ID that this service should run on
     Type: String
 
-  LoadBalancerName:
-    Description: The LoadBalancer name
-    Type: String
-
   GraphqlEndpoint:
     Description: The url of the GraphQL server
     Type: String
@@ -21,10 +17,6 @@ Resources:
       Role: !Ref ServiceRole
       DesiredCount: 1
       TaskDefinition: !Ref TaskDefinition
-      LoadBalancers:
-        - ContainerName: scraper-service
-          ContainerPort: 80
-          LoadBalancerName: !Ref LoadBalancerName
 
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
