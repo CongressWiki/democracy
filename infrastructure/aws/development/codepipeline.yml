@@ -232,6 +232,8 @@ Resources:
                   Ref: BuildCopyCFNProject
               RunOrder: 1
 
+        - Name: PushImages
+          Actions:
             - Name: CodeBuildScraper
               InputArtifacts:
                 - Name: CFNTemplateOutput
@@ -247,6 +249,8 @@ Resources:
                   Ref: BuildScraperProject
               RunOrder: 2
 
+        - Name: BuildStackTest
+          Actions:
             - Name: CreateTestCFNStack
               InputArtifacts:
                 - Name: CFNTemplateArtifact

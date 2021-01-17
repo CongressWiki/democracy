@@ -59,7 +59,7 @@ Resources:
   PostgresDatabase:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/infrastructure/postgres.yml
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/databases/postgres.yml
       Parameters:
         DBSubnetGroup: !GetAtt VPC.Outputs.DBSubnetGroup
         DBServerSecurityGroup: !GetAtt SecurityGroups.Outputs.DBServerSecurityGroup
