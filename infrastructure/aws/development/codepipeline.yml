@@ -19,23 +19,23 @@ Parameters:
 
 Resources:
   UATTopic:
-    Type: "AWS::SNS::Topic"
+    Type: AWS::SNS::Topic
     Properties:
       Subscription:
         - Endpoint:
             Ref: UATApprovalEmail
-          Protocol: "email"
+          Protocol: email
 
   ProdTopic:
-    Type: "AWS::SNS::Topic"
+    Type: AWS::SNS::Topic
     Properties:
       Subscription:
         - Endpoint:
             Ref: ProdApprovalEmail
-          Protocol: "email"
+          Protocol: email
 
   CodePipelineRole:
-    Type: "AWS::IAM::Role"
+    Type: AWS::IAM::Role
     Properties:
       RoleName:
         Fn::Sub: CodePipelineRole-${AWS::StackName}
@@ -63,7 +63,7 @@ Resources:
                   - "*"
 
   CloudFormationRole:
-    Type: "AWS::IAM::Role"
+    Type: AWS::IAM::Role
     Properties:
       RoleName:
         Fn::Sub: CloudFormationRole-${AWS::StackName}
@@ -335,8 +335,7 @@ Resources:
                 Version: '1'
                 Provider: Manual
               Configuration:
-                NotificationArn:
-                  Fn::Sub: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${UATTopic}
+                NotificationArn: !Ref UATTopic
                 CustomData: Approve once UAT has been completed.
               RunOrder: 3
 
@@ -370,8 +369,7 @@ Resources:
                 Version: '1'
                 Provider: Manual
               Configuration:
-                NotificationArn:
-                  Fn::Sub: arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${ProdTopic}
+                NotificationArn: !Ref ProdTopic
                 CustomData: Approve deployment in production.
               RunOrder: 2
 
