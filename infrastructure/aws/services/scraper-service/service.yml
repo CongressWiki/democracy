@@ -22,10 +22,10 @@ Resources:
     Properties:
       ContainerDefinitions:
         - Name: scraper-service
-          Essential: true
+          # Essential: true
           Image:
             Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/democracy-scraper:latest
-          Memory: 1900
+          Memory: 2048
           PortMappings:
             - ContainerPort: 80
               HostPort: 0
