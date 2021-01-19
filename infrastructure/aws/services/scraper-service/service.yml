@@ -20,12 +20,19 @@ Resources:
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
     Properties:
+      Volumes:
+        - Name: us-government-data
+          Host:
+            SourcePath: /mnt/efs/us-government-data
       ContainerDefinitions:
         - Name: scraper-service
           # Essential: true
           Image:
             Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/democracy-scraper:latest
           Memory: 2048
+          MountPoints:
+            - ContainerPath: /build/us-government-data
+              SourceVolume: us-government-data
           PortMappings:
             - ContainerPort: 80
               HostPort: 0
