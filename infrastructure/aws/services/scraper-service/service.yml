@@ -26,8 +26,6 @@ Resources:
     Properties:
       Volumes:
         - Name: us-government-data
-          Host:
-            SourcePath: /mnt/efs/us-government-data
           EFSVolumeConfiguration:
             FilesystemId: !Ref EFS
       ContainerDefinitions:
