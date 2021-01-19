@@ -59,6 +59,16 @@ Resources:
         EnvironmentName: !Ref EnvironmentName
         LoadBalancerUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
 
+  EFS:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/databases/efs.yml
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        VPC: !GetAtt VPC.Outputs.VPC
+        PrivateSubnet1: !GetAtt VPC.Outputs.PrivateSubnet1
+        PrivateSubnet2: !GetAtt VPC.Outputs.PrivateSubnet2
+
   ECS:
     Type: AWS::CloudFormation::Stack
     Properties:
@@ -103,6 +113,7 @@ Resources:
     Properties:
       TemplateURL: https://s3.amazonaws.com/democracy-stack/aws/services/scraper-service/service.yml
       Parameters:
+        EFS: !GetAtt EFS.Outputs.EfsFileSystem
         Cluster: !GetAtt  ECS.Outputs.Cluster
         GraphqlEndpoint: !GetAtt Certificates.Outputs.WebsiteUrl
 

@@ -9,6 +9,10 @@ Parameters:
     Description: The url of the GraphQL server
     Type: String
 
+  EFS:
+    Description: The Elastic file storage to associate with this task definition
+    Type: String
+
 Resources:
   Service:
     Type: AWS::ECS::Service
@@ -24,6 +28,8 @@ Resources:
         - Name: us-government-data
           Host:
             SourcePath: /mnt/efs/us-government-data
+          EFSVolumeConfiguration:
+            FilesystemId: !Ref EFS
       ContainerDefinitions:
         - Name: scraper-service
           # Essential: true
