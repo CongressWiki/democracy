@@ -8,6 +8,11 @@ import requests
 # GRAPHQL_URL = "http://localhost:8080/v1/graphql"
 # GRAPHQL_URL = "https://uat.usacounts.com/v1/graphql"
 GRAPHQL_URL = os.environ.get('GRAPHQL_URL')
+
+if (GRAPHQL_URL == ''):
+    logging.warn('GRAPHQL_URL = ""')
+    GRAPHQL_URL = 'https://uat.usacounts.com'
+
 HEADERS = {
     "x-hasura-admin-secret": "hasuraadmin",
     "Content-Type": "application/json",
