@@ -4,13 +4,10 @@ import os
 
 import requests
 
-# import logging
-
-
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
 # GRAPHQL_URL = "http://localhost:8080/v1/graphql"
 # GRAPHQL_URL = "https://uat.usacounts.com/v1/graphql"
-GRAPHQL_URL = f"{os.environ.get('GRAPHQL_URL')}/v1/graphql"
+GRAPHQL_URL = os.environ.get('GRAPHQL_URL')
 HEADERS = {
     "x-hasura-admin-secret": "hasuraadmin",
     "Content-Type": "application/json",
@@ -20,7 +17,7 @@ HEADERS = {
 def send_graphql_request(payload: dict):
     with requests.Session() as session:
         response = session.post(
-            GRAPHQL_URL,
+            f"{GRAPHQL_URL}/v1/graphql",
             headers=HEADERS,
             data=json.dumps(payload)
         )
