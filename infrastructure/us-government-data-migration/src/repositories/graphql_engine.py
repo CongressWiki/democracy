@@ -13,7 +13,6 @@ HEADERS = {
     "Content-Type": "application/json",
 }
 
-
 def send_graphql_request(payload: dict):
     with requests.Session() as session:
         response = session.post(
