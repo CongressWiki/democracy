@@ -1,41 +1,50 @@
 import json
 import logging
 import os
+import pprint
 
 import requests
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s [%(levelname)s] %(message)s",
+)
+
 # GRAPHQL_URL = 'http://graphql-engine:8080/v1/graphql'
 # GRAPHQL_URL = "http://localhost:8080/v1/graphql"
-# GRAPHQL_URL = "https://uat.usacounts.com/v1/graphql"
-GRAPHQL_URL = os.environ.get('GRAPHQL_URL')
+GRAPHQL_URL = "https://uat.usacounts.com"
 
-if (GRAPHQL_URL == ''):
-    logging.warn('GRAPHQL_URL = ""')
-    GRAPHQL_URL = 'https://uat.usacounts.com'
+if os.environ.get("GRAPHQL_URL") is not None:
+    GRAPHQL_URL = os.environ["GRAPHQL_URL"]
+
+logging.info(f"GRAPHQL_URL = {GRAPHQL_URL}")
 
 HEADERS = {
     "x-hasura-admin-secret": "hasuraadmin",
     "Content-Type": "application/json",
 }
 
+pp = pprint.PrettyPrinter()
+
+
 def send_graphql_request(payload: dict):
     with requests.Session() as session:
         response = session.post(
-            f"{GRAPHQL_URL}/v1/graphql",
-            headers=HEADERS,
-            data=json.dumps(payload)
+            f"{GRAPHQL_URL}/v1/graphql", headers=HEADERS, data=json.dumps(payload)
         )
 
         if response.status_code != 200:
-            logging.error("Request failed. Response")
-            response.raise_for_status()
+            logging.error("Request failed")
+            # response.raise_for_status()
 
         responseJson = response.json()
 
-        if 'errors' in responseJson:
-            logging.error("GraphQL error:\n" + json.dumps(responseJson))
+        if "errors" in responseJson:
+            logging.error("GraphQL error:")
+            logging.error(response.text)
             logging.error("Failed request payload:")
-            logging.error(payload)
+            prettyPayload = f"{pp.pprint(payload)}"
+            logging.error(prettyPayload)
 
         return responseJson
 
@@ -115,23 +124,22 @@ def insert_legislative_member(legislative_memeber: dict):
 
 def insert_vote(vote: dict):
     query = """\
-        mutation insert_votes_one(
-            $id: String,
-            $member_id: String,
-            $bill_id: String,
-            $decision: String
-        ) {
-        insert_votes_one(object: {
-            id: $id,
-            member_id: $member_id,
-            bill_id: $bill_id,
-            decision: $decision
-        }),
-        on_conflict: {
-            constraint: bills_pkey,
-            update_columns: updated_at
-        }) {
-            id
+    mutation insert_votes_one(
+        $id: String = "",
+        $member_id: String = "",
+        $bill_id: String = "",
+        $decision: String = ""
+    ) {
+    insert_votes_one(object: {
+        id: $id,
+        member_id: $member_id,
+        bill_id: $bill_id,
+        decision: $decision
+    }, on_conflict: {
+        constraint: votes_id_key,
+        update_columns: id
+    }) {
+        id
         }
     }
     """
@@ -158,7 +166,7 @@ def insert_bill(bill: dict):
         $title: String = "",
         $type: String = "",
         $updated_at: timestamptz = ""
-        ) {
+    ) {
     insert_bills_one(object: {
         id: $id,
         updated_at: $updated_at,
@@ -179,7 +187,7 @@ def insert_bill(bill: dict):
         constraint: bills_pkey,
         update_columns: updated_at
     }) {
-        id
+            id
         }
     }
     """
