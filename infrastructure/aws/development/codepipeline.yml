@@ -141,7 +141,7 @@ Resources:
               Ref: ArtifactS3Bucket
       Source:
         Type: CODEPIPELINE
-        BuildSpec: infrastructure/aws/development/buildspec.yml
+        BuildSpec: aws/development/buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
@@ -181,8 +181,9 @@ Resources:
             Type: PARAMETER_STORE
             Value: /docker/DOCKER_PASSWORD
       Source:
-        Type: CODEPIPELINE
-        BuildSpec: infrastructure/aws/development/deploy_scraper_image_buildspec.yml
+        Type: GITHUB
+        Location: https://github.com/USACounts/scrapers.git
+        BuildSpec: buildspec.yml
       TimeoutInMinutes: 15
       EncryptionKey:
         Fn::Sub: arn:aws:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
@@ -209,9 +210,8 @@ Resources:
                 - Name: CFNTemplateOutput
               RunOrder: 1
               Configuration:
-                ConnectionArn:
-                  Fn::Sub: "arn:aws:codestar-connections:${AWS::Region}:${AWS::AccountId}:connection/26fe5895-4c6e-4a24-aaec-8e21d5257bed"
-                FullRepositoryId: "ryparker/democracy"
+                ConnectionArn: arn:aws:codestar-connections:us-east-1:495634646531:connection/8a78eebb-f883-48c2-b989-05ff42b6db7d
+                FullRepositoryId: "USACounts/infrastructure"
                 BranchName: "main"
                 OutputArtifactFormat: "CODE_ZIP"
 
