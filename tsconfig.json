@@ -1,7 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "target": "es6",
+    "lib": [
+      "dom",
+      "es6",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -14,6 +22,15 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/with-apollo.js", "lib/use-local-storage.js", "top-layer-layout"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "lib/with-apollo.js",
+    "lib/use-local-storage.js",
+    "top-layer-layout"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

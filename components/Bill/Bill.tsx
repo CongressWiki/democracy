@@ -27,14 +27,14 @@ export interface BillProps {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // flexGrow: 1,
-    // width: "25vw",
+    flexGrow: 1,
+    width: "calc((8.5/14) * .5 * 100vw)",
     // aspectRatio: "1 / 1.6471",
-    height: "calc(1 / 1.6471 * 100vw)",
-    margin: "auto",
-    marginLeft: theme.spacing(2),
+    height: "calc((14/8.5) * .5 * 100vh)",
+    margin: theme.spacing(4),
+    // marginLeft: theme.spacing(2),
     borderRadius: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     background: "rgba(224, 211, 175)",
     boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
   },
@@ -42,14 +42,14 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
   indent: (props) => ({
-    // textIndent: "-3em",
+    // TextIndent: "-3em",
     // paddingLeft: "3em",
   }),
   divider: {
-    // marginTop: theme.spacing(2),
+    // MarginTop: theme.spacing(2),
     // marginBottom: theme.spacing(2),
     backgroundColor: "black",
-    // height: 1,
+    // Height: 1,
     // Width: '60%'
   },
 }));
@@ -61,14 +61,14 @@ export const Bill = (props) => {
     <Paper elevation={3} className={classes.paper}>
       <Grid container direction="column" spacing={1}>
         {/* ID */}
-        <Grid item className={classes.id} xs>
+        <Grid item xs className={classes.id}>
           {props.id ? (
             <Typography>{props.id}</Typography>
           ) : (
             <Skeleton
               variant="text"
               animation="wave"
-              // height={22}
+              // Height={22}
               // width="10%"
               // style={{ marginBottom: theme.spacing(4) }}
             />
@@ -82,7 +82,7 @@ export const Bill = (props) => {
             <Skeleton
               variant="text"
               animation="wave"
-              // height={22}
+              // Height={22}
               // width="80%"
               // style={{ marginBottom: theme.spacing(4) }}
             />

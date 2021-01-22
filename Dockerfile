@@ -4,14 +4,17 @@ FROM node:alpine
 COPY components components
 COPY pages pages
 COPY public public
+COPY lib lib
 COPY styles styles
+COPY top-layer-layout top-layer-layout
+COPY .babelrc .babelrc
 COPY next-env.d.ts next-env.d.ts
 COPY tsconfig.json tsconfig.json
 COPY package.json package.json
 COPY yarn.lock yarn.lock
 
 # install dependencies
-RUN yarn
+RUN yarn --pure-lockfile
 
 # start app
 RUN yarn build

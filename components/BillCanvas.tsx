@@ -27,18 +27,6 @@ const GET_LATEST_BILLS = gql`
   }
 `;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  billRow: {
-    backgroundColor: "red",
-  },
-  bill: {
-    alignSelf: "center",
-  },
-}));
-
 const BillCanvas = () => {
   const { loading, error, data } = useQuery(GET_LATEST_BILLS);
   const classes = useStyles();
@@ -61,7 +49,7 @@ const BillCanvas = () => {
           direction="column"
         >
           {data.bills.map((billData) => (
-            <Grid item className={classes.bill}>
+            <Grid item xs className={classes.bill}>
               <Bill
                 id={`${billData.type}.${billData.number}`.toUpperCase()}
                 title={billData?.title}
@@ -74,5 +62,17 @@ const BillCanvas = () => {
     );
   }
 };
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  billRow: {
+    // backgroundColor: "red",
+  },
+  bill: {
+    alignSelf: "center",
+  },
+}));
 
 export default BillCanvas;
