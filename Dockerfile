@@ -5,7 +5,6 @@ COPY components components
 COPY pages pages
 COPY public public
 COPY lib lib
-COPY styles styles
 COPY top-layer-layout top-layer-layout
 COPY .babelrc .babelrc
 COPY next-env.d.ts next-env.d.ts

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
+    // "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "target": "es6",
