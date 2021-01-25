@@ -1,14 +1,35 @@
-import BillCanvas from '../components/BillCanvas';
-import Layout from '../components/Layout';
-import React from 'react';
-import {withApollo} from '../lib/with-apollo';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Image from "next/image";
 
 const Home = () => {
-	return (
-		<Layout>
-			<BillCanvas/>
-		</Layout>
-	);
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <Image
+          src="/barrier.svg"
+          alt="construction barrier"
+          width={150}
+          height={150}
+        />
+        <h1>Coming Soon</h1>
+      </div>
+    </div>
+  );
 };
 
-export default withApollo()(Home);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    textAlign: "center",
+  },
+}));
+
+export default Home;
