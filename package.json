@@ -1,6 +1,7 @@
 {
   "name": "democracy-front-end",
   "version": "0.1.0",
+  "license": "UNLICENSED",
   "private": true,
   "browser": true,
   "env": {
@@ -33,10 +34,10 @@
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",
     "@apollo/react-ssr": "^4.0.0",
-    "@material-ui/core": "^4.11.2",
+    "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "4.0.0-alpha.57",
-    "@material-ui/styles": "^4.11.2",
+    "@material-ui/styles": "^4.11.3",
     "apollo-boost": "^0.4.9",
     "apollo-link-ws": "^1.0.20",
     "fontsource-roboto": "^4.0.0",
@@ -53,10 +54,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@storybook/addon-actions": "^6.1.14",
-    "@storybook/addon-essentials": "^6.1.14",
-    "@storybook/addon-links": "^6.1.14",
-    "@storybook/react": "^6.1.14",
+    "@storybook/addon-actions": "^6.1.15",
+    "@storybook/addon-essentials": "^6.1.15",
+    "@storybook/addon-links": "^6.1.15",
+    "@storybook/react": "^6.1.15",
     "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
     "babel-loader": "^8.2.2",

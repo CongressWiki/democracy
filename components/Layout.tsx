@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    // backgroundImage: 'url("https://www.transparenttextures.com/patterns/purty-wood.png")',
+    // backgroundColor: "#edccab",
   },
   header: {
     left: "50vw",

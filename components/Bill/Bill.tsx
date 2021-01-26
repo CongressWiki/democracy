@@ -35,7 +35,9 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: theme.spacing(2),
     borderRadius: 1,
     padding: theme.spacing(4),
-    background: "rgba(224, 211, 175)",
+    // background: "rgba(224, 211, 175)",
+    backgroundImage:
+      "linear-gradient(90deg,hsla(30,40%,50%,.7),hsla(30,40%,50%,.7) 99%)",
     boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
   },
   id: {
