@@ -1,3 +1,3 @@
-[submodule "front-end/public/elected_official_images"]
-	path = front-end/public/elected_official_images
+[submodule "public/elected_official_images"]
+	path = public/elected_official_images
 	url = https://github.com/unitedstates/images.git
