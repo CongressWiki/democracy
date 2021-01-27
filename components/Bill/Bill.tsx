@@ -85,7 +85,7 @@ export const Bill = (props) => {
             )}
           </Grid>
           {/* Date */}
-          <Grid item xs={4} justify="flex-end">
+          <Grid item xs={4}>
             {props.updated_at ? (
               <Typography display="block" align="right" variant="caption">
                 {updated_at}

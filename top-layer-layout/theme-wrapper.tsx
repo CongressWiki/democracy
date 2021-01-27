@@ -6,14 +6,14 @@ import React from "react";
 import useLocalStorage from "../lib/use-local-storage";
 
 const defaultState = {
-  theme: "light",
+  theme: "dark",
   toggleDarkMode: () => null,
 };
 
 export const ThemeContext = React.createContext(defaultState);
 
 export const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useLocalStorage("theme", "dark");
+  const [theme, setTheme] = useLocalStorage("theme", defaultState.theme);
   const toggleDarkMode = () => {
     setTheme(theme === "light" ? "dark" : "light");
   };
