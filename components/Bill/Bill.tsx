@@ -1,12 +1,17 @@
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
-import Divider from "@material-ui/core/Divider";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import PropTypes from "prop-types";
+import Card from "@material-ui/core/Card";
 import React from "react";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import Image from "next/image";
+import { Tooltip } from "@material-ui/core";
+
+// import Stepper from "@material-ui/core/Stepper";
+// import Step from "@material-ui/core/Step";
+// import StepLabel from "@material-ui/core/StepLabel";
 
 export interface BillProps {
   /**
@@ -23,96 +28,116 @@ export interface BillProps {
    * Summary of bill
    */
   summary: string;
+
+  actions: Array<Record<string, any>>;
+
+  updated_at: Date;
+
+  sponsor: string;
 }
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
+  root: {
     flexGrow: 1,
-    width: "calc((8.5/14) * .5 * 100vw)",
-    // aspectRatio: "1 / 1.6471",
-    height: "calc((14/8.5) * .5 * 100vh)",
-    margin: theme.spacing(4),
-    // marginLeft: theme.spacing(2),
-    borderRadius: 1,
-    padding: theme.spacing(4),
-    // background: "rgba(224, 211, 175)",
-    backgroundImage:
-      "linear-gradient(90deg,hsla(30,40%,50%,.7),hsla(30,40%,50%,.7) 99%)",
+    maxWidth: "600px",
+    borderRadius: 5,
+    padding: theme.spacing(2),
+    border: "0.2em solid #edccab",
     boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
+    overflow: "hidden",
   },
-  id: {
-    margin: "auto",
+  // indent: (props) => ({
+  // TextIndent: "-3em",
+  // paddingLeft: "3em",
+  // }),
+  sponsorAvatar: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
   },
-  indent: (props) => ({
-    // TextIndent: "-3em",
-    // paddingLeft: "3em",
-  }),
-  divider: {
-    // MarginTop: theme.spacing(2),
-    // marginBottom: theme.spacing(2),
-    backgroundColor: "black",
-    // Height: 1,
-    // Width: '60%'
+  title: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
   },
 }));
 
 export const Bill = (props) => {
   const classes = useStyles();
+  const updated_at = new Date(props.updated_at).toDateString();
 
   return (
-    <Paper elevation={3} className={classes.paper}>
-      <Grid container direction="column" spacing={1}>
-        {/* ID */}
-        <Grid item xs className={classes.id}>
-          {props.id ? (
-            <Typography>{props.id}</Typography>
-          ) : (
-            <Skeleton
-              variant="text"
-              animation="wave"
-              // Height={22}
-              // width="10%"
-              // style={{ marginBottom: theme.spacing(4) }}
-            />
-          )}
+    <Card elevation={3} className={classes.root}>
+      <Grid container spacing={1}>
+        <Grid container justify="space-between">
+          <Grid item xs={4} />
+          {/* ID */}
+          <Grid item xs={4}>
+            {props.id ? (
+              <Typography variant="h6" align="center">
+                {props.id}
+              </Typography>
+            ) : (
+              <Skeleton
+                variant="text"
+                animation="wave"
+                height={22}
+                width="30%"
+              />
+            )}
+          </Grid>
+          {/* Date */}
+          <Grid item xs={4} justify="flex-end">
+            {props.updated_at ? (
+              <Typography display="block" align="right" variant="caption">
+                {updated_at}
+              </Typography>
+            ) : (
+              <Skeleton
+                variant="text"
+                animation="wave"
+                height={22}
+                width="30%"
+              />
+            )}
+          </Grid>
         </Grid>
-        {/* Title */}
-        <Grid item xs>
-          {props.title ? (
-            <Typography className={classes.indent}>{props.title}</Typography>
-          ) : (
-            <Skeleton
-              variant="text"
-              animation="wave"
-              // Height={22}
-              // width="80%"
-              // style={{ marginBottom: theme.spacing(4) }}
-            />
-          )}
-        </Grid>
-        {/* Divider */}
-        {/* <Grid item xs>
-          <Divider variant="fullWidth" className={classes.divider} />
-        </Grid> */}
-        {/* Summary */}
-        {/* <Grid item xs>
-          {props.summary ? (
-            <Typography className={classes.indent}>{props.summary}</Typography>
-          ) : (
-            <Skeleton
-              variant="text"
-              animation="wave"
-              // height={18}
-            />
-          )}
-        </Grid> */}
-      </Grid>
-    </Paper>
-  );
-};
 
-Bill.propTypes = {
-  id: PropTypes.string,
-  title: PropTypes.string,
-  summary: PropTypes.string,
+        {/* Title */}
+        <Grid item xs={12}>
+          {props.title ? (
+            <Typography className={classes.title} variant="body1" paragraph>
+              {props.title}
+            </Typography>
+          ) : (
+            <Skeleton variant="text" animation="wave" height={22} width="80%" />
+          )}
+        </Grid>
+
+        {/* Stepper */}
+        {/* <Stepper activeStep={props.actions.length - 1} alternativeLabel>
+          {props.actions.map((action, index) => (
+            <Step key={index}>
+              <StepLabel>{action.text.slice(0, 60) + "..."}</StepLabel>
+            </Step>
+          ))}
+        </Stepper> */}
+
+        {/* Sponsor image */}
+        <Grid item xs={4} />
+        <Grid item xs={4} container justify="center">
+          <Tooltip title="Sponsor">
+            <Avatar className={classes.sponsorAvatar}>
+              <Image
+                src={`/elected_official_images/congress/original/${props.sponsor}.jpg`}
+                layout="fill"
+                objectFit="cover"
+                objectPosition="50% 10%"
+                quality={100}
+              />
+            </Avatar>
+          </Tooltip>
+        </Grid>
+        <Grid item xs={4} />
+      </Grid>
+    </Card>
+  );
 };

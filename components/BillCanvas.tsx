@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 
 const GET_LATEST_BILLS = gql`
   query getLatestBills {
-    bills(limit: 3, order_by: { status_at: desc }) {
+    bills(limit: 3, order_by: { updated_at: desc }) {
       id
       type
       number
@@ -32,7 +32,11 @@ const BillCanvas = () => {
   const classes = useStyles();
 
   if (loading) {
-    return <CircularProgress />;
+    return (
+      <div className={classes.root}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   if (error) {
@@ -49,11 +53,14 @@ const BillCanvas = () => {
           direction="column"
         >
           {data.bills.map((billData) => (
-            <Grid item xs className={classes.bill}>
+            <Grid item xs className={classes.bill} key={billData.id}>
               <Bill
                 id={`${billData.type}.${billData.number}`.toUpperCase()}
                 title={billData?.title}
                 summary={billData?.summary}
+                actions={billData?.actions}
+                updated_at={new Date(billData?.updated_at)}
+                sponsor={billData?.sponsor}
               />
             </Grid>
           ))}
