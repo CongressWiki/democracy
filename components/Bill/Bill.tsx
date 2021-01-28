@@ -130,7 +130,7 @@ export const Bill = (props) => {
                 src={`/elected_official_images/congress/original/${props.sponsor}.jpg`}
                 layout="fill"
                 objectFit="cover"
-                objectPosition="50% 10%"
+                objectPosition="50% 20%"
                 quality={100}
               />
             </Avatar>
