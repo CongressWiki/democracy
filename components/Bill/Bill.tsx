@@ -13,52 +13,16 @@ import { Tooltip } from "@material-ui/core";
 // import Step from "@material-ui/core/Step";
 // import StepLabel from "@material-ui/core/StepLabel";
 
-export interface BillProps {
-  /**
-   * Bill ID
-   */
+export type BillProps = {
   id: string;
-
-  /**
-   * Bill title
-   */
+  type: string;
+  number: string;
   title: string;
-
-  /**
-   * Summary of bill
-   */
   summary: string;
-
   actions: Array<Record<string, any>>;
-
   updated_at: Date;
-
   sponsor: string;
-}
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: "600px",
-    borderRadius: 5,
-    padding: theme.spacing(2),
-    border: "0.2em solid #edccab",
-    boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
-    overflow: "hidden",
-  },
-  // indent: (props) => ({
-  // TextIndent: "-3em",
-  // paddingLeft: "3em",
-  // }),
-  sponsorAvatar: {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-  },
-  title: {
-    paddingLeft: theme.spacing(3),
-    paddingRight: theme.spacing(3),
-  },
-}));
+};
 
 export const Bill = (props) => {
   const classes = useStyles();
@@ -141,3 +105,27 @@ export const Bill = (props) => {
     </Card>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    maxWidth: "600px",
+    borderRadius: 5,
+    padding: theme.spacing(2),
+    border: "0.2em solid #edccab",
+    boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
+    overflow: "hidden",
+  },
+  // indent: (props) => ({
+  // TextIndent: "-3em",
+  // paddingLeft: "3em",
+  // }),
+  sponsorAvatar: {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+  },
+  title: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+}));

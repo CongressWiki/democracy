@@ -2,25 +2,16 @@ import Grid from "@material-ui/core/Grid";
 import { Tooltip } from "@material-ui/core";
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { ThemeContext } from "../top-layer-layout/theme-wrapper";
+import { ThemeContext } from "@top-layer-layout/theme-wrapper";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    // backgroundImage: 'url("https://www.transparenttextures.com/patterns/purty-wood.png")',
-    // backgroundColor: "#edccab",
-  },
-  header: {
-    left: "50vw",
-    textAlign: "center",
-    // position: "fixed",
-  },
-}));
+export type LayoutProps = {
+  children: React.ReactNode;
+};
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ children }: LayoutProps) => {
   const classes = useStyles();
   const { toggleDarkMode } = useContext(ThemeContext);
 
@@ -38,14 +29,22 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             </IconButton>
           </Tooltip>
         </Grid>
-        {/* <Grid item xs={4} /> */}
-        <Grid item xs={8}>
+        <Grid item xs>
           <main>{children}</main>
         </Grid>
-        {/* <Grid item xs={4} /> */}
       </Grid>
     </div>
   );
 };
+
+const useStyles = makeStyles(() => ({
+  root: {
+    flexGrow: 1,
+  },
+  header: {
+    left: "50vw",
+    textAlign: "center",
+  },
+}));
 
 export default Layout;

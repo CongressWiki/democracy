@@ -3,6 +3,18 @@
     // "noImplicitAny": true,
     // "noImplicitThis": true,
     // "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "components/*"
+      ],
+      "@libs/*": [
+        "libs/*"
+      ],
+      "@top-layer-layout/*": [
+        "top-layer-layout/*"
+      ]
+    },
     "target": "es6",
     "lib": [
       "dom",
@@ -26,9 +38,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "lib/with-apollo.js",
-    "lib/use-local-storage.js",
-    "top-layer-layout"
+    "libs/*",
+    "top-layer-layout/*"
   ],
   "exclude": [
     "node_modules"

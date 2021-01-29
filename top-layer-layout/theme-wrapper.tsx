@@ -3,7 +3,7 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import PropTypes from "prop-types";
 import React from "react";
-import useLocalStorage from "../lib/use-local-storage";
+import useLocalStorage from "@libs/use-local-storage";
 
 const defaultState = {
   theme: "dark",
