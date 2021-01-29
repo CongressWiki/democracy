@@ -9,7 +9,7 @@ import fetch from 'isomorphic-unfetch';
 const GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || '';
 const HASURA_GRAPHQL_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
 
-console.log({GRAPHQL_ENDPOINT})
+console.log({GRAPHQL_ENDPOINT});
 
 const HTTPS_GRAPHQL_ENDPOINT = GRAPHQL_ENDPOINT;
 const WSS_GRAPHQL_ENDPOINT = GRAPHQL_ENDPOINT.replace('https', 'wss');

@@ -29,7 +29,17 @@
       "unicorn/filename-case": 0,
       "react/prop-types": 0,
       "@typescript-eslint/consistent-type-assertions": 0
-    }
+    },
+    "overrides": [
+      {
+        "files": "libs/*",
+        "rules": {
+          "@typescript-eslint/no-implicit-any-catch": 1,
+          "@typescript-eslint/prefer-optional-chain": 1,
+          "import/no-extraneous-dependencies": 1
+        }
+      }
+    ]
   },
   "dependencies": {
     "@apollo/react-hooks": "^4.0.0",

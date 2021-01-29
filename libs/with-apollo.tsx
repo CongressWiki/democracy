@@ -21,7 +21,7 @@ export const initOnContext = ctx => {
 	if (process.env.NODE_ENV === 'development' && inAppContext) {
 		console.warn(
 			'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n' +
-          'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n'
+        'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n'
 		);
 	}
 
@@ -92,7 +92,9 @@ const initApolloClient = (initialState, headers) => {
  */
 export const withApollo = ({ssr = true} = {}) => PageComponent => {
 	const WithApollo = ({apolloClient, apolloState, ...pageProps}) => {
-		const client = apolloClient ? apolloClient : initApolloClient(apolloState, {});
+		const client = apolloClient ?
+			apolloClient :
+			initApolloClient(apolloState, {});
 
 		return (
 			<ApolloProvider client={client}>
@@ -105,17 +107,14 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 	if (process.env.NODE_ENV !== 'production') {
 		const displayName =
       PageComponent.displayName || PageComponent.name || 'Component';
-		WithApollo.displayName = `withApollo(${displayName})`;
+		WithApollo.displayName = `withApollo(${displayName as string})`;
 	}
 
 	if (ssr || PageComponent.getInitialProps) {
 		WithApollo.getInitialProps = async ctx => {
 			// Initialize ApolloClient, add it to the ctx object so
 			// we can use it in `PageComponent.getInitialProp`.
-			ctx.apolloClient = initApolloClient(
-				null,
-				await getHeaders(ctx)
-			);
+			ctx.apolloClient = initApolloClient(null, await getHeaders(ctx));
 
 			const {apolloClient, AppTree} = ctx;
 
