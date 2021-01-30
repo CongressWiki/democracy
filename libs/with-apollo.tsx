@@ -1,6 +1,6 @@
-import {ApolloProvider} from '@apollo/react-hooks';
-import Head from 'next/head';
 import React from 'react';
+import Head from 'next/head';
+import {ApolloProvider} from '@apollo/react-hooks';
 import createApolloClient from './apollo-client';
 
 // On the client, we store the Apollo Client in the following variable.

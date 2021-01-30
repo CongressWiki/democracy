@@ -1,7 +1,7 @@
-import ElectedOfficialAvatar from '../ElectedOfficialAvatar/ElectedOfficialAvatar';
-import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import {Grid} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import ElectedOfficialAvatar from '../ElectedOfficialAvatar/ElectedOfficialAvatar';
 import type {ElectedOfficialAvatarProps} from '../ElectedOfficialAvatar/ElectedOfficialAvatar';
 
 export type CongressGridProps = {

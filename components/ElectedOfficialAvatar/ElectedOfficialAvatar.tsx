@@ -1,10 +1,7 @@
-import {makeStyles} from '@material-ui/core/styles';
-
 import React from 'react';
-import Skeleton from '@material-ui/lab/Skeleton';
-import Avatar from '@material-ui/core/Avatar';
 import Image from 'next/image';
-import {Tooltip} from '@material-ui/core';
+import {Avatar, Tooltip} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 
 export type ElectedOfficialAvatarProps = {
 	id: string;

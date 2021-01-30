@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import React from 'react';
-
+import {useTheme} from '@material-ui/styles';
 export const siteTitle = 'Keeping US A-ccountable';
 
 const Header = () => {
+	const theme = useTheme();
 	return (
 		<Head>
 			<title>{siteTitle}</title>
@@ -19,11 +20,13 @@ const Header = () => {
 			/>
 			<meta name="og:title" content={siteTitle}/>
 			<meta name="twitter:card" content="summary_large_image"/>
-			<link rel="icon" href="/favicon.ico"/>
+			{/* PWA primary color */}
+			<meta name="theme-color" content="#303030"/>
 			<link
-				href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap"
 				rel="stylesheet"
+				href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
 			/>
+			<link rel="icon" href="/favicon.ico"/>
 		</Head>
 	);
 };

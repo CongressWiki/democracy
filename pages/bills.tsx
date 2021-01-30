@@ -1,14 +1,14 @@
-import Layout from '@components/Layout/Layout';
 import React from 'react';
-import {withApollo} from '@libs/with-apollo';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import gql from 'graphql-tag';
+import {withApollo} from '@libs/with-apollo';
 import {useQuery} from '@apollo/react-hooks';
+import Layout from '@components/Layout/Layout';
 import BillCanvas from '@components/BillCanvas/BillCanvas';
+import CircularProgress from '@components/CircularProgress/CircularProgress';
 
 const GET_LATEST_BILLS = gql`
   query getLatestBills {
-    bills(limit: 3, order_by: { updated_at: desc }) {
+    bills(limit: 10, order_by: { updated_at: desc }) {
       id
       type
       number
@@ -49,10 +49,12 @@ const Bills = () => {
 	if (data.bills) {
 		return (
 			<Layout>
-				<BillCanvas bills={data.bills}/>
+				<main>
+					<BillCanvas bills={data.bills}/>
+				</main>
 			</Layout>
 		);
 	}
 };
 
-export default withApollo()(Bills);
+export default withApollo({ssr: false})(Bills);

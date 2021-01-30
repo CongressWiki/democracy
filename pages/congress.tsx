@@ -1,10 +1,10 @@
-import CongressGrid from '@components/CongressGrid/CongressGrid';
-import Layout from '@components/Layout/Layout';
 import React from 'react';
-import {withApollo} from '@libs/with-apollo';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import gql from 'graphql-tag';
+import {withApollo} from '@libs/with-apollo';
 import {useQuery} from '@apollo/react-hooks';
+import Layout from '@components/Layout/Layout';
+import CircularProgress from '@components/CircularProgress/CircularProgress';
+import CongressGrid from '@components/CongressGrid/CongressGrid';
 
 const GET_ELECTED_OFFICIALS = gql`
   query getElectedOfficials {

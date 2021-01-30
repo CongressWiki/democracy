@@ -1,7 +1,7 @@
-import {Bill} from '../Bill/Bill';
-import {makeStyles} from '@material-ui/core/styles';
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
+import {Grid} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {Bill} from '../Bill/Bill';
 import type {BillProps} from '../Bill/Bill';
 
 export type BillCanvasProps = {

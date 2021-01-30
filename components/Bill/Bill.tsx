@@ -1,17 +1,17 @@
+import {
+	Grid,
+	Card,
+	Typography,
+	Avatar,
+	Tooltip
+	// Stepper,
+	// Step,
+	// StepLabel
+} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-
-import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import Image from 'next/image';
-import {Tooltip} from '@material-ui/core';
-
-// Import Stepper from "@material-ui/core/Stepper";
-// import Step from "@material-ui/core/Step";
-// import StepLabel from "@material-ui/core/StepLabel";
 
 export type BillProps = {
 	id: string;
@@ -112,14 +112,11 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: '600px',
 		borderRadius: 5,
 		padding: theme.spacing(2),
-		border: '0.2em solid #edccab',
+		border: '0.2em solid',
+		borderColor: theme.palette.secondary.main,
 		boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
 		overflow: 'hidden'
 	},
-	// Indent: (props) => ({
-	// TextIndent: "-3em",
-	// paddingLeft: "3em",
-	// }),
 	sponsorAvatar: {
 		width: theme.spacing(7),
 		height: theme.spacing(7)

@@ -1,27 +1,20 @@
-import Grid from '@material-ui/core/Grid';
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Header from '@components/Header/Header';
+import {Container} from '@material-ui/core';
+import AppBar from '@components/AppBar/AppBar';
 
 export type LayoutProps = {
 	children: React.ReactNode;
 };
 
 const Layout = ({children}: LayoutProps) => {
-	const classes = useStyles();
-
 	return (
-		<div className={classes.root}>
-			<Header/>
-			<main>{children}</main>
-		</div>
+		<>
+			<AppBar/>
+			<Container maxWidth="sm">
+				{children}
+			</Container>
+		</>
 	);
 };
-
-const useStyles = makeStyles(() => ({
-	root: {
-		flexGrow: 1
-	}
-}));
 
 export default Layout;

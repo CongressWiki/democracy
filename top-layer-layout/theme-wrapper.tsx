@@ -1,8 +1,6 @@
-import {ThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-
-import CssBaseline from '@material-ui/core/CssBaseline';
-import PropTypes from 'prop-types';
 import React from 'react';
+import {CssBaseline} from '@material-ui/core';
+import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import useLocalStorage from '@libs/use-local-storage';
 
 const defaultState = {
@@ -21,7 +19,32 @@ export const ThemeWrapper = ({children}: { children: React.ReactNode }) => {
 	const nextTheme = React.useMemo(() => {
 		const newTheme = createMuiTheme({
 			palette: {
-				type: theme
+				type: theme,
+				primary: {
+					light: '#da452d',
+					main: '#6c0000',
+					dark: '#6c0000',
+					contrastText: '#fff'
+				},
+				secondary: {
+					light: '#ffffdd',
+					main: '#edccab',
+					dark: '#ba9b7c',
+					contrastText: '#000'
+				}
+			},
+			overrides: {
+				// Style sheet name ⚛️
+				MuiAppBar: {
+					colorDefault: {
+						backgroundColor: theme === 'dark' ? '#303030' : '#fff'
+					}
+				},
+				MuiBackdrop: {
+					root: {
+						// BackgroundColor: '#fff'
+					}
+				}
 			}
 		});
 		return newTheme;
@@ -40,8 +63,4 @@ export const ThemeWrapper = ({children}: { children: React.ReactNode }) => {
 			</ThemeProvider>
 		</ThemeContext.Provider>
 	);
-};
-
-ThemeWrapper.propTypes = {
-	children: PropTypes.node
 };

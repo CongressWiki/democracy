@@ -1,6 +1,5 @@
-import Header from './header';
-import PropTypes from 'prop-types';
 import React from 'react';
+import Header from './header';
 import {ThemeWrapper} from './theme-wrapper';
 
 const TopLayout = ({children}: {children: React.ReactNode}) => {
@@ -12,10 +11,6 @@ const TopLayout = ({children}: {children: React.ReactNode}) => {
 			</ThemeWrapper>
 		</>
 	);
-};
-
-TopLayout.propTypes = {
-	children: PropTypes.node
 };
 
 export default TopLayout;
