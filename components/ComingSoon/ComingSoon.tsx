@@ -22,13 +22,12 @@ const ComingSoon = () => {
 const useStyles = makeStyles(() => ({
 	root: {
 		width: '100vw',
-		height: '100vh',
+		height: '90vh',
 		display: 'flex',
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	container: {
-		height: '70vh',
 		justifyContent: 'center',
 		alignItems: 'center',
 		textAlign: 'center'

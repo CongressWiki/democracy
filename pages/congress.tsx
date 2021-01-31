@@ -41,7 +41,9 @@ const Congress = () => {
 	if (data.elected_officials) {
 		return (
 			<Layout>
-				<CongressGrid electedOfficials={data.elected_officials}/>
+				<main>
+					<CongressGrid electedOfficials={data.elected_officials}/>
+				</main>
 			</Layout>
 		);
 	}

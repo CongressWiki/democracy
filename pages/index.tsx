@@ -5,7 +5,9 @@ import ComingSoon from '@components/ComingSoon/ComingSoon';
 const Home = () => {
 	return (
 		<Layout>
-			<ComingSoon/>
+			<main>
+				<ComingSoon/>
+			</main>
 		</Layout>
 	);
 };
