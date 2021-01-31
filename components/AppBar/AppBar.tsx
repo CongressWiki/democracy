@@ -1,21 +1,26 @@
 import React, {useContext} from 'react';
 import {
 	AppBar as MaterialUiAppBar,
+	Badge,
 	Toolbar,
 	IconButton,
 	Typography,
 	MenuItem,
 	Menu,
 	useScrollTrigger,
-	Theme
+	Theme,
+	Tooltip
 } from '@material-ui/core';
 import {makeStyles, createStyles} from '@material-ui/core/styles';
-import {MoreVert as MoreIcon} from '@material-ui/icons';
-import DarkModeToggle from '@components/DarkModeToggle/DarkModeToggle';
+import {
+	Brightness4 as Brightness4Icon,
+	MoreVert as MoreIcon
+} from '@material-ui/icons';
 import {ThemeContext} from '@top-layer-layout/theme-wrapper';
 
 const AppBar = props => {
 	const classes = useStyles();
+	const {toggleDarkMode} = useContext(ThemeContext);
 	const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(null);
 	const [mobileMoreAnchorElement, setMobileMoreAnchorElement] = React.useState<null | HTMLElement>(null);
 
@@ -46,12 +51,17 @@ const AppBar = props => {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<DarkModeToggle/>
+			<Tooltip title="Toggle dark mode">
+				<IconButton color="inherit" onClick={toggleDarkMode}>
+					<Badge color="secondary">
+						<Brightness4Icon/>
+					</Badge>
+				</IconButton>
+			</Tooltip>
 		</Menu>
 	);
 
 	const mobileMenuId = 'primary-search-account-menu-mobile';
-	const {toggleDarkMode} = useContext(ThemeContext);
 	const renderMobileMenu = (
 		<Menu
 			keepMounted
@@ -63,7 +73,6 @@ const AppBar = props => {
 			onClose={handleMobileMenuClose}
 		>
 			<MenuItem onClick={toggleDarkMode}>
-				<DarkModeToggle/>
 				<p>Toggle Dark Mode</p>
 			</MenuItem>
 		</Menu>
@@ -79,7 +88,13 @@ const AppBar = props => {
 						</Typography>
 						<div className={classes.grow}/>
 						<div className={classes.sectionDesktop}>
-							<DarkModeToggle/>
+							<Tooltip title="Toggle dark mode">
+								<IconButton color="inherit" onClick={toggleDarkMode}>
+									<Badge color="secondary">
+										<Brightness4Icon/>
+									</Badge>
+								</IconButton>
+							</Tooltip>
 						</div>
 						<div className={classes.sectionMobile}>
 							<IconButton
@@ -95,7 +110,7 @@ const AppBar = props => {
 					</Toolbar>
 				</MaterialUiAppBar>
 			</ElevationScroll>
-			<Toolbar className={classes.toolBar}/>
+			<Toolbar/>
 			{renderMobileMenu}
 			{renderMenu}
 		</div>
@@ -138,9 +153,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			[theme.breakpoints.up('md')]: {
 				display: 'none'
 			}
-		},
-		toolBar: {
-			// MarginBottom: theme.spacing(2)
 		}
 	})
 );
