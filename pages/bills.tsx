@@ -8,7 +8,7 @@ import CircularProgress from '@components/CircularProgress/CircularProgress';
 
 const GET_LATEST_BILLS = gql`
   query getLatestBills {
-    bills(limit: 10, order_by: { updated_at: desc }) {
+    bills(limit: 15, order_by: { updated_at: desc }) {
       id
       type
       number

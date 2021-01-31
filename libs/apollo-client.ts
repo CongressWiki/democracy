@@ -50,7 +50,7 @@ const createWSLink = () => {
 		new SubscriptionClient(`${WSS_GRAPHQL_ENDPOINT}/v1/graphql`, {
 			lazy: true,
 			reconnect: true,
-			connectionParams: async () => {
+			connectionParams: () => {
 				// Await requestAccessToken() // happens on the client
 				return {
 					headers: {

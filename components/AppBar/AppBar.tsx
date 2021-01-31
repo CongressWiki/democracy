@@ -4,7 +4,6 @@ import {
 	Badge,
 	Toolbar,
 	IconButton,
-	Typography,
 	MenuItem,
 	Menu,
 	useScrollTrigger,
@@ -81,11 +80,8 @@ const AppBar = props => {
 	return (
 		<div className={classes.grow}>
 			<ElevationScroll {...props}>
-				<MaterialUiAppBar color="default" position="fixed">
+				<MaterialUiAppBar color="default">
 					<Toolbar variant="dense">
-						<Typography noWrap className={classes.title} variant="h6">
-							USA Counts
-						</Typography>
 						<div className={classes.grow}/>
 						<div className={classes.sectionDesktop}>
 							<Tooltip title="Toggle dark mode">
@@ -110,7 +106,7 @@ const AppBar = props => {
 					</Toolbar>
 				</MaterialUiAppBar>
 			</ElevationScroll>
-			<Toolbar/>
+			<Toolbar variant="dense"/>
 			{renderMobileMenu}
 			{renderMenu}
 		</div>
@@ -124,7 +120,7 @@ function ElevationScroll({children}) {
 	});
 
 	return React.cloneElement(children, {
-		elevation: trigger ? 4 : 0
+		elevation: trigger ? 2 : 0
 	});
 }
 

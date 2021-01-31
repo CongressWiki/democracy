@@ -1,7 +1,6 @@
 import React from 'react';
 import {
-	CircularProgress as MaterialUiProgress,
-	Backdrop
+	CircularProgress as MaterialUiProgress
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -9,9 +8,7 @@ const CircularProgress = () => {
 	const styles = useStyles();
 	return (
 		<div className={styles.container}>
-			<Backdrop open transitionDuration={5000}>
-				<MaterialUiProgress color="secondary"/>
-			</Backdrop>
+			<MaterialUiProgress color="secondary"/>
 		</div>
 	);
 };
@@ -19,10 +16,9 @@ const CircularProgress = () => {
 const useStyles = makeStyles(() => ({
 	container: {
 		display: 'flex',
-		height: '70vh',
+		height: '90vh',
 		justifyContent: 'center',
-		alignItems: 'center',
-		textAlign: 'center'
+		alignItems: 'center'
 	}
 }));
 

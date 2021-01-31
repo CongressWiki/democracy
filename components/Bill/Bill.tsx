@@ -1,3 +1,4 @@
+import React from 'react';
 import {
 	Grid,
 	Card,
@@ -9,9 +10,8 @@ import {
 	// StepLabel
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import Image from 'next/image';
+import ElectedOfficialAvatar from '@components/ElectedOfficialAvatar/ElectedOfficialAvatar';
 
 export type BillProps = {
 	id: string;
@@ -88,17 +88,10 @@ export const Bill = (props: BillProps) => {
 				{/* Sponsor image */}
 				<Grid item xs={4}/>
 				<Grid item container xs={4} justify="center">
-					<Tooltip title="Sponsor">
-						<Avatar className={classes.sponsorAvatar}>
-							<Image
-								src={`/elected_official_images/congress/original/${props.sponsor}.jpg`}
-								layout="fill"
-								objectFit="cover"
-								objectPosition="50% 20%"
-								quality={100}
-							/>
-						</Avatar>
-					</Tooltip>
+					<ElectedOfficialAvatar
+						id={props.sponsor}
+						member_id={props.sponsor}
+					/>
 				</Grid>
 				<Grid item xs={4}/>
 			</Grid>
@@ -112,7 +105,7 @@ const useStyles = makeStyles(theme => ({
 		maxWidth: '600px',
 		borderRadius: 5,
 		padding: theme.spacing(2),
-		border: '0.2em solid',
+		border: 'thin solid',
 		borderColor: theme.palette.secondary.main,
 		boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
 		overflow: 'hidden'

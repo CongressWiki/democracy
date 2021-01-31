@@ -21,9 +21,9 @@ export const ThemeWrapper = ({children}: { children: React.ReactNode }) => {
 			palette: {
 				type: theme,
 				primary: {
-					light: '#da452d',
-					main: '#6c0000',
-					dark: '#6c0000',
+					light: '#58b9ed',
+					main: '#0089ba',
+					dark: '#005c8a',
 					contrastText: '#fff'
 				},
 				secondary: {
@@ -34,15 +34,9 @@ export const ThemeWrapper = ({children}: { children: React.ReactNode }) => {
 				}
 			},
 			overrides: {
-				// Style sheet name ⚛️
 				MuiAppBar: {
 					colorDefault: {
-						backgroundColor: theme === 'dark' ? '#303030' : '#fff'
-					}
-				},
-				MuiBackdrop: {
-					root: {
-						// BackgroundColor: '#fff'
+						backgroundColor: theme === 'dark' ? '#303030' : '#FAFAFA'
 					}
 				}
 			}

@@ -5,11 +5,11 @@ import {makeStyles} from '@material-ui/core/styles';
 
 export type ElectedOfficialAvatarProps = {
 	id: string;
-	political_party_id: string;
-	member_id: string;
-	is_active: string;
-	position: string;
-	state: string;
+	political_party_id?: string;
+	member_id?: string;
+	is_active?: string;
+	position?: string;
+	state?: string;
 };
 
 const ElectedOfficialAvatar = (props: ElectedOfficialAvatarProps) => {
@@ -31,22 +31,10 @@ const ElectedOfficialAvatar = (props: ElectedOfficialAvatarProps) => {
 };
 
 const useStyles = makeStyles(theme => ({
-	root: {
-		flexGrow: 1,
-		maxWidth: '600px',
-		borderRadius: 5,
-		padding: theme.spacing(2),
-		border: '0.2em solid #edccab',
-		boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
-		overflow: 'hidden'
-	},
 	avatar: {
-		width: theme.spacing(7),
-		height: theme.spacing(7)
-	},
-	title: {
-		paddingLeft: theme.spacing(3),
-		paddingRight: theme.spacing(3)
+		// Border: 'thin solid red',
+		width: theme.spacing(8),
+		height: theme.spacing(8)
 	}
 }));
 
