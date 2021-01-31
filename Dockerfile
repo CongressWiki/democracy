@@ -4,7 +4,7 @@ FROM node:alpine
 COPY components components
 COPY pages pages
 COPY public public
-COPY lib lib
+COPY libs libs
 COPY top-layer-layout top-layer-layout
 COPY .babelrc .babelrc
 COPY next-env.d.ts next-env.d.ts
