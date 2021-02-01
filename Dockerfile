@@ -1,5 +1,9 @@
 FROM node:alpine
 
+EXPOSE 3000 3000
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
 # copy source files
 COPY components components
 COPY pages pages
@@ -17,6 +21,7 @@ COPY yarn.lock yarn.lock
 RUN yarn --pure-lockfile
 
 # Build app
+
 RUN yarn build
 
 # Start app
