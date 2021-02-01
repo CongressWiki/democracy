@@ -7,13 +7,12 @@ import CircularProgress from '@components/CircularProgress/CircularProgress';
 import CongressGrid from '@components/CongressGrid/CongressGrid';
 
 const GET_ELECTED_OFFICIALS = gql`
-  query getElectedOfficials {
+  query getElectedOfficials(where: {is_active: {_eq: true}}) {
     elected_officials {
       id
-      political_party_id
-      member_id
-      is_active
-      position
+      preferred_name
+      political_party
+      type
       state
     }
   }
