@@ -26,7 +26,6 @@ const ElectedOfficialAvatar = (props: ElectedOfficialAvatarProps) => {
 			return classes.independentBorder;
 		}
 
-		console.warn('Unhandled political party');
 		return classes.otherBorder;
 	};
 
@@ -48,7 +47,7 @@ const ElectedOfficialAvatar = (props: ElectedOfficialAvatarProps) => {
 
 const useStyles = makeStyles(theme => ({
 	otherBorder: {
-		border: 'thin solid grey'
+		border: 'thin solid white'
 	},
 	independentBorder: {
 		border: 'thin solid green'

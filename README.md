@@ -23,12 +23,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
 ## Styles
 
 ### Flexbox vs Grid
@@ -37,3 +31,7 @@ A simple question to ask yourself when deciding between grid or flexbox is:
 
 - Do I only need to control the layout by row or column – **use a flexbox**
 - Do I need to control the layout by row and column – **use a grid**
+
+## References
+
+- [Apollo & NextJS setup](https://hasura.io/learn/graphql/nextjs-fullstack-serverless/apollo-client/)

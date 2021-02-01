@@ -33,7 +33,9 @@ const Bills = () => {
 	if (loading) {
 		return (
 			<Layout>
-				<CircularProgress/>
+				<main>
+					<CircularProgress/>
+				</main>
 			</Layout>
 		);
 	}
@@ -41,7 +43,9 @@ const Bills = () => {
 	if (error) {
 		return (
 			<Layout>
-				<span>Error {JSON.stringify(error, null, 2)}</span>
+				<main>
+					<span>Error {JSON.stringify(error, null, 2)}</span>
+				</main>
 			</Layout>
 		);
 	}
@@ -57,4 +61,4 @@ const Bills = () => {
 	}
 };
 
-export default withApollo({ssr: false})(Bills);
+export default withApollo({ssr: true})(Bills);

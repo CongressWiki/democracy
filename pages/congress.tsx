@@ -24,7 +24,9 @@ const Congress = () => {
 	if (loading) {
 		return (
 			<Layout>
-				<CircularProgress/>
+				<main>
+					<CircularProgress/>
+				</main>
 			</Layout>
 		);
 	}
@@ -32,7 +34,9 @@ const Congress = () => {
 	if (error) {
 		return (
 			<Layout>
-				<span>Error {JSON.stringify(error, null, 2)}</span>
+				<main>
+					<span>Error {JSON.stringify(error, null, 2)}</span>
+				</main>
 			</Layout>
 		);
 	}

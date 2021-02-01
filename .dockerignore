@@ -1,0 +1,14 @@
+# Ignore
+./.*
+docs
+node_modules
+stories
+.editorconfig
+buildspec.yml
+LICENSE
+README.md
+dockerfile
+
+# Do not ignore
+!.babelrc
+
