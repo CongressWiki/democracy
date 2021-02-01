@@ -12,12 +12,21 @@ let HTTPS_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || DEFAULT
 let HASURA_GRAPHQL_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
 console.log({HTTPS_GRAPHQL_ENDPOINT});
 
-if (!process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT) {
-	console.warn('NEXT_PUBLIC_GRAPHQL_ENDPOINT not found in env.');
-	console.info('Fetching Secrets from next.config.js ...');
+if (!HASURA_GRAPHQL_ADMIN_SECRET) {
+	console.warn('HASURA_GRAPHQL_ADMIN_SECRET has no value.');
+	console.info('Fetching serverRuntimeConfig Secrets from next.config.js ...');
 	const {serverRuntimeConfig} = getConfig();
 	HTTPS_GRAPHQL_ENDPOINT = serverRuntimeConfig.NEXT_PUBLIC_GRAPHQL_ENDPOINT || DEFAULT_GRAPHQL_ENDPOINT;
 	HASURA_GRAPHQL_ADMIN_SECRET = serverRuntimeConfig.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
+	console.log({HTTPS_GRAPHQL_ENDPOINT});
+}
+
+if (!HASURA_GRAPHQL_ADMIN_SECRET) {
+	console.warn('HASURA_GRAPHQL_ADMIN_SECRET has no value.');
+	console.info('Fetching publicRuntimeConfig Secrets from next.config.js ...');
+	const {publicRuntimeConfig} = getConfig();
+	HTTPS_GRAPHQL_ENDPOINT = publicRuntimeConfig.NEXT_PUBLIC_GRAPHQL_ENDPOINT || DEFAULT_GRAPHQL_ENDPOINT;
+	HASURA_GRAPHQL_ADMIN_SECRET = publicRuntimeConfig.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
 	console.log({HTTPS_GRAPHQL_ENDPOINT});
 }
 
