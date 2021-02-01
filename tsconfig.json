@@ -8,8 +8,8 @@
       "@components/*": [
         "components/*"
       ],
-      "@libs/*": [
-        "libs/*"
+      "@lib/*": [
+        "lib/*"
       ],
       "@top-layer-layout/*": [
         "top-layer-layout/*"
@@ -38,7 +38,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "libs/*",
+    "lib/*",
     "top-layer-layout/*"
   ],
   "exclude": [

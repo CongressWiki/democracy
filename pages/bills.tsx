@@ -1,10 +1,11 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import {withApollo} from '@libs/with-apollo';
+import {withApollo} from '@lib/with-apollo';
 import {useQuery} from '@apollo/react-hooks';
 import Layout from '@components/Layout/Layout';
 import BillCanvas from '@components/BillCanvas/BillCanvas';
 import CircularProgress from '@components/CircularProgress/CircularProgress';
+import Error from 'next/error';
 
 const GET_LATEST_BILLS = gql`
   query getLatestBills {
@@ -41,12 +42,9 @@ const Bills = () => {
 	}
 
 	if (error) {
+		console.error(error);
 		return (
-			<Layout>
-				<main>
-					<span>Error {JSON.stringify(error, null, 2)}</span>
-				</main>
-			</Layout>
+			<Error statusCode={400} title="GraphQL error"/>
 		);
 	}
 
