@@ -90,7 +90,7 @@ export const Bill = (props: BillProps) => {
 				<Grid item container xs={4} justify="center">
 					<ElectedOfficialAvatar
 						id={props.sponsor}
-						member_id={props.sponsor}
+						preferred_name="Sponsor"
 					/>
 				</Grid>
 				<Grid item xs={4}/>

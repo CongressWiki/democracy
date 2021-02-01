@@ -4,11 +4,24 @@ import {InMemoryCache} from 'apollo-cache-inmemory';
 import {SubscriptionClient} from 'subscriptions-transport-ws';
 import {WebSocketLink} from 'apollo-link-ws';
 import fetch from 'isomorphic-unfetch';
+import getConfig from 'next/config';
 // Import {onError} from 'apollo-link-error';
+const DEFAULT_GRAPHQL_ENDPOINT = 'https://uat.usacounts.com';
 
-const HTTPS_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || '';
+let HTTPS_GRAPHQL_ENDPOINT = process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT || DEFAULT_GRAPHQL_ENDPOINT;
+let HASURA_GRAPHQL_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
+console.log({HTTPS_GRAPHQL_ENDPOINT});
+
+if (!process.env.NEXT_PUBLIC_GRAPHQL_ENDPOINT) {
+	console.warn('NEXT_PUBLIC_GRAPHQL_ENDPOINT not found in env.');
+	console.info('Fetching Secrets from next.config.js ...');
+	const {serverRuntimeConfig} = getConfig();
+	HTTPS_GRAPHQL_ENDPOINT = serverRuntimeConfig.NEXT_PUBLIC_GRAPHQL_ENDPOINT || DEFAULT_GRAPHQL_ENDPOINT;
+	HASURA_GRAPHQL_ADMIN_SECRET = serverRuntimeConfig.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
+	console.log({HTTPS_GRAPHQL_ENDPOINT});
+}
+
 const WSS_GRAPHQL_ENDPOINT = HTTPS_GRAPHQL_ENDPOINT.replace('https', 'wss');
-const HASURA_GRAPHQL_ADMIN_SECRET = process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ADMIN_SECRET || '';
 
 // Let accessToken = null
 
