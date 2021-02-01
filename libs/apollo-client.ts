@@ -6,7 +6,7 @@ import {WebSocketLink} from 'apollo-link-ws';
 import fetch from 'isomorphic-unfetch';
 // Import {onError} from 'apollo-link-error';
 
-const HTTPS_GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT;
+const HTTPS_GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT || '';
 const WSS_GRAPHQL_ENDPOINT = HTTPS_GRAPHQL_ENDPOINT.replace('https', 'wss');
 const HASURA_GRAPHQL_ADMIN_SECRET = process.env.GRAPHQL_SECRET;
 
