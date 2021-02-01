@@ -7,7 +7,7 @@ phases:
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
 
       - echo Logging in to Docker...
-      - docker login --username $DOCKER_USERNAME --password-stdin $DOCKER_PASSWORD
+      - docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
   build:
     commands:
       - echo Build started on `date`
