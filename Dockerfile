@@ -8,12 +8,14 @@ COPY . .
 
 FROM base AS build
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /build
 COPY --from=base /base ./
 RUN yarn build
 
 FROM node:current-alpine AS production
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 COPY --from=build /build/node_modules ./node_modules
 COPY --from=build /build/package.json ./
