@@ -5,6 +5,7 @@ COPY yarn.lock ./
 RUN yarn install --pure-lockfile
 # TODO add --ignore-scripts
 COPY . .
+RUN git clone https://github.com/unitedstates/images.git ./public/elected_officials
 
 FROM base AS build
 ENV NODE_ENV=production
