@@ -28,6 +28,9 @@
         "camel2DashComponentName": false
       },
       "icons"
+    ],
+    [
+      "graphql-tag"
     ]
   ]
 }

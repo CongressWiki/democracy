@@ -1,43 +1,42 @@
-import {ApolloClient} from 'apollo-client';
-import {HttpLink} from 'apollo-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
-import {SubscriptionClient} from 'subscriptions-transport-ws';
-import {WebSocketLink} from 'apollo-link-ws';
 import fetch from 'isomorphic-unfetch';
+import {ApolloClient} from 'apollo-client';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {HttpLink} from 'apollo-link-http';
 // Import {onError} from 'apollo-link-error';
+import {WebSocketLink} from 'apollo-link-ws';
+import {SubscriptionClient} from 'subscriptions-transport-ws';
 
 const HTTPS_GRAPHQL_ENDPOINT = process.env.GRAPHQL_ENDPOINT || '';
-console.log({HTTPS_GRAPHQL_ENDPOINT});
+// Console.log({HTTPS_GRAPHQL_ENDPOINT});
 const WSS_GRAPHQL_ENDPOINT = HTTPS_GRAPHQL_ENDPOINT.replace('https', 'wss');
 const HASURA_GRAPHQL_ADMIN_SECRET = process.env.GRAPHQL_SECRET;
 
-// Let accessToken = null
+// Const accessToken = null;
+// Const requestAccessToken = async () => {
+// 	if (accessToken) {
+// 		return;
+// 	}
 
-// const requestAccessToken = async () => {
-//   if (accessToken) return
-//   const res = await fetch(`http://${process.env.NEXT_JS_URL}/api/session`)
-//   if (res.ok) {
-//     const json = await res.json()
-//     accessToken = json.accessToken
-//   } else {
-//     accessToken = 'public'
-//   }
-// }
+// 	const response = await fetch(`${process.env.APP_HOST}/api/session`);
+// 	if (response.ok) {
+// 		const json = await response.json();
+// 		accessToken = json.accessToken;
+// 	} else {
+// 		accessToken = 'public';
+// 	}
+// };
 
-// // remove cached token on 401 from the server
-// const resetTokenLink = onError(({ networkError }) => {
-//   if (
-//     networkError &&
-//     networkError.name === 'ServerError' &&
-//     networkError.statusCode === 401
-//   ) {
-//     accessToken = null
-//   }
-// })
+// // Remove cached token on 401 from the server
+// const resetTokenLink = onError(({networkError}) => {
+// 	if (networkError && networkError.name === 'ServerError' && networkError.statusCode === 401) {
+// 		accessToken = null;
+// 	}
+// });
 
 const createHttpLink = () => {
 	const httpLink = new HttpLink({
 		uri: `${HTTPS_GRAPHQL_ENDPOINT}/v1/graphql`,
+		credentials: 'include',
 		headers: {
 			'x-hasura-admin-secret': HASURA_GRAPHQL_ADMIN_SECRET,
 			'x-hasura-role': 'anonymous-website-user'

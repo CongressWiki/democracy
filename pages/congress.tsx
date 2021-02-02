@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import {withApollo} from '@lib/with-apollo';
+import {withApollo} from '@lib/withApollo';
 import {useQuery} from '@apollo/react-hooks';
 import Layout from '@components/Layout/Layout';
 import CircularProgress from '@components/CircularProgress/CircularProgress';

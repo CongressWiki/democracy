@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import {ApolloProvider} from '@apollo/react-hooks';
-import createApolloClient from './apollo-client';
+import createApolloClient from '@lib/apolloClient';
 
 // On the client, we store the Apollo Client in the following variable.
 // This prevents the client from reinitializing between page transitions.
@@ -28,7 +28,7 @@ export const initOnContext = ctx => {
 	// Initialize ApolloClient if not already done
 	const apolloClient =
     ctx.apolloClient ||
-    initApolloClient(ctx.apolloState || {}, inAppContext ? ctx.ctx : ctx);
+    initApolloClient(ctx.apolloState || {});
 
 	// We send the Apollo Client as a prop to the component to avoid calling initApollo() twice in the server.
 	// Otherwise, the component would have to call initApollo() again but this
@@ -47,19 +47,19 @@ export const initOnContext = ctx => {
 	return ctx;
 };
 
-async function getHeaders(ctx) {
-	if (typeof window !== 'undefined') {
-		return null;
-	}
+// Async function getHeaders(ctx) {
+// 	if (typeof window !== 'undefined') {
+// 		return null;
+// 	}
 
-	if (typeof ctx.req === 'undefined') {
-		return null;
-	}
+// 	if (typeof ctx.req === 'undefined') {
+// 		return null;
+// 	}
 
-	return {
-		authorization: 'Bearer hasurapassword'
-	};
-}
+// 	return {
+// 		authorization: 'Bearer hasurapassword'
+// 	};
+// }
 
 /**
  * Always creates a new apollo client on the server
@@ -67,7 +67,7 @@ async function getHeaders(ctx) {
  * @param  {NormalizedCacheObject} initialState
  * @param  {NextPageContext} ctx
  */
-const initApolloClient = (initialState, headers) => {
+const initApolloClient = initialState => {
 	// Make sure to create a new client for every server-side request so that data
 	// isn't shared between connections (which would be bad)
 	if (typeof window === 'undefined') {
@@ -94,7 +94,7 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 	const WithApollo = ({apolloClient, apolloState, ...pageProps}) => {
 		const client = apolloClient ?
 			apolloClient :
-			initApolloClient(apolloState, {});
+			initApolloClient(apolloState);
 
 		return (
 			<ApolloProvider client={client}>
@@ -114,7 +114,7 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 		WithApollo.getInitialProps = async ctx => {
 			// Initialize ApolloClient, add it to the ctx object so
 			// we can use it in `PageComponent.getInitialProp`.
-			ctx.apolloClient = initApolloClient(null, await getHeaders(ctx));
+			ctx.apolloClient = initApolloClient(null);
 
 			const {apolloClient, AppTree} = ctx;
 

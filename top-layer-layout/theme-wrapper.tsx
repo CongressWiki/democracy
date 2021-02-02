@@ -1,7 +1,7 @@
 import React from 'react';
 import {CssBaseline} from '@material-ui/core';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
-import useLocalStorage from '@lib/use-local-storage';
+import useLocalStorage from '@lib/useLocalStorage';
 
 const defaultState = {
 	theme: 'dark',
