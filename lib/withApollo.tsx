@@ -1,101 +1,24 @@
 import React from 'react';
 import Head from 'next/head';
 import {ApolloProvider} from '@apollo/react-hooks';
-import createApolloClient from '@lib/apolloClient';
+import {ApolloClient} from 'apollo-client';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {HttpLink} from 'apollo-link-http';
+import fetch from 'isomorphic-unfetch';
 
-// On the client, we store the Apollo Client in the following variable.
-// This prevents the client from reinitializing between page transitions.
-let globalApolloClient = null;
-
-/**
- * Installs the Apollo Client on NextPageContext
- * or NextAppContext. Useful if you want to use apolloClient
- * inside getStaticProps, getStaticPaths or getServerSideProps
- * @param {NextPageContext | NextAppContext} ctx
- */
-export const initOnContext = ctx => {
-	const inAppContext = Boolean(ctx.ctx);
-
-	// We consider installing `withApollo({ ssr: true })` on global App level
-	// as antipattern since it disables project wide Automatic Static Optimization.
-	if (process.env.NODE_ENV === 'development' && inAppContext) {
-		console.warn(
-			'Warning: You have opted-out of Automatic Static Optimization due to `withApollo` in `pages/_app`.\n' +
-        'Read more: https://err.sh/next.js/opt-out-auto-static-optimization\n'
-		);
-	}
-
-	// Initialize ApolloClient if not already done
-	const apolloClient =
-    ctx.apolloClient ||
-    initApolloClient(ctx.apolloState || {});
-
-	// We send the Apollo Client as a prop to the component to avoid calling initApollo() twice in the server.
-	// Otherwise, the component would have to call initApollo() again but this
-	// time without the context. Once that happens, the following code will make sure we send
-	// the prop as `null` to the browser.
-	apolloClient.toJSON = () => null;
-
-	// Add apolloClient to NextPageContext & NextAppContext.
-	// This allows us to consume the apolloClient inside our
-	// custom `getInitialProps({ apolloClient })`.
-	ctx.apolloClient = apolloClient;
-	if (inAppContext) {
-		ctx.ctx.apolloClient = apolloClient;
-	}
-
-	return ctx;
-};
-
-// Async function getHeaders(ctx) {
-// 	if (typeof window !== 'undefined') {
-// 		return null;
-// 	}
-
-// 	if (typeof ctx.req === 'undefined') {
-// 		return null;
-// 	}
-
-// 	return {
-// 		authorization: 'Bearer hasurapassword'
-// 	};
-// }
+let apolloClient = null;
 
 /**
- * Always creates a new apollo client on the server
- * Creates or reuses apollo client in the browser.
- * @param  {NormalizedCacheObject} initialState
- * @param  {NextPageContext} ctx
+ * Creates and provides the apolloContext
+ * to a next.js PageTree. Use it by wrapping
+ * your PageComponent via HOC pattern.
+ * @param {Function|Class} PageComponent
+ * @param {Object} [config]
+ * @param {Boolean} [config.ssr=true]
  */
-const initApolloClient = initialState => {
-	// Make sure to create a new client for every server-side request so that data
-	// isn't shared between connections (which would be bad)
-	if (typeof window === 'undefined') {
-		return createApolloClient(initialState);
-	}
-
-	// Reuse client on the client-side
-	if (!globalApolloClient) {
-		globalApolloClient = createApolloClient(initialState);
-	}
-
-	return globalApolloClient;
-};
-
-/**
- * Creates a withApollo HOC
- * that provides the apolloContext
- * to a next.js Page or AppTree.
- * @param  {Object} withApolloOptions
- * @param  {Boolean} [withApolloOptions.ssr=false]
- * @returns {(PageComponent: ReactNode) => ReactNode}
- */
-export const withApollo = ({ssr = true} = {}) => PageComponent => {
+export function withApollo(PageComponent, {ssr = true} = {}) {
 	const WithApollo = ({apolloClient, apolloState, ...pageProps}) => {
-		const client = apolloClient ?
-			apolloClient :
-			initApolloClient(apolloState);
-
+		const client = apolloClient || initApolloClient(apolloState);
 		return (
 			<ApolloProvider client={client}>
 				<PageComponent {...pageProps}/>
@@ -107,16 +30,21 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 	if (process.env.NODE_ENV !== 'production') {
 		const displayName =
       PageComponent.displayName || PageComponent.name || 'Component';
-		WithApollo.displayName = `withApollo(${displayName as string})`;
+
+		if (displayName === 'App') {
+			console.warn('This withApollo HOC only works with PageComponents.');
+		}
+
+		WithApollo.displayName = `withApollo(${displayName})`;
 	}
 
 	if (ssr || PageComponent.getInitialProps) {
 		WithApollo.getInitialProps = async ctx => {
+			const {AppTree} = ctx;
+
 			// Initialize ApolloClient, add it to the ctx object so
 			// we can use it in `PageComponent.getInitialProp`.
-			ctx.apolloClient = initApolloClient(null);
-
-			const {apolloClient, AppTree} = ctx;
+			const apolloClient = (ctx.apolloClient = initApolloClient());
 
 			// Run wrapped getInitialProps methods
 			let pageProps = {};
@@ -160,6 +88,7 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 
 			// Extract query data from the Apollo store
 			const apolloState = apolloClient.cache.extract();
+
 			return {
 				...pageProps,
 				apolloState
@@ -168,4 +97,44 @@ export const withApollo = ({ssr = true} = {}) => PageComponent => {
 	}
 
 	return WithApollo;
-};
+}
+
+/**
+ * Always creates a new apollo client on the server
+ * Creates or reuses apollo client in the browser.
+ * @param  {Object} initialState
+ */
+function initApolloClient(initialState) {
+	// Make sure to create a new client for every server-side request so that data
+	// isn't shared between connections (which would be bad)
+	if (typeof window === 'undefined') {
+		return createApolloClient(initialState);
+	}
+
+	// Reuse client on the client-side
+	if (!apolloClient) {
+		apolloClient = createApolloClient(initialState);
+	}
+
+	return apolloClient;
+}
+
+/**
+ * Creates and configures the ApolloClient
+ * @param  {Object} [initialState={}]
+ */
+function createApolloClient(initialState = {}) {
+	// Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
+	return new ApolloClient({
+		ssrMode: typeof window === 'undefined', // Disables forceFetch on the server (so queries are only run once)
+		link: new HttpLink({
+			uri: `${process.env.GRAPHQL_ENDPOINT}/v1/graphql`, // Server URL (must be absolute)
+			credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+			headers: {
+				'x-hasura-admin-secret': process.env.GRAPHQL_SECRET
+			},
+			fetch
+		}),
+		cache: new InMemoryCache().restore(initialState)
+	});
+}

@@ -33,6 +33,7 @@ const ElectedOfficialAvatar = (props: ElectedOfficialAvatarProps) => {
 		<Tooltip title={props.preferred_name}>
 			<Avatar className={`${classes.avatar} ${partyThemedBorderClass(props.political_party)}`}>
 				<Image
+					// src={`https://bioguide.congress.gov/bioguide/photo/${props.id[0]}/${props.id}.jpg`}
 					src={`/elected_official_images/congress/original/${props.id}.jpg`}
 					alt={props.preferred_name}
 					layout="fill"

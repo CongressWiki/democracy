@@ -50,4 +50,4 @@ const Congress = () => {
 	}
 };
 
-export default withApollo({ssr: true})(Congress);
+export default withApollo(Congress);

@@ -36,6 +36,7 @@ A simple question to ask yourself when deciding between grid or flexbox is:
 
 - [Apollo & NextJS setup](https://hasura.io/learn/graphql/nextjs-fullstack-serverless/apollo-client/)
 - [Hasura + Auth0 + NextJS](https://github.com/vgrafe/nextjs-auth0-hasura)
+- [Another Auth0 + NextJS example](https://github.com/auth0/nextjs-auth0/tree/master/examples)
 - [Sample NextJS + Apollo](https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/nextjs-postgres-graphql)
 - [Interesting NextJS Apollo Open source](https://github.com/adamsoffer/next-apollo)
 - [Template project for Nextjs + Auth0 + Hasura with Apollo.](https://github.com/vgrafe/nextjs-auth0-hasura)

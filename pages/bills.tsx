@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import {withApollo} from '@lib/withApollo';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useApolloClient} from '@apollo/react-hooks';
 import Layout from '@components/Layout/Layout';
 import BillCanvas from '@components/BillCanvas/BillCanvas';
 import CircularProgress from '@components/CircularProgress/CircularProgress';
@@ -42,7 +42,7 @@ const Bills = () => {
 	}
 
 	if (error) {
-		console.error(error);
+		console.error(JSON.stringify(error, null, 2));
 		return (
 			<Error statusCode={400} title="GraphQL error"/>
 		);
@@ -59,4 +59,4 @@ const Bills = () => {
 	}
 };
 
-export default withApollo({ssr: true})(Bills);
+export default withApollo(Bills);
