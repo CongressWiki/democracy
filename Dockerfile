@@ -6,8 +6,7 @@ RUN yarn install --pure-lockfile
 # TODO add --ignore-scripts
 COPY . .
 RUN apk add --no-cache git
-RUN mkdir -p /public/elected_officials
-RUN git clone https://github.com/unitedstates/images.git ./public/elected_officials
+RUN git clone https://github.com/unitedstates/images.git ./public/elected_official_images
 
 FROM base AS build
 ENV NODE_ENV=production
