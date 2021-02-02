@@ -5,6 +5,8 @@ COPY yarn.lock ./
 RUN yarn install --pure-lockfile
 # TODO add --ignore-scripts
 COPY . .
+RUN apk add --no-cache git
+RUN mkdir -p /public/elected_officials
 RUN git clone https://github.com/unitedstates/images.git ./public/elected_officials
 
 FROM base AS build
