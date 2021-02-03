@@ -1,3 +1,5 @@
+# Democracy - USACounts.com website
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -41,3 +43,5 @@ A simple question to ask yourself when deciding between grid or flexbox is:
 - [Sample NextJS + Apollo](https://github.com/hasura/graphql-engine/tree/master/community/sample-apps/nextjs-postgres-graphql)
 - [Interesting NextJS Apollo Open source](https://github.com/adamsoffer/next-apollo)
 - [Template project for Nextjs + Auth0 + Hasura with Apollo.](https://github.com/vgrafe/nextjs-auth0-hasura)
+- [Example project of Apollo + NextJS(SSG)](https://github.com/vercel/next.js/tree/canary/examples/with-apollo)
+- [Discussion on Apollo + NextJS(SSG)](https://github.com/vercel/next.js/discussions/11957#discussioncomment-7190)

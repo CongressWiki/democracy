@@ -1,10 +1,8 @@
 import Head from 'next/head';
 import React from 'react';
-import {useTheme} from '@material-ui/styles';
 export const siteTitle = 'Keeping US A-ccountable';
 
 const Header = () => {
-	const theme = useTheme();
 	return (
 		<Head>
 			<title>{siteTitle}</title>

@@ -1,15 +1,15 @@
 import React from 'react';
-import gql from 'graphql-tag';
-import {withApollo} from '@lib/withApollo';
-import {useQuery, useApolloClient} from '@apollo/react-hooks';
+import {initializeApollo, addApolloState, withApollo} from '@lib/withApollo';
+import {gql, useQuery, NetworkStatus} from '@apollo/client';
 import Layout from '@components/Layout/Layout';
 import BillCanvas from '@components/BillCanvas/BillCanvas';
 import CircularProgress from '@components/CircularProgress/CircularProgress';
 import Error from 'next/error';
+import {Button} from '@material-ui/core';
 
 const GET_LATEST_BILLS = gql`
-  query getLatestBills {
-    bills(limit: 15, order_by: { updated_at: desc }) {
+  query getLatestBills($limit: Int!, $offset: Int!) {
+    bills(order_by: { updated_at: desc }, limit: $limit, offset: $offset) {
       id
       type
       number
@@ -25,13 +25,57 @@ const GET_LATEST_BILLS = gql`
       actions
       sponsor
     }
+    bills_aggregate {
+      aggregate {
+        count
+      }
+    }
   }
 `;
 
-const Bills = () => {
-	const {loading, error, data} = useQuery(GET_LATEST_BILLS);
+export const getStaticProps = async ({params}, ctx) => {
+	const apolloClient = initializeApollo(ctx);
 
-	if (loading) {
+	await apolloClient.query({
+		query: GET_LATEST_BILLS,
+		variables: {
+			offset: 0,
+			limit: 3
+		}
+	});
+
+	return addApolloState(apolloClient, {
+		props: {},
+		revalidate: 1
+	});
+};
+
+const Bills = () => {
+	const {loading, error, data, fetchMore, networkStatus} = useQuery(GET_LATEST_BILLS,
+		{
+			variables: {
+				offset: 0,
+				limit: 3
+			},
+			// Setting this value to true will make the component rerender when
+			// the "networkStatus" changes, so we are able to know if it is fetching
+			// more data
+			notifyOnNetworkStatusChange: true
+		});
+
+	const loadingMoreBills = networkStatus === NetworkStatus.fetchMore;
+	const {bills, bills_aggregate} = data;
+	const areMoreBills = bills.length < bills_aggregate.count;
+
+	const loadMoreBills = () => {
+		(fetchMore as any)({
+			variables: {
+				offset: bills.length
+			}
+		});
+	};
+
+	if (loading || loadingMoreBills) {
 		return (
 			<Layout>
 				<main>
@@ -48,15 +92,20 @@ const Bills = () => {
 		);
 	}
 
-	if (data.bills) {
-		return (
-			<Layout>
-				<main>
-					<BillCanvas bills={data.bills}/>
-				</main>
-			</Layout>
-		);
-	}
+	return (
+		<Layout>
+			<Button
+				disabled={loadingMoreBills} onClick={() => {
+					loadMoreBills();
+				}}
+			>{loadingMoreBills ? 'Loading...' : 'Show More'}
+			</Button>
+			<main>
+				<BillCanvas bills={bills || []}/>
+			</main>
+		</Layout>
+	);
 };
 
+// Export default Bills;
 export default withApollo(Bills);

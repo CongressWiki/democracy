@@ -42,6 +42,7 @@
     ]
   },
   "dependencies": {
+    "@apollo/client": "^3.3.7",
     "@apollo/react-hooks": "^4.0.0",
     "@apollo/react-ssr": "^4.0.0",
     "@material-ui/core": "^4.11.3",
@@ -54,9 +55,11 @@
     "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
+    "deepmerge": "^4.2.2",
     "fontsource-roboto": "^4.0.0",
     "graphql": "^15.5.0",
     "isomorphic-unfetch": "^3.1.0",
+    "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "next": "10.0.6",
     "react": "17.0.1",
